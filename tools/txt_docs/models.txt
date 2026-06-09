@@ -1,0 +1,4670 @@
+MODULE: meta.models
+========================================================================
+
+FUNCTION: ActiveModels
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_models instead.
+SIGNATURE: meta.models.ActiveModels() -> list[Model]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_models` instead.
+  
+  This function collects all the current active loaded 3D models.
+  
+  Returns
+  -------
+  list[Model]
+      It returns a list with model objects where each member of the list refers to the corresponding active loaded 3D model.
+      Upon failure an empty list is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          act_models = models.ActiveModels()
+          for mdl in act_models:
+              print(mdl.id, mdl.name)
+              print(mdl.label, mdl.deck, mdl.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AddLabelOnModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.set_label instead.
+SIGNATURE: meta.models.AddLabelOnModel(label: str, model_id: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.set_label` instead.
+  
+  This function adds a label on an existing model.
+  
+  Parameters
+  ----------
+  label : str
+      Label of the model.
+  
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          label = "GEOM_MODEL 3"
+          models.AddLabelOnModel(model_id, label)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AvailableGeometriesOfAnimatorDB
+MODULE: meta.models
+SIGNATURE: meta.models.AvailableGeometriesOfAnimatorDB(filename: str) -> list[str]
+DOCSTRING:
+  This function gets the available geometries of a given Animator DB file. The results of this function can be used as input in script function "LoadAnimatorDBModel".
+  
+  Parameters
+  ----------
+  filename : str
+      Name of the Animator DB file.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list where each member of the list is a string referring to one specific available geometry of the given Animator DB file.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          filename = "/home/examples/Car_with_Spiders_static.a3db"
+          all_geom = AvailableGeometriesOfAnimatorDB(filename)
+          for avail_geom in all_geom:
+              print(avail_geom)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AvailableGeometriesOfProject
+MODULE: meta.models
+SIGNATURE: meta.models.AvailableGeometriesOfProject(filename: str) -> list[str]
+DOCSTRING:
+  This function gets the available geometries of a given project file (.metadb). The results of this function can be used as input in script function "LoadProjectModel".
+  
+  Parameters
+  ----------
+  filename : str
+      Name of the project file.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with where each member of the list is a string referring to one specific available geometry of the given project file.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          filename = "/home/examples/Ex1.metadb"
+          all_geom = models.AvailableGeometriesOfProject(filename)
+          for avail_geom in all_geom:
+              print(avail_geom)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CentroidScalarOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_centroid_scalar instead.
+SIGNATURE: meta.models.CentroidScalarOfModel(layer: str, result: results.Result) -> list[results.CentroidScalar]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_centroid_scalar` instead.
+  
+  This function calculates all centroid scalar values for a model specified by its id.
+  
+  Parameters
+  ----------
+  layer : str, optional
+      Location of the centroid scalar values. It should be specified only if both top and bottom values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CentroidScalar]
+      It returns a list with CentroidScalar objects where ach member of the list refers to the centroid scalar value of an element of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CentroidScalar
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          layer = "bottom"
+          # Bottom centroid scalar values in case both bottom and top centroid scalar values are loaded
+          all_centroid = models.CentroidScalarOfModel(result, layer)
+  
+          for i in range(1, min(len(all_centroid), 10)):
+              print(all_centroid[i].value, all_centroid[i].element_id)
+              print(all_centroid[i].second_id, all_centroid[i].type)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CentroidScalarOfModelNonZero
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_centroid_scalar instead.
+SIGNATURE: meta.models.CentroidScalarOfModelNonZero(layer: str, result: results.Result) -> list[results.CentroidScalar]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_centroid_scalar` instead.
+  
+  This function calculates non zero centroid scalar values for a model specified by its id.
+  
+  Parameters
+  ----------
+  layer : str, optional
+      Location of the centroid scalar values. It should be specified only if both top and bottom values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'.
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CentroidScalar]
+      It returns a list with CentroidScalar objects where each member of the listrefers to the non zero centroid scalar value of an element of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CentroidScalar
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          layer = "bottom"
+          # Bottom centroid scalar values if both bottom and top centroid scalar values are loaded
+          all_centroid = models.CentroidScalarOfModelNonZero(result, layer)
+          for i in range(1, min(len(all_centroid), 10)):
+              print(all_centroid[i].value, all_centroid[i].element_id)
+              print(all_centroid[i].second_id, all_centroid[i].type)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CentroidVectorOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_centroid_vector instead.
+SIGNATURE: meta.models.CentroidVectorOfModel(layer: str, principal: str, result: results.Result) -> list[results.CentroidVector]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_centroid_vector` instead.
+  
+  This function calculates all centroid vector values of an existing model.
+  
+  Parameters
+  ----------
+  layer : str
+      Location of the centroid vector values. It should be specified only if both top and bottom values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'.
+  
+  principal : str
+      Principal order of the centroid vector tensor values. It should be specified only when tensor results have been loaded. Possible values are:
+      - 'first': first principal (default)
+      - 'second': second principal
+      - 'third': third principal
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CentroidVector]
+      It returns a list with CentroidVector objects where each member of the list refers to the centroid vector value of an element of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CentroidVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+          all_centroid = models.CentroidVectorOfModel(result)
+          for i in range(1, min(len(all_centroid), 10)):
+              print(
+                  all_centroid[i].value,
+                  all_centroid[i].element_id,
+                  all_centroid[i].second_id,
+                  all_centroid[i].type,
+              )
+              print(all_centroid[i].x, all_centroid[i].y, all_centroid[i].z)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CentroidVectorOfModelNonZero
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_centroid_vector instead.
+SIGNATURE: meta.models.CentroidVectorOfModelNonZero(layer: str, principal: str, result: results.Result) -> list[results.CentroidVector]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_centroid_vector` instead.
+  
+  This function calculates non zero centroid vector values of an existing model.
+  
+  Parameters
+  ----------
+  layer : str
+      Location of the centroid vector values. It should be specified only if both top and bottom values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'.
+  
+  principal : str
+      Principal order of the centroid vector tensor values. It should be specified only when tensor results have been loaded. Possible values are:
+      - 'first': first principal (default)
+      - 'second': second principal
+      - 'third': third principal
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CentroidVector]
+      It returns a list with CentroidVector objects where each member of the list refers to the non zero centroid vector value of an element of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CentroidVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+          all_centroid = models.CentroidVectorOfModelNonZero(result)
+          for i in range(1, min(len(all_centroid), 10)):
+              print(
+                  all_centroid[i].value,
+                  all_centroid[i].element_id,
+                  all_centroid[i].second_id,
+                  all_centroid[i].type,
+              )
+              print(all_centroid[i].x, all_centroid[i].y, all_centroid[i].z)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectEntities
+MODULE: meta.models
+SIGNATURE: meta.models.CollectEntities(entity_type: str, mode: str, window_name: str) -> list
+DOCSTRING:
+  This function collects entities of META.
+  
+  Parameters
+  ----------
+  entity_type : str
+      Type of the collected entities. Its possible values are:
+      - 'models' : Collect models
+      - 'pages' : Collect pages
+      - 'windows' : Collect windows
+      - 'resultsets' : Collect resultsets
+      - 'parts' : Collect parts
+      - 'materials' : Collect materials
+      - 'nodes' : Collect nodes
+      - 'elements' : Collect elements
+      - 'boundaries' : Collect boundary elements
+      - 'groups' : Collect groups
+      - 'coord_systems' : Collect coordinate systems
+      - 'plots' : Collect plots
+      - 'curves' : Collect curves
+      - 'points' : Collect points
+      - 'annotations' : Collect annotations
+      - 'images' : Collect images
+      - 'videos' : Collect videos
+      - 'planes' : Collect planes
+      - 'isofunctions' : Collect isofunctions
+  
+  mode : str, optional
+      Option for collecting all, visible, or identified entities. Its possible values are:
+      "all" : All entities (default option)
+      "visible" : Visible entities
+      "identified" : Identified entities
+  
+  window_name : str, optional
+      The name of the window, on which are the visible/identified entities
+  
+  Returns
+  -------
+  list
+      It returns a list with where each member of the list is an object referring to one specific entity of META.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page, except for the case that pages are collected.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          entity_type = "materials"
+          collected_materials = models.CollectEntities(entity_type)
+          print("Materials")
+          for m in collected_materials:
+              print(m.id, m.name)
+          entity_type = "parts"
+          # collected_parts = models.CollectEntities(entity_type, 'visible', window_name ='MetaPost')
+          collected_parts = models.CollectEntities(
+              entity_type, "identified", window_name="MetaPost"
+          )
+          print("Parts")
+          for p in collected_parts:
+              print(p.id, p.name)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectModelEntities
+MODULE: meta.models
+SIGNATURE: meta.models.CollectModelEntities(entity_type: str, model_id: int, mode: str, window_name: str) -> list
+DOCSTRING:
+  This function collects entities of the model specified by the given id. 
+  
+  Parameters
+  ----------
+  entity_type : str
+      Type of the collected entities. Its possible values are:
+      - 'parts' : Collect parts
+      - 'materials' : Collect materials
+      - 'nodes' : Collect nodes
+      - 'elements' : Collect elements
+      - 'boundaries' : Collect boundary elements
+      - 'groups' : Collect groups
+      - 'coord_systems' : Collect coordinate systems
+  
+  model_id : int
+      Id of the model.
+  
+  mode : str, optional
+      Option for collecting all, visible, or identified entities. Its possible values are:
+      "all" : All entities (default option)
+      "visible" : Visible entities
+      "identified" : Identified entities
+  
+  window_name : str, optional
+      The name of the window, on which are the visible/identified entities
+  
+  Returns
+  -------
+  list
+      It returns a list with objects where each member of the list is an object referring to one specific entity of the given model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          entity_type = "parts"
+          collected_entities = models.CollectModelEntities(model_id, entity_type)
+          for p in collected_entities:
+              print(
+                  p.id,
+                  p.type,
+                  p.subtype,
+                  p.visible,
+                  p.name,
+                  p.mat_id,
+                  p.shell_thick,
+                  p.model_id,
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewEntitiesEnd
+MODULE: meta.models
+SIGNATURE: meta.models.CollectNewEntitiesEnd() -> list
+DOCSTRING:
+  This function ends recording the creation of new entities. This function should be preceded by a corresponding call to script function CollectNewEntitiesStart().
+  
+  Returns
+  -------
+  list
+      It returns a list with objects where each member of the list is an object referring to one specific entity of META.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import utils
+      from meta import annotations
+      from meta import visuals
+  
+  
+      def main():
+          models.CollectNewEntitiesStart()
+  
+          # create new annotations
+          utils.MetaCommand('annotation add 1 "Empty Annotation"')
+          utils.MetaCommand('annotation add 2 "Empty Annotation"')
+  
+          # create new images
+          utils.MetaCommand('image read image0 "/home/examples/Ex1.png"')
+          utils.MetaCommand('image read image1 "/home/examples/Ex2.png"')
+  
+          new_entities = models.CollectNewEntitiesEnd()
+          for ent in new_entities:
+              if annotations.IsAnnotation(ent):
+                  a = ent
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+              elif visuals.IsImage(ent):
+                  img = ent
+                  print(
+                      img.name,
+                      img.window_name,
+                      img.width,
+                      img.height,
+                      img.filename,
+                      img.zorder,
+                      img.visible,
+                      img.page_id,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewEntitiesStart
+MODULE: meta.models
+SIGNATURE: meta.models.CollectNewEntitiesStart() -> int
+DOCSTRING:
+  This function starts recording the creation of new entities. This function should be followed by a corresponding call to script function CollectNewEntitiesEnd().
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import utils
+      from meta import annotations
+      from meta import visuals
+  
+  
+      def main():
+          models.CollectNewEntitiesStart()
+  
+          # create new annotations
+          utils.MetaCommand('annotation add 1 "Empty Annotation"')
+          utils.MetaCommand('annotation add 2 "Empty Annotation"')
+  
+          # create new images
+          utils.MetaCommand('image read image0 "/home/examples/Ex1.png"')
+          utils.MetaCommand('image read image1 "/home/examples/Ex2.png"')
+  
+          new_entities = models.CollectNewEntitiesEnd()
+          for ent in new_entities:
+              if annotations.IsAnnotation(ent):
+                  a = ent
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+              elif visuals.IsImage(ent):
+                  img = ent
+                  print(
+                      img.name,
+                      img.window_name,
+                      img.width,
+                      img.height,
+                      img.filename,
+                      img.zorder,
+                      img.visible,
+                      img.page_id,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewModelsEnd
+MODULE: meta.models
+SIGNATURE: meta.models.CollectNewModelsEnd() -> list[Model]
+DOCSTRING:
+  This function ends recording the creation of new models. This function should be preceded by a corresponding call to script function CollectNewModelsStart().
+  
+  Returns
+  -------
+  list[Model]
+      It returns a list with model objects where each member of the list refers to one specific newly created model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import utils
+  
+  
+      def main():
+          models.CollectNewModelsStart()
+  
+          # create new models
+          utils.MetaCommand("model active empty")
+          utils.MetaCommand("read geom Nastran /home/user/1.nas")
+          utils.MetaCommand("model active empty")
+          utils.MetaCommand("read geom Nastran /home/user/2.nas")
+  
+          new_models = models.CollectNewModelsEnd()
+          for r in new_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewModelsStart
+MODULE: meta.models
+SIGNATURE: meta.models.CollectNewModelsStart() -> int
+DOCSTRING:
+  This function starts recording the creation of new models. This function should be followed by a corresponding call to script function CollectNewModelsEnd().
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import utils
+  
+  
+      def main():
+          models.CollectNewModelsStart()
+  
+          # create new models
+          utils.MetaCommand("model active empty")
+          utils.MetaCommand("read geom Nastran /home/user/1.nas")
+          utils.MetaCommand("model active empty")
+          utils.MetaCommand("read geom Nastran /home/user/2.nas")
+  
+          new_models = models.CollectNewModelsEnd()
+          for r in new_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ColorOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_color instead.
+SIGNATURE: meta.models.ColorOfModel(window_name: str, model_id: int) -> windows.Color
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_color` instead.
+  
+  This function finds color of a model.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window. If it is absent then this function will return the color of the model for the first enabled window.
+  
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  windows.Color
+      Upon success, it returns a color object with the color of the corresponding model for the specified window.
+      Else, a non valid color object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Color
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          window_name = "MetaPost"
+          col = models.ColorOfModel(model_id, window_name)
+          if col:
+              print(col.name, col.r, col.g, col.b, col.a)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CornerScalarOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_corner_scalar instead.
+SIGNATURE: meta.models.CornerScalarOfModel(layer: str, result: results.Result) -> list[results.CornerScalar]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_corner_scalar` instead.
+  
+  This function calculates all corner scalar values of the elements of a model.
+  
+  Parameters
+  ----------
+  layer : str, optional
+      Location of the corner scalar values. It should be specified only if both top and bottom values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'.
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CornerScalar]
+      It returns a list with CornerScalar objects where each member of the list refers to the corner scalar values of an element of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CornerScalar
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          layer = "bottom"
+          # Bottom centroid scalar values in case both bottom and top centroid scalar values are loaded
+          all_corner = models.CornerScalarOfModel(result, layer)
+  
+          for i in range(1, min(len(all_corner), 10)):
+              print(all_corner[i].value)  # Corner scalar value
+              print(
+                  all_corner[i].element_id, all_corner[i].second_id, all_corner[i].type
+              )  # Id, second id and type of the element
+              print(
+                  all_corner[i].corner
+              )  # Id of the node - corner for shell and solid elements, or the fraction of the distance from the start to the total distance for line elements
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CornerScalarOfModelNonZero
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_corner_scalar instead.
+SIGNATURE: meta.models.CornerScalarOfModelNonZero(layer: str, result: results.Result) -> list[results.CornerScalar]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_corner_scalar` instead.
+  
+  This function calculates non zero corner scalar values of the elements of a model.
+  
+  Parameters
+  ----------
+  layer : str, optional
+      Location of the centroid scalar values. It should be specified only if both top and bottom values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'.
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CornerScalar]
+      It returns a list with CornerScalar objects where each member of the list is refers to the non zero corner scalar values of an element of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CornerScalar
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          layer = "bottom"
+          # Bottom centroid scalar values in case both bottom and top centroid scalar values are loaded
+          all_corner = models.CornerScalarOfModelNonZero(result, layer)
+  
+          for i in range(1, min(len(all_corner), 10)):
+              print(all_corner[i].value)  # Corner scalar value
+              print(
+                  all_corner[i].element_id, all_corner[i].second_id, all_corner[i].type
+              )  # Id, second id and type of the element
+              print(
+                  all_corner[i].corner
+              )  # Id of the node - corner for shell and solid elements, or the fraction of the distance from the start to the total distance for line elements
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeformationLabelsOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_deformation_labels instead.
+SIGNATURE: meta.models.DeformationLabelsOfModel(model_id: int) -> list[str]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_deformation_labels` instead.
+  
+  This function finds all deformation labels for given model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with strings, where each member refers to one deformation label of the corresponding model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          all_labels = models.DeformationLabelsOfModel(model_id)
+          for deform_label in all_labels:
+              print(deform_label)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeformationsOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_deformations instead.
+SIGNATURE: meta.models.DeformationsOfModel(result: results.Result) -> list[results.Deformation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_deformations` instead.
+  
+  This function calculates deformations for each direction (X, Y, Z, TOTAL), of a model. Deformations refer to a resultset specified by its object.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.Deformation]
+      It returns a list with deformation objects where each member of the list refers to a deformation of a node for the given model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.Deformation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          all_deform = models.DeformationsOfModel(result)
+          for i in range(1, min(len(all_deform), 10)):
+              print(
+                  all_deform[i].x,
+                  all_deform[i].y,
+                  all_deform[i].z,
+                  all_deform[i].total,
+                  all_deform[i].node_id,
+              )  # X, Y, Z, Total Deformation, Id of the node
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeformationsOfModelNonZero
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_deformations instead.
+SIGNATURE: meta.models.DeformationsOfModelNonZero(result: results.Result) -> list[results.Deformation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_deformations` instead.
+  
+  This function calculates non zero deformations for each direction (X, Y, Z, TOTAL), of a model. Deformations refer to a resultset specified by its object.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.Deformation]
+      It returns a list with deformation objects where each member of the list is refers to a non zero deformation of a node for the given model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.Deformation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          all_deform = models.DeformationsOfModelNonZero(result)
+          for i in range(1, min(len(all_deform), 10)):
+              print(
+                  all_deform[i].x,
+                  all_deform[i].y,
+                  all_deform[i].z,
+                  all_deform[i].total,
+                  all_deform[i].node_id,
+              )  # X, Y, Z, Total Deformation, Id of the node
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.delete instead.
+SIGNATURE: meta.models.DeleteModel(model_id: int, window_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.delete` instead.
+  
+  This function deletes an existing model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  window_name : str, optional
+      Defines the window from which the model will be removed. If it is absent then model will be deleted from all windows in which is loaded.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          window_name = "MetaPost"
+          ret = models.DeleteModel(model_id, window_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: FunctionLabelsOfModel
+MODULE: meta.models
+SIGNATURE: meta.models.FunctionLabelsOfModel(model_id: int) -> list[str]
+DOCSTRING:
+  This function finds all function labels (scalar or vector) for given model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with all function labels where each member of the list is a string referring to one function label of the corresponding model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          all_labels = models.FunctionLabelsOfModel(model_id)
+          for function_label in all_labels:
+              print(function_label)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HasDeformations
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.results.Result.has_deformations instead.
+SIGNATURE: meta.models.HasDeformations(result: results.Result) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.results.Result.has_deformations` instead.
+  
+  This function checks if deformations are loaded on a resultset of a given model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          has_deform = models.HasDeformations(result)
+          print(has_deform)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HasScalar
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.results.Result.has_scalar instead.
+SIGNATURE: meta.models.HasScalar(result: results.Result) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.results.Result.has_scalar` instead.
+  
+  This function checks if scalar results are loaded on a state specified by a resultset of a given model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          has_scalar = models.HasScalar(result)
+          print(has_scalar)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HasVector
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.results.Result.has_vector instead.
+SIGNATURE: meta.models.HasVector(result: results.Result) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.results.Result.has_vector` instead.
+  
+  This function checks if vector results are loaded on a state specified by a resultset of a given model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          has_vector = models.HasVector(result)
+          print(has_vector)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsModel
+MODULE: meta.models
+SIGNATURE: meta.models.IsModel(model: Any) -> int
+DOCSTRING:
+  This function checks whether an object is of class Model.
+  
+  Parameters
+  ----------
+  model : Any
+      Any given object.
+  
+  Returns
+  -------
+  int
+      It returns 1 if object is of class Model, 0 otherwise.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import utils
+  
+  
+      def main():
+          objects = list()
+          objects.append(models.Models()[0])
+          objects.append(None)
+  
+          for ob in objects:
+              if models.IsModel(ob):
+                  print("This is an object of class Models")
+                  print(ob.id, ob.name, ob.label, ob.deck, ob.active)
+              else:
+                  print("This is not an object of class Models")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsScalar
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.results.Result.is_scalar instead.
+SIGNATURE: meta.models.IsScalar(result: results.Result) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.results.Result.is_scalar` instead.
+  
+  This function checks if scalar results are loaded on a specific resultset of a given model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          is_scalar = models.IsScalar(result)
+          print(is_scalar)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsVector
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.results.Result.is_vector instead.
+SIGNATURE: meta.models.IsVector(result: results.Result) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.results.Result.is_vector` instead.
+  
+  This function checks if vector results are loaded on a specific resultset of a given model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          is_vector = models.IsVector(result)
+          print(is_vector)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: LayerIntegrationPointsOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_layer_integration_points instead.
+SIGNATURE: meta.models.LayerIntegrationPointsOfModel(model_id: int) -> list[str]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_layer_integration_points` instead.
+  
+  This function finds the layer integration points of a model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with the layer integration points of the specified model.
+      Each member of the list is a string referring to one layer integration point of the given model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+  
+          layer_integration_points = models.LayerIntegrationPointsOfModel(model_id)
+          for str in layer_integration_points:
+              print(str)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: LayersOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_layers instead.
+SIGNATURE: meta.models.LayersOfModel(layer_type: str, model_id: int) -> list[str]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_layers` instead.
+  
+  This function finds the layers of a model with a given id (model_id).
+  
+  Parameters
+  ----------
+  layer_type : str
+      Type of the layer. Possible values are:
+      - 'Layer'
+      - 'GlobalLayer'
+      - 'NamedLayer'
+  
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list where each member of the list is a string referring to the number or the id of a layer of the given model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          layer_type = "NamedLayer"
+  
+          all_layers = models.LayersOfModel(model_id, layer_type)
+          for str in all_layers:
+              print(str)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: LoadAnimatorDBModel
+MODULE: meta.models
+SIGNATURE: meta.models.LoadAnimatorDBModel(filename: str, label: str, window_name: str) -> Model
+DOCSTRING:
+  This function loads the geometry of a 3D model from an Animator file with a given filename.
+  
+  Parameters
+  ----------
+  filename : str
+      Filepath of the Animator DB file.
+  
+  label : str
+      Label of the geometry that will be loaded.
+  
+  window_name : str
+      Name of the window that the model will be loaded into.
+  
+  Returns
+  -------
+  Model
+      Upon success, it returns an object of class Model referring to the currently loaded model.
+      Else, a non valid Model object is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          window_name = "MetaPost"
+          filename = "/home/geo/proj5.a3db"
+          label = "0"
+          r = models.LoadAnimatorDBModel(window_name, filename, label)
+          if r:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: LoadModel
+MODULE: meta.models
+SIGNATURE: meta.models.LoadModel(window_name: str, filename: str, deck: str, failed_elements: str, initial_data: str, contents: dict) -> Model
+DOCSTRING:
+  This function loads the geometry of a 3D model from a file with a given filename. The model is being loaded in an existing 3D window specified by its name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  filename : str
+      Name of the file.
+  
+  deck : str
+      Deck name of the model (e.g. 'AUTO', 'NASTRAN', 'DYNA', 'ABAQUS', 'PAMCRASH', 'ANSYS', 'RADIOSS', etc.). The names can be found in betameta_structs.META_KEYWORDS
+  
+  failed_elements : str
+      Defines whether failed elements are loaded. Possible values are:
+      - 'failed' : Failed elements are loaded - default value if absent
+      - 'nofailed' : Failed elements are not loaded
+  
+  initial_data : str
+      Defines whether initial data (e.g. strains, stresses, partition data) are loaded
+      - 'on' : Initial data are loaded as states - default value if absent
+      - 'off' : Initial data are not loaded
+  
+  contents : dict, optional
+      A dictionary of the contents of the file that are going to be read. The format of the dictionary should be the same as the returned dictionary of the utils.ScanGeometryFile. This argument is used for reading only specific pids, groups of Geometry. If absent, the whole label will be read.
+  
+  Returns
+  -------
+  Model
+      Upon success, it returns an object of class Model referring to the currently loaded model.
+      Else, a non valid Model object is returned.
+  
+  See Also
+  --------
+  meta.models.Model, meta.utils.ScanGeometryFile
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          window_name = "MetaPost"
+          filename = "/home/examples/AbaqusEx8.inp"
+          deck = "ABAQUS"
+          r = models.LoadModel(window_name, filename, deck)
+          # or
+          # contents = utils.ScanGeometryFile(filename, deck)
+          # modify contents by removing pids,groups,etc that are not needed to Load
+          # r = models.LoadModel(window_name, filename, deck, contents)
+          if r:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: LoadProjectModel
+MODULE: meta.models
+SIGNATURE: meta.models.LoadProjectModel(window_name: str, filename: str, label: str, contents: dict) -> Model
+DOCSTRING:
+  This function loads the geometry of a 3D model from a META project file (.metadb).
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  filename : str
+      Filepath of the project file.
+  
+  label : str
+      Label of the geometry.
+  
+  contents : dict, optional
+      A dictionary of the contents of the file that are going to be read. The format of the dictionary should be the same as the returned dictionary of the utils.ScanGeometryFile, for the specific label. This argument is used for reading only specific pids of Label. If absent, the whole label will be read.
+  
+  Returns
+  -------
+  Model
+      Upon success, it returns an object of class Model referring to the currently loaded model.
+      Else, a non valid Model object is returned.
+  
+  See Also
+  --------
+  meta.models.AvailableGeometriesOfProject, meta.models.Model, meta.utils.ScanGeometryFile
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models, utils
+  
+  
+      def main():
+          window_name = "MetaPost"
+          filename = "/home/examples/Ex1.metadb"
+          label = "label"
+          r = models.LoadProjectModel(window_name, filename, label)
+          # or
+          # contents = utils.ScanGeometryFile(filename, deck)
+          # r = models.LoadProjectModel(window_name, filename, label, contents[label])
+          if r:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MaxCoordinatesOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_coordinates instead.
+SIGNATURE: meta.models.MaxCoordinatesOfModel(result: results.Result, model_id: int) -> list[nodes.Node]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_coordinates` instead.
+  
+  This function calculates maximum coordinates in each direction (X, Y, Z) of a given model. Maximum coordinates refer to the position of the nodes for a given resultset.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model. If it is absent, then maximum coordinates will refer to the ORIGINAL STATE.
+  
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[nodes.Node]
+      It returns a list with 3 Node objects where each member of the list is an object of class Node referring to the node with the maximun coordinate in each direction of the specified model.
+      - 0 = Node with the maximum X coordinate
+      - 1 = Node with the maximum Y coordinate
+      - 2 = Node with the maximum Z coordinate
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.nodes.Node
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+          max_node = models.MaxCoordinatesOfModel(model_id, result)
+          if len(max_node):
+              max_x_node = max_node[0]  # Object of class Node with the maximum X coordinate
+              print(
+                  max_x_node.x, max_x_node.y, max_x_node.z
+              )  # Coordinates in X, Y, Z directions of the node with the maximum X coordinate
+              print(max_x_node.id)  # Id of the node with the maximum X coordinate
+  
+              max_y_node = max_node[1]  # Object of class Node with the maximum Y coordinate
+              print(
+                  max_y_node.x, max_y_node.y, max_y_node.z
+              )  # Coordinates in X, Y, Z directions of the node with the maximum Y coordinate
+              print(max_y_node.id)  # Id of the node with the maximum Y coordinate
+  
+              max_z_node = max_node[2]  # Object of class Node with the maximum Z coordinate
+              print(
+                  max_z_node.x, max_z_node.y, max_z_node.z
+              )  # Coordinates in X, Y, Z directions of the node with the maximum Z coordinate
+              print(max_z_node.id)  # Id of the node with the maximum Z coordinate
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MaxDeformationOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_deformations instead.
+SIGNATURE: meta.models.MaxDeformationOfModel(result: results.Result) -> list[results.Deformation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_deformations` instead.
+  
+  This function calculates maximum deformation for each direction (X, Y, Z, TOTAL), of a model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.Deformation]
+      It returns a list with 4 Deformation objects where each member of the list is an object of class Deformation referring to the maximum deformation in each direction for the specified model.
+      - 0 = X deformation
+      - 1 = Y deformation
+      - 2 = Z deformation
+      - 3 = TOTAL deformation
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.Deformation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          max_deform = models.MaxDeformationOfModel(result)
+          if len(max_deform):
+              max_x_deform = max_deform[0]  # Object with maximum deformation in direction X
+              print(
+                  max_x_deform.x, max_x_deform.y, max_x_deform.z, max_x_deform.total
+              )  # Deformations in X, Y, Z and Total directions on the node with the maximum X deformation
+              print(max_x_deform.node_id)  # Id of the node with the maximum X deformation
+  
+              max_y_deform = max_deform[1]  # Object with maximum deformation in direction Y
+              print(
+                  max_y_deform.x, max_y_deform.y, max_y_deform.z, max_y_deform.total
+              )  # Deformations in X, Y, Z and Total directions on the node with the maximum Y deformation
+              print(max_y_deform.node_id)  # Id of the node with the maximum Y deformation
+  
+              max_z_deform = max_deform[2]  # Object with maximum deformation in direction Z
+              print(
+                  max_z_deform.x, max_z_deform.y, max_z_deform.z, max_z_deform.total
+              )  # Deformations in X, Y, Z and Total directions on the node with the maximum Z deformation
+              print(max_z_deform.node_id)  # Id of the node with the maximum Z deformation
+  
+              max_total_deform = max_deform[3]  # Object with maximum TOTAL deformation
+              print(
+                  max_total_deform.x,
+                  max_total_deform.y,
+                  max_total_deform.z,
+                  max_total_deform.total,
+              )  # Deformations in X, Y, Z and Total directions on the node with the maximum TOTAL deformation
+              print(
+                  max_total_deform.node_id
+              )  # Id of the node with the maximum TOTAL deformation
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinCoordinatesOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_coordinates instead.
+SIGNATURE: meta.models.MinCoordinatesOfModel(result: results.Result, model_id: int) -> list[nodes.Node]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_coordinates` instead.
+  
+  This function calculates minimum coordinates in each direction (X, Y, Z) of a given model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model. If it is absent, then minimum coordinates will refer to the ORIGINAL STATE.
+  
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[nodes.Node]
+      It returns a list with 3 Node objects where each member of the list is an object of class Node referring to the node with the minimun coordinate in each direction of the specified model.
+      - 0 = Node with the minimum X coordinate
+      - 1 = Node with the minimum Y coordinate
+      - 2 = Node with the minimum Z coordinate
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.nodes.Node
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          min_node = models.MinCoordinatesOfModel(model_id, result)
+          if len(min_node):
+              min_x_node = min_node[0]  # Object of class Node with the minimum X coordinate
+              print(
+                  min_x_node.x, min_x_node.y, min_x_node.z
+              )  # Coordinates in X, Y, Z directions of the node with the minimum X coordinate
+              print(min_x_node.id)  # Id of the node with the minimum X coordinate
+  
+              min_y_node = min_node[1]  # Object of class Node with the minimum Y coordinate
+              print(
+                  min_y_node.x, min_y_node.y, min_y_node.z
+              )  # Coordinates in X, Y, Z directions of the node with the minimum Y coordinate
+              print(min_y_node.id)  # Id of the node with the minimum Y coordinate
+  
+              min_z_node = min_node[2]  # Object of class Node with the minimum Z coordinate
+              print(
+                  min_z_node.x, min_z_node.y, min_z_node.z
+              )  # Coordinates in X, Y, Z directions of the node with the minimum Z coordinate
+              print(min_z_node.id)  # Id of the node with the minimum Z coordinate
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinDeformationOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_deformations instead.
+SIGNATURE: meta.models.MinDeformationOfModel(result) -> list[results.Deformation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_deformations` instead.
+  
+  This function calculates minimum deformation for each direction (X, Y, Z, TOTAL), of a model.
+  
+  Parameters
+  ----------
+  result : 
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.Deformation]
+      It returns a list with 4 Deformation objects where each member of the list is an object of class Deformation referring to the minimum deformation in each direction for the specified model.
+      - 0 = X deformation
+      - 1 = Y deformation
+      - 2 = Z deformation
+      - 3 = TOTAL deformation
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.Deformation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          min_deform = models.MinDeformationOfModel(result)
+          if len(min_deform):
+              min_x_deform = min_deform[0]  # Object with minimum deformation in direction X
+              print(
+                  min_x_deform.x, min_x_deform.y, min_x_deform.z, min_x_deform.total
+              )  # Deformations in X, Y, Z and Total directions on the node with the minimum X deformation
+              print(min_x_deform.node_id)  # Id of the node with the minimum X deformation
+  
+              min_y_deform = min_deform[0]  # Object with minimum deformation in direction Y
+              print(
+                  min_y_deform.x, min_y_deform.y, min_y_deform.z, min_y_deform.total
+              )  # Deformations in X, Y, Z and Total directions on the node with the minimum Y deformation
+              print(min_y_deform.node_id)  # Id of the node with the minimum Y deformation
+  
+              min_z_deform = min_deform[0]  # Object with minimum deformation in direction Z
+              print(
+                  min_z_deform.x, min_z_deform.y, min_z_deform.z, min_z_deform.total
+              )  # Deformations in X, Y, Z and Total directions on the node with the minimum Z deformation
+              print(min_z_deform.node_id)  # Id of the node with the minimum Z deformation
+  
+              min_total_deform = min_deform[0]  # Object with minimum TOTAL deformation
+              print(
+                  min_total_deform.x,
+                  min_total_deform.y,
+                  min_total_deform.z,
+                  min_total_deform.total,
+              )  # Deformations in X, Y, Z and Total directions on the node with the minimum TOTAL deformation
+              print(
+                  min_total_deform.node_id
+              )  # Id of the node with the minimum TOTAL deformation
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinMaxCentroidScalarOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_centroid_scalar instead.
+SIGNATURE: meta.models.MinMaxCentroidScalarOfModel(result: results.Result) -> list[results.CentroidScalar]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_centroid_scalar` instead.
+  
+  This function calculates minimum and maximum centroid scalar value for a given model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CentroidScalar]
+      It returns a list with 2 CentroidScalar objects where each member of the list refers to the minimum or maximun centroid scalar value for the specified model.
+      - 0 = MINIMUM centroid scalar
+      - 1 = MAXIMUM centroid scalar
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CentroidScalar
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          centroid = models.MinMaxCentroidScalarOfModel(result)
+          if centroid:
+              min_centroid = centroid[0]  # Object with minimum centroid scalar value
+              print(
+                  min_centroid.value,
+                  min_centroid.element_id,
+                  min_centroid.second_id,
+                  min_centroid.type,
+              )  # Minimum centroid scalar value, Id, second id and type of the element with the minimum centroid scalar value
+  
+              max_centroid = centroid[1]
+              # Object with maximum centroid scalar value
+              print(
+                  max_centroid.value,
+                  max_centroid.element_id,
+                  max_centroid.second_id,
+                  max_centroid.type,
+              )  # Maximum centroid scalar value, Id, second id and type of the element with the maximum centroid scalar value
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinMaxCentroidVectorOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_centroid_vector instead.
+SIGNATURE: meta.models.MinMaxCentroidVectorOfModel(result: results.Result) -> list[results.CentroidVector]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_centroid_vector` instead.
+  
+  This function calculates minimum and maximum centroid vector values of a model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CentroidVector]
+      It returns a list with 2 CentroidVector objects where each member of the list refers to the minimum or maximun centroid vector value for the specified model.
+      - 0 = MINIMUM centroid vector
+      - 1 = MAXIMUM centroid vector
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CentroidVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          centroid = models.MinMaxCentroidVectorOfModel(result)
+          if centroid:
+              min_centroid = centroid[0]  # Object with minimum centroid vector value
+              print(
+                  min_centroid.value,
+                  min_centroid.element_id,
+                  min_centroid.second_id,
+                  min_centroid.type,
+              )  # Minimum centroid vector value, Id, second id and type of the element with the minimum centroid vector value
+  
+              max_centroid = centroid[1]
+              # Object with maximum centroid vector value
+              print(
+                  max_centroid.value,
+                  max_centroid.element_id,
+                  max_centroid.second_id,
+                  max_centroid.type,
+              )  # Maximum centroid vector value, Id, second id and type of the element with the maximum centroid vector value
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinMaxCornerScalarOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_corner_scalar instead.
+SIGNATURE: meta.models.MinMaxCornerScalarOfModel(result: results.Result) -> list[results.CornerScalar]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_corner_scalar` instead.
+  
+  This function calculates minimum and maximum corner scalar value of a model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CornerScalar]
+      It returns a list with 2 CornerScalar objects where each member of the list refers to the minimum or maximun corner scalar value for the specified model.
+              0 = MINIMUM corner scalar
+              1 = MAXIMUM corner scalar
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CornerScalar
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          corner = models.MinMaxCornerScalarOfModel(result)
+          if corner:
+              min_corner = corner[0]  # Object with the minimum corner scalar value
+              print(min_corner.value)  # Minimum corner scalar value
+              print(
+                  min_corner.element_id, min_corner.second_id, min_corner.type
+              )  # Id, second id and type of the element with the minimum corner scalar value
+              print(
+                  min_corner.corner
+              )  # Id of the node - corner with the minimum corner scalar value for shells and solids elements, or the fraction of the distance from the start to the total distance for line elements
+  
+              max_corner = corner[1]  # Object with the maximum corner scalar value
+              print(
+                  max_corner.value,
+                  max_corner.element_id,
+                  max_corner.second_id,
+                  max_corner.type,
+                  max_corner.corner,
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinMaxNodalScalarOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_nodal_scalar instead.
+SIGNATURE: meta.models.MinMaxNodalScalarOfModel(result: results.Result) -> list[results.NodalScalar]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_nodal_scalar` instead.
+  
+  This function calculates minimum and maximum nodal scalar value for a model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.NodalScalar]
+      It returns a list with 2 NodalScalar objects where each member of the list refers to the minimum or maximun nodal scalar value for the specified model.
+      - 0 = MINIMUM nodal scalar
+      - 1 = MAXIMUM nodal scalar
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.NodalScalar
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          nodal = models.MinMaxNodalScalarOfModel(result)
+          if len(nodal):
+              min_nodal = nodal[0]  # Object with minimum nodal scalar value
+              print(min_nodal.value)  # Minimum nodal scalar value
+              print(min_nodal.node_id)  # Id of the node with the minimun nodal scalar value
+              print(min_nodal.part_id)  # Id of the part or -1 if no part exists
+  
+              max_nodal = nodal[1]  # Object with maximum nodal scalar value
+              print(max_nodal.value)  # Maximum nodal scalar value
+              print(max_nodal.node_id)  # Id of the node with the maximum nodal scalar value
+              print(max_nodal.part_id)  # Id of the part or -1 if no part exists
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinMaxNodalVectorOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_nodal_vector instead.
+SIGNATURE: meta.models.MinMaxNodalVectorOfModel(result: results.Result) -> list[results.NodalVector]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_nodal_vector` instead.
+  
+  This function calculates minimum and maximum nodal vector values of a model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.NodalVector]
+      It returns a list with 2 NodalVector objects where each member of the list refers to the minimum or maximun nodal vector value for the specified model.
+      - 0 = MINIMUM nodal vector
+      - 1 = MAXIMUM nodal vector
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.NodalVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          nodal = models.MinMaxNodalVectorOfModel(result)
+          if len(nodal):
+              min_nodal = nodal[0]  # Object with the minimum nodal vector value
+              print(min_nodal.value)  # Minimum nodal vector value
+              print(
+                  min_nodal.x, min_nodal.y, min_nodal.z
+              )  # Normalized coordinates (X, Y, Z) of the minimun nodal vector value
+              print(min_nodal.node_id)  # Id of the node with the minimum nodal vector value
+              print(min_nodal.part_id)  # Id of the part or -1 if no part exists
+  
+              max_nodal = nodal[1]  # Object with the maximum nodal vector value
+              print(max_nodal.value)  # Maximum nodal vector value
+              print(
+                  max_nodal.x, max_nodal.y, max_nodal.z
+              )  # Normalized coordinates (X, Y, Z) of the maximum nodal vector value
+              print(max_nodal.node_id)  # Id of the node with the maximum nodal vector value
+              print(max_nodal.part_id)  # Id of the part or -1 if no part exists
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ModelById
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_models instead.
+SIGNATURE: meta.models.ModelById(model_id: int) -> Model
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_models` instead.
+  
+  This function searches for the model with the given model number.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  Model
+      Upon success, it returns the model object with the given model number.
+      Else, a non valid model object is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          r = models.ModelById(0)
+          if r:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ModelByName
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_models instead.
+SIGNATURE: meta.models.ModelByName(filename: str) -> Model
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_models` instead.
+  
+  This function searches for the model with the given filename.
+  
+  Parameters
+  ----------
+  filename : str
+      Full absolute path of the file of the model.
+  
+  Returns
+  -------
+  Model
+      Upon success, it returns the model object with the given filename.
+      Else, a non valid model object is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          filename = "/home/examples/EpilysisEx5.op2"
+          r = models.ModelByName(filename)
+          if r:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Models
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_models instead.
+SIGNATURE: meta.models.Models() -> list[Model]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_models` instead.
+  
+  This function collects all the currently loaded 3D models.
+  
+  Returns
+  -------
+  list[Model]
+      It returns a list where each member of the list is an object of class Model referring to the corresponding loaded 3D model.
+      If no model is loaded, an empty list is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          all_models = models.Models()
+          for r in all_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ModelsByName
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_models instead.
+SIGNATURE: meta.models.ModelsByName(filename: str) -> list[Model]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_models` instead.
+  
+  This function searches for the model with the given filename.
+  
+  Parameters
+  ----------
+  filename : str
+      A string search expression where wildcards can be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  list[Model]
+      It returns a list where each member of the list is an object of class Model referring to one specific model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          filename = "*.cdb"
+          collected_models = models.ModelsByName(filename)
+          for r in collected_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ModelsIn3DWindow
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_models instead.
+SIGNATURE: meta.models.ModelsIn3DWindow(window_name: str) -> list[Model]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_models` instead.
+  
+  This function finds the models which are loaded in the 3D window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Full name of the window.
+  
+  Returns
+  -------
+  list[Model]
+      On success, it returns a list with Model objects where each member of the list refers to the corresponding model.
+      On failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          window_name = "MetaPost"
+          window_models = models.ModelsIn3DWindow(window_name)
+          for r in window_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ModelsOfOverlayRun
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_models instead.
+SIGNATURE: meta.models.ModelsOfOverlayRun(overlay_run_id: int, overlay_run_type: str) -> list[Model]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_models` instead.
+  
+  This function searches for the models of an overlay run with a given type.
+  
+  Parameters
+  ----------
+  overlay_run_id : int
+      Id of the overlay run.
+  
+  overlay_run_type : str
+      Type of the overlay run. Possible values are:
+      - 'session'
+      - 'project'
+  
+  Returns
+  -------
+  list[Model]
+      It returns a list where each member of the list is an object of class Model referring to one model of the given overlay run.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          overlay_run_type = "session"
+          overlay_run_id = 1
+  
+          overlay_run_models = models.ModelsOfOverlayRun(overlay_run_type, overlay_run_id)
+          for r in overlay_run_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NodalScalarOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_nodal_scalar instead.
+SIGNATURE: meta.models.NodalScalarOfModel(layer: str, result: results.Result) -> list[results.NodalScalar]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_nodal_scalar` instead.
+  
+  This function calculates all nodal scalar values of the nodes of a given model.
+  
+  Parameters
+  ----------
+  layer : str
+      Location of the nodal scalar values. It should be specified only if both bottom and top values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.NodalScalar]
+      It returns a list with the NodalScalar objects where each member of the list refers to one nodal scalar value of a node of the specified model.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  If a node of the model belongs to more than one parts, then this function will calculate the nodal scalar values of all parts of this node.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.NodalScalar
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          all_nodal = models.NodalScalarOfModel(result)  # Matrix with nodal_scalar structs
+          iter_end = min(10, len(all_nodal))
+          for nodal in all_nodal[0:iter_end]:
+              print(
+                  nodal.value, nodal.node_id, nodal.part_id
+              )  # Nodal scalar value, Id of the node, Id of the part (-1 if no part exists)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NodalScalarOfModelNonZero
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_nodal_scalar instead.
+SIGNATURE: meta.models.NodalScalarOfModelNonZero(layer: str, result) -> list[results.NodalScalar]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_nodal_scalar` instead.
+  
+  This function calculates non zero nodal scalar values of the nodes of a given model.
+  
+  Parameters
+  ----------
+  layer : str
+      Location of the nodal scalar values. It should be specified only if both bottom and top values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'
+  
+  result : 
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.NodalScalar]
+      It returns a list where each member of the list is an object of class NodalScalar referring to one non-zero nodal scalar value of a node of the specified model.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  If a node of the model belongs to more than one parts, then this function will calculate the nodal scalar values of all parts of this node.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.NodalScalar
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          all_nodal = models.NodalScalarOfModelNonZero(
+              result
+          )  # Matrix with nodal_scalar structs
+          iter_end = min(10, len(all_nodal))
+          for nodal in all_nodal[0:iter_end]:
+              print(
+                  nodal.value, nodal.node_id, nodal.part_id
+              )  # Nodal scalar value, Id of the node, Id of the part (-1 if no part exists)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NodalVectorOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_nodal_vector instead.
+SIGNATURE: meta.models.NodalVectorOfModel(layer: str, result: results.Result) -> list[results.NodalVector]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_nodal_vector` instead.
+  
+  This function calculates all nodal vector values of an existing model.
+  
+  Parameters
+  ----------
+  layer : str
+      Location of the nodal vector values. It should be specified only if both bottom and top values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.NodalVector]
+      It returns a list where each member of the list is an object of class NodalVector referring to one nodal vector value of a node of the specified model.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  If a node of the model belongs to more than one parts, then this function will calculate the nodal vector values of all parts of this node.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.NodalVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          all_nodal = models.NodalVectorOfModel(result)  # Matrix with nodal_vector structs
+          iter_end = min(10, len(all_nodal))
+          for nodal in all_nodal[0:iter_end]:
+              print(nodal.value)  # Nodal vector value
+              print(
+                  nodal.x, nodal.y, nodal.z
+              )  # Normalized coordinates (X, Y, Z) of the nodal vector
+              print(
+                  nodal.node_id, nodal.part_id
+              )  # Id of the node, Id of the part (-1 if no part exists)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NodalVectorOfModelNonZero
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_nodal_vector instead.
+SIGNATURE: meta.models.NodalVectorOfModelNonZero(layer: str, result: results.Result) -> list[results.NodalVector]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_nodal_vector` instead.
+  
+  This function calculates non zero nodal vector values of an existing model.
+  
+  Parameters
+  ----------
+  layer : str
+      Location of the nodal vector values. It should be specified only if both bottom and top values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.NodalVector]
+      It returns a list where each member of the list is an object of class NodalVector referring to one non-zero nodal vector value of a node of the specified model.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  If a node of the model belongs to more than one parts, then this function will calculate the nodal vector values of all parts of this node.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.NodalVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          all_nodal = models.NodalVectorOfModelNonZero(
+              result
+          )  # Matrix with nodal_vector structs
+          iter_end = min(10, len(all_nodal))
+          for nodal in all_nodal[0:iter_end]:
+              print(nodal.value)  # Nodal vector value
+              print(
+                  nodal.x, nodal.y, nodal.z
+              )  # Normalized coordinates (X, Y, Z) of the nodal vector
+              print(
+                  nodal.node_id, nodal.part_id
+              )  # Id of the node, Id of the part (-1 if no part exists)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NumOfModels
+MODULE: meta.models
+SIGNATURE: meta.models.NumOfModels() -> int
+DOCSTRING:
+  This function finds the number of the current loaded 3D models.
+  
+  Returns
+  -------
+  int
+      It returns the number of the loaded 3D models.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          num_of_models = models.NumOfModels()
+          print(num_of_models)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PickModels
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.pick_models instead.
+SIGNATURE: meta.models.PickModels(message: str) -> list[Model]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.pick_models` instead.
+  
+  This function allows the user to pick models from the existing windows. The execution of the script will stop and it will restart when the middle mouse button or Enter is pressed.
+  
+  Parameters
+  ----------
+  message : str
+      Message displayed to the user which will be shown to the user when the function is called.
+  
+  Returns
+  -------
+  list[Model]
+      It returns a list with Model objects where each member of the list is refers to one specific picked model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          message = "Select Models and press Enter when you are ready"
+          picked_models = models.PickModels(message)
+          for r in picked_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ProjectedFrontalAreaOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_projected_frontal_area instead.
+SIGNATURE: meta.models.ProjectedFrontalAreaOfModel(window_name: str, model_id: int) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_projected_frontal_area` instead.
+  
+  This function finds the projected frontal area of a model's visible entities according to current view.
+  
+  Parameters
+  ----------
+  window_name : str, optional
+      Name of the window of the model. If it is absent then this function will return the projected frontal area of the model for the first enabled window.
+  
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  float
+      Upon success, it returns as a float the projected frontal area of the corresponding model for the specified window.
+      Else, a zero value is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          window_name = "MetaPost"
+          proj_frontal_area = models.ProjectedFrontalAreaOfModel(model_id, window_name)
+          print(proj_frontal_area)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReferenceAreaOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_reference_area instead.
+SIGNATURE: meta.models.ReferenceAreaOfModel(model_id: int) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_reference_area` instead.
+  
+  This function finds the reference area of a model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  float
+      Upon success, it returns as a float the reference area of the corresponding model with the given id. 
+      Else, a zero value is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          ref_area = models.ReferenceAreaOfModel(model_id)
+          print(ref_area)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReferenceDensityOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_reference_density instead.
+SIGNATURE: meta.models.ReferenceDensityOfModel(model_id: int) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_reference_density` instead.
+  
+  This function finds the reference density of a model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  float
+      Upon success, it returns as a float the reference density of the corresponding model with the given id.
+      Else, a zero value is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          ref_density = models.ReferenceDensityOfModel(model_id)
+          print(ref_density)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReferenceLengthOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_reference_length instead.
+SIGNATURE: meta.models.ReferenceLengthOfModel(model_id: int) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_reference_length` instead.
+  
+  This function finds the reference length of a model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  float
+      Upon success, it returns as a float the reference length of the corresponding model with the given id.
+      Else, a zero value is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          ref_length = models.ReferenceLengthOfModel(model_id)
+          print(ref_length)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReferencePressureOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_reference_pressure instead.
+SIGNATURE: meta.models.ReferencePressureOfModel(model_id: int) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_reference_pressure` instead.
+  
+  This function finds the reference pressure of a model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  float
+      Upon success, it returns as a float the reference pressure of the corresponding model with the given id.
+      Else, a zero value is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          ref_pressure = models.ReferencePressureOfModel(model_id)
+          print(ref_pressure)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReferenceVelocityOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_reference_velocity instead.
+SIGNATURE: meta.models.ReferenceVelocityOfModel(model_id: int) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_reference_velocity` instead.
+  
+  This function finds the reference velocity of a model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  float
+      Upon success, it returns as a float the reference velocity of the specified model.
+      Else, a zero value is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          ref_veloc = models.ReferenceVelocityOfModel(model_id)
+          print(ref_veloc)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReportNewEntities
+MODULE: meta.models
+SIGNATURE: meta.models.ReportNewEntities() -> list
+DOCSTRING:
+  This function collects the newly created entities from the last call of script function CollectNewEntitiesStart(). This function should be preceded by a corresponding call to script function CollectNewEntitiesStart() and should be followed by a corresponding call to script function CollectNewEntitiesEnd().
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is an object referring to one specific entity of META.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import utils
+      from meta import annotations
+      from meta import visuals
+  
+  
+      def main():
+          models.CollectNewEntitiesStart()
+  
+          # create new annotations
+          utils.MetaCommand('annotation add 1 "Empty Annotation"')
+          utils.MetaCommand('annotation add 2 "Empty Annotation"')
+  
+          # create new images
+          utils.MetaCommand('image read image0 "/home/examples/Ex1.png"')
+          utils.MetaCommand('image read image1 "/home/examples/Ex2.png"')
+  
+          new_entities = models.ReportNewEntities()
+          for ent in new_entities:
+              if annotations.IsAnnotation(ent):
+                  a = ent
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+              elif visuals.IsImage(ent):
+                  img = ent
+                  print(
+                      img.name,
+                      img.window_name,
+                      img.width,
+                      img.height,
+                      img.filename,
+                      img.zorder,
+                      img.visible,
+                  )
+          models.CollectNewEntitiesEnd()
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReportNewModels
+MODULE: meta.models
+SIGNATURE: meta.models.ReportNewModels() -> list[Model]
+DOCSTRING:
+  This function collects the newly created models from the last call of script function CollectNewModelsStart(). This function should be preceded by a corresponding call to script function CollectNewModelsStart() and should be followed by a corresponding call to script function CollectNewModelsEnd().
+  
+  Returns
+  -------
+  list[Model]
+      It returns a list where each member of the list is an object of class Model referring to one specific newly created model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import utils
+  
+  
+      def main():
+          models.CollectNewModelsStart()
+  
+          # create new models
+          utils.MetaCommand("model active empty")
+          utils.MetaCommand("read geom Nastran /home/examples/NastranEx2.nas")
+  
+          new_models = models.ReportNewModels()
+          for r in new_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+          models.CollectNewModelsEnd()
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetColorOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.set_color instead.
+SIGNATURE: meta.models.SetColorOfModel(model_id: int, red: int, green: int, blue: int, alpha: int, window_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.set_color` instead.
+  
+  This function sets color of a model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  red : int
+      Red value.
+  
+  green : int
+      Green value.
+  
+  blue : int
+      Blue value.
+  
+  alpha : int
+      Alpha channel value.
+  
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          red = 100
+          green = 255
+          blue = 255
+          alpha = 255
+          window_name = "MetaPost"
+          ret = models.SetColorOfModel(model_id, red, green, blue, alpha, window_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ShellNormalOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_shell_normal instead.
+SIGNATURE: meta.models.ShellNormalOfModel(result: results.Result) -> list[results.CentroidVector]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_shell_normal` instead.
+  
+  This function calculates the shell normal vectors of the SHELL elements of a model. It takes into account the displaced structure according to a given resultset with deformations available.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model. If it does not contain deformation information, then shell normal vectors will be calculated for the ORIGINAL STATE.
+  
+  Returns
+  -------
+  list[results.CentroidVector]
+      It returns a list with the CentroidVector objects where each member of the list refers to the shell normal vector of a SHELL element of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CentroidVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          all_normal = models.ShellNormalOfModel(
+              result
+          )  # List with CentroidVector objects (shell normal vector)
+          iter_end = min(10, len(all_normal))
+          for shell_normal in all_normal[0:iter_end]:
+              print(shell_normal.value)  # Magnitude of the shell normal vector (always 1)
+              print(
+                  shell_normal.x, shell_normal.y, shell_normal.z
+              )  # Normalized coordinates (X, Y, Z) of the shell normal vector
+              print(
+                  shell_normal.element_id, shell_normal.second_id, shell_normal.type
+              )  # Id, second id and type of the element
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UpdateModel
+MODULE: meta.models
+SIGNATURE: meta.models.UpdateModel(model: Model) -> Model
+DOCSTRING:
+  This function updates the data of the given Model object. Update is based in the field 'id' of the given Model object.
+  
+  Parameters
+  ----------
+  model : Model
+      Object of class Model.
+  
+  Returns
+  -------
+  Model
+      Upon success, it returns the new updated Model object.
+      Else, a non valid Model object is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import utils
+  
+  
+      def main():
+          model_id = 0
+          r = models.ModelById(model_id)
+  
+          # commands which alter the data of the model struct
+          utils.MetaCommand("model active empty")
+  
+          r = models.UpdateModel(r)
+          if r:  # Update OK
+              print(r.id, r.name, r.label, r.deck, r.active)
+          else:  # Update FAILED
+              print("This is not a valid model object")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AreaOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_area instead.
+SIGNATURE: meta.models.AreaOfModel(type: str, result: results.Result) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_area` instead.
+  
+  This function calculates the area of a model. Model area is calculated as the sum of the areas of all SHELL and/or SOLID parts depending on the 'type' argument.
+  
+  Parameters
+  ----------
+  type : str
+      Determines the types of parts included in the estimation of the model area. Possible values are:
+      - 'SHELL': Only shell elements are taken into account
+      - 'SOLID': Only solid elements are taken into account
+      - 'ALL': Both shell and solid elements are taken into account
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model. If it does not contain deformation information, then area will be calculated for the ORIGINAL STATE.
+  
+  Returns
+  -------
+  float
+      It returns a float value being the area of the model calculated as the sum of the areas of all parts of the specified type (shell and/or solid).
+      Upon failure, an invalid value of -1000 will be returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import results
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          type = "SHELL"
+          all_resultsets = results.Resultsets(model_id)
+          area = models.AreaOfModel(all_resultsets[0], type)
+          print("area = " + str(area))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: StringFromAdvFilters
+MODULE: meta.models
+SIGNATURE: meta.models.StringFromAdvFilters(model_id: int, initial_filter: str) -> list[str]
+DOCSTRING:
+  This function allows the user to specify the advanced filter for a given model. The execution of the script will stop and a window will open in order for the user to specify its advanced filters.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  initial_filter : str, optional
+      Defines the initial advanced filter setting (e.g 'add:Elements:visible::Keep All').
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with the strings of the selected advanced filters. The first entry refers to state selection. The second entry is the advanced filter text as it would appear in a META command.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          all_filters = models.StringFromAdvFilters(model_id)
+          for filter in all_filters:
+              print(filter)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VisibleModelsOfWindow
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_models instead.
+SIGNATURE: meta.models.VisibleModelsOfWindow(window_name: str) -> list[Model]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_models` instead.
+  
+  This function finds the visible models which are loaded in a given 3D window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Full name of the 3d window
+  
+  Returns
+  -------
+  list[Model]
+      On success, it returns a list where each member of the list is an object of class Model referring to the corresponding visible model.
+      On failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          window_name = "MetaPost"
+          visible_models = models.VisibleModelsOfWindow(window_name)
+          for r in visible_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VectorLabelsOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_vector_labels instead.
+SIGNATURE: meta.models.VectorLabelsOfModel(model_id: int) -> list[str]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_vector_labels` instead.
+  
+  This function finds all vector labels for a given model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with all vector labels where each member of the list is a string referring to one vector label of the corresponding model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          all_labels = models.VectorLabelsOfModel(model_id)
+          for vector_label in all_labels:
+              print(vector_label)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ScalarLabelsOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_scalar_labels instead.
+SIGNATURE: meta.models.ScalarLabelsOfModel(model_id: int) -> list[str]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_scalar_labels` instead.
+  
+  This function finds all scalar labels for a given model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with all scalar labels where each member of the list is a string referring to one scalar label of the corresponding model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          all_labels = models.ScalarLabelsOfModel(model_id)
+          for scalar_label in all_labels:
+              print(scalar_label)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CommentOfProject
+MODULE: meta.models
+SIGNATURE: meta.models.CommentOfProject(filename: str) -> str
+DOCSTRING:
+  This function gets the comment of a given project file (.metadb). 
+  
+  Parameters
+  ----------
+  filename : str
+      Filename of the project file.
+  
+  Returns
+  -------
+  str
+      It returns a string referring to the comment of the given project file.
+      Upon failure, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          filename = "/home/examples/Ex1.metadb"
+          project_comment = models.CommentOfProject(filename)
+          print(project_comment)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CornerVectorOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_corner_vector instead.
+SIGNATURE: meta.models.CornerVectorOfModel(layer: str, result: results.Result) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_corner_vector` instead.
+  
+  This function calculates all corner vector values of the elements of a model.
+  
+  Parameters
+  ----------
+  layer : str, optional
+      Location of the corner scalar values. It should be specified only if both top and bottom values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'.
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  int
+      It returns a list with CornerVector objects where each member of the list refers to the corner vector values of an element of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CornerVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          layer = "bottom"
+          # Bottom centroid vector values in case both bottom and top centroid vector values are loaded
+          all_corner = models.CornerVectorOfModel(result, layer)
+  
+          for i in range(1, min(len(all_corner), 10)):
+              print(all_corner[i].value)  # Corner scalar value
+              print(all_corner[i].x)  # Corner X component value
+              print(all_corner[i].y)  # Corner Y component value
+              print(all_corner[i].z)  # Corner Z component value
+              print(
+                  all_corner[i].element_id, all_corner[i].second_id, all_corner[i].type
+              )  # Id, second id and type of the element
+              print(
+                  all_corner[i].corner
+              )  # Id of the node - corner for shell and solid elements, or the fraction of the distance from the start to the total distance for line elements
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinMaxCornerVectorOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_corner_vector instead.
+SIGNATURE: meta.models.MinMaxCornerVectorOfModel(result: results.Result) -> list[results.CornerVector]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_corner_vector` instead.
+  
+  This function calculates minimum and maximum corner vector value of a model.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list[results.CornerVector]
+      It returns a list with 2 CornerVector objects where each member of the list refers to the minimum or maximun corner scalar value for the specified model.
+              0 = MINIMUM corner scalar
+              1 = MAXIMUM corner scalar
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CornerVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          corner = models.MinMaxCornerVectorOfModel(result)
+          if corner:
+              min_corner = corner[0]  # Object with the minimum corner scalar value
+              print(min_corner.value)  # Minimum corner scalar value
+              print(min_corner.x)  # X component corner value
+              print(min_corner.y)  # Y component corner value
+              print(min_corner.z)  # Z component corner value
+              print(
+                  min_corner.element_id, min_corner.second_id, min_corner.type
+              )  # Id, second id and type of the element with the minimum corner scalar value
+              print(
+                  min_corner.corner
+              )  # Id of the node - corner with the minimum corner scalar value for shells and solids elements, or the fraction of the distance from the start to the total distance for line elements
+  
+              max_corner = corner[1]  # Object with the maximum corner scalar value
+              print(
+                  max_corner.value,
+                  min_corner.x,
+                  min_corner.y,
+                  min_corner.z,
+                  max_corner.element_id,
+                  max_corner.second_id,
+                  max_corner.type,
+                  max_corner.corner,
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CornerVectorOfModelNonZero
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_corner_vector instead.
+SIGNATURE: meta.models.CornerVectorOfModelNonZero(layer: str, result: results.Result) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_corner_vector` instead.
+  
+  This function calculates all non zero corner vector values of the elements of a model.
+  
+  Parameters
+  ----------
+  layer : str, optional
+      Location of the corner scalar values. It should be specified only if both top and bottom values are loaded. Possible values are:
+      - 'bottom' (default)
+      - 'top'.
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  int
+      It returns a list with CornerVector objects where each member of the list refers to the non zero corner vector values of an element of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result, meta.results.CornerVector
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+  
+          layer = "bottom"
+          # Bottom centroid vector values in case both bottom and top centroid vector values are loaded
+          all_corner = models.CornerVectorOfModelNonZero(result, layer)
+  
+          for i in range(1, min(len(all_corner), 10)):
+              print(all_corner[i].value)  # Corner scalar value
+              print(all_corner[i].x)  # Corner X component value
+              print(all_corner[i].y)  # Corner Y component value
+              print(all_corner[i].z)  # Corner Z component value
+              print(
+                  all_corner[i].element_id, all_corner[i].second_id, all_corner[i].type
+              )  # Id, second id and type of the element
+              print(
+                  all_corner[i].corner
+              )  # Id of the node - corner for shell and solid elements, or the fraction of the distance from the start to the total distance for line elements
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PickModelsFromList
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.pick_models_from_list instead.
+SIGNATURE: meta.models.PickModelsFromList(message: str) -> list[Model]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.pick_models_from_list` instead.
+  
+  This function allows the user to select models from a given list. The execution of the script will stop and it will restart after the selection of the models from the list.
+  
+  Parameters
+  ----------
+  message : str
+      Message displayed to the user.
+  
+  Returns
+  -------
+  list[Model]
+      It returns a list where each member of the list is an object of class Model referring to one specific selected model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          message = "Select Models and press Enter when you are ready"
+          picked_models = models.PickModelsFromList(message)
+          for r in picked_models:
+              print(r.id, r.name, r.label, r.deck, r.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: BoundingRectangleOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_bounding_rectangle instead.
+SIGNATURE: meta.models.BoundingRectangleOfModel(model_id: int, window_name: str) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_bounding_rectangle` instead.
+  
+  This function finds the bounding rectangle of a model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list
+      Upon success, it returns a list where it contains in position 0 and 1 the screen X,Y coordinates [0,1] of the bottom left corner of the rectangle and in position 2 and 3 the screen X,Y coordinates of the top right corner of the rectangle. 
+      Else, a list with zero length is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          window_name = "MetaPost"
+          rect = models.BoundingRectangleOfModel(model_id, window_name)
+          print(rect)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributeOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_attributes instead.
+SIGNATURE: meta.models.AttributeOfModel(model_id: int, attribute_name: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_attributes` instead.
+  
+  This function returns the value of a specific attribute.
+  
+  Parameters
+  ----------
+  model_id : int
+      The number of the model
+  
+  attribute_name : str
+      Name of the attribute
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string with the value of the given argument.
+      Else, an empty string is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          attrib_name = "Deck"
+          val = models.AttributeOfModel(model_id, attrib_name)
+          print("Value: " + val)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.set_attribute instead.
+SIGNATURE: meta.models.SetAttributeOfModel(model_id: int, attribute_name: str, attribute_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.set_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given model. If the given attribute does not exist it is automatically created and its value is set.
+  
+  Parameters
+  ----------
+  model_id : int
+      The number of the model.
+  
+  attribute_name : str
+      Name of the attribute.
+  
+  attribute_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+  
+          attrib_name = "group.test_attrib"
+          value = "test_value"
+          models.SetAttributeOfModel(model_id, attrib_name, value)
+          # or
+          n_attrib_name = "group.n_test_attrib"
+          n_value = 0.1
+          attribute_type = "numerical"
+          models.SetAttributeOfModel(model_id, n_attrib_name, n_value, attribute_type)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_attributes instead.
+SIGNATURE: meta.models.AttributesOfModel(model_id: int) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_attributes` instead.
+  
+  This function collects all attributes of a given model
+  
+  Parameters
+  ----------
+  model_id : int
+      The number of the model
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.models.Model
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          all_attributes = models.AttributesOfModel(model_id)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfResultset
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.results.Result.set_attribute instead.
+SIGNATURE: meta.models.SetAttributeOfResultset(resultset: results.Result, attribute_name: str, attribute_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.results.Result.set_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given state. If the given attribute does not exist it is automatically created and its value is set.
+  
+  Parameters
+  ----------
+  resultset : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  attribute_name : str
+      Name of the attribute.
+  
+  attribute_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          if len(all_resultsets):
+              res = all_resultsets[1]
+              name = "group.name"
+              value = "value"
+              results.SetAttributeOfResultset(res, name, value)
+              # or
+              name = "group.n_name"
+              value = 1.1
+              attribute_type = "numerical"
+              results.SetAttributeOfResultset(res, name, value, attribute_type)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfResultset
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.results.Result.get_attributes instead.
+SIGNATURE: meta.models.AttributesOfResultset(result: results.Result) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.results.Result.get_attributes` instead.
+  
+  This function collects all attributes of a given state
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+  
+      from meta import models
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          res = all_resultsets[1]
+          name = "group.name"
+          value = "value"
+  
+          all_attributes = results.AttributesOfResultset(res)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ProjectedFrontalHoleAreaOfModel
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_projected_frontal_hole_area instead.
+SIGNATURE: meta.models.ProjectedFrontalHoleAreaOfModel(model_id: int, window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_projected_frontal_hole_area` instead.
+  
+  This function finds the projected frontal hole area of a model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  window_name : str, optional
+      Name of the window of the model. If it is absent then this function will return the projected frontal area of the model for the first enabled window.
+  
+  Returns
+  -------
+  float
+      Upon success, it returns as a float the projected frontal hole area of the corresponding model for the specified window.
+      Else, a zero value is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.models.ProjectedFrontalAreaOfModel
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          model_id = 0
+          window_name = "MetaPost"
+          proj_frontal_hole_area = models.ProjectedFrontalHoleAreaOfModel(
+              model_id, window_name
+          )
+          print(proj_frontal_hole_area)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetHiddenOversetElements
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_elements instead.
+SIGNATURE: meta.models.GetHiddenOversetElements(resultset: results.Result, model_id: int) -> list[elements.Element]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_elements` instead.
+  
+  This function returns a list with all the dead elements of the model's background and component volume meshes for the current state. If the model does not contain overset meshes or there exist no dead element, the function returns None.
+  
+  Parameters
+  ----------
+  resultset : results.Result
+      is an object of class Result needed for the current state
+  
+  model_id : int
+      is the Model id
+  
+  Returns
+  -------
+  list[elements.Element]
+      Upon success, it returns a list with all the dead elements of overset meshes. Otherwise it returns None.
+  
+  See Also
+  --------
+  meta.models.EnableOversetCalc, meta.models.DisableOversetCalc, meta.models.HasOversets
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import models
+      from meta import results
+      from meta import elements
+  
+  
+      def main():
+          window_name = "MetaPost"
+  
+          model_filename = " /home/examples/oversets.cas"
+          results_filename = "/home/examples/oversets.dat"
+          deck = "FLUENT"
+          r = models.LoadModel(window_name, model_filename, deck)
+  
+          states = "all"
+          data = "Pressure"
+          new_resultsets = results.LoadScalar(r.id, results_filename, deck, states, data)
+          all_resultsets = results.Resultsets(r.id)
+          res = all_resultsets[1]
+          results.SetCurrentResultset(r.id, res)
+          crn_res = results.CurrentResultset(r.id)
+  
+          m = models.GetHiddenOversetElements(crn_res, r.id)
+  
+          element_types = list()
+          element_ids = list()
+          second_ids = list()
+          all_elements = elements.Elements(r.id)
+  
+          for e in all_elements:
+              element_types.append(e.type)
+              element_ids.append(e.id)
+              second_ids.append(e.second_id)
+          elements.ShowSomeElements(r.id, element_types, element_ids, second_ids)
+  
+          element_types.clear()
+          element_ids.clear()
+          second_ids.clear()
+  
+          for e in m:
+              element_types.append(e.type)
+              element_ids.append(e.id)
+              second_ids.append(e.second_id)
+          elements.HideSomeElements(r.id, element_types, element_ids, second_ids)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HasOversets
+MODULE: meta.models
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.has_oversets instead.
+SIGNATURE: meta.models.HasOversets(model_id: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.has_oversets` instead.
+  
+  This function checks if the passing model as argument with id: model_id contains oversets. 
+  
+  Parameters
+  ----------
+  model_id : int
+      is the Model id
+  
+  Returns
+  -------
+  int
+      This function returns 1 for models containing oversets. Otherwise it returns 0.
+  
+  See Also
+  --------
+  meta.models.GetHiddenOversetElements, meta.models.EnableOversetCalc, meta.models.DisableOversetCalc
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import models
+  
+  
+      def main():
+          act_models = models.ActiveModels()
+          r = act_models[0]
+  
+          hasOversets = models.HasOversets(r.id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: EnableOversetCalc
+MODULE: meta.models
+SIGNATURE: meta.models.EnableOversetCalc() -> int
+DOCSTRING:
+  This function enables the oversets calculation.
+  
+  Returns
+  -------
+  int
+      It always returns 1.
+  
+  See Also
+  --------
+  meta.models.DisableOversetCalc, meta.models.HasOversets, meta.models.GetHiddenOversetElements
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import models
+  
+  
+      def main():
+          status = models.EnableOversetCalc()
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DisableOversetCalc
+MODULE: meta.models
+SIGNATURE: meta.models.DisableOversetCalc() -> int
+DOCSTRING:
+  This function disables the oversets calculation.
+  
+  Returns
+  -------
+  int
+      It always returns 0.
+  
+  See Also
+  --------
+  meta.models.EnableOversetCalc, meta.models.HasOversets, meta.models.GetHiddenOversetElements
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import models
+  
+  
+      def main():
+          status = models.DisableOversetCalc()
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectEntitiesI
+MODULE: meta.models
+SIGNATURE: meta.models.CollectEntitiesI(entity_type: str, specifier: str, window: windows.Window) -> Iterable
+DOCSTRING:
+  Creates an iterable with the entities of specific type. It offers better speed and less memory usage when it is just needed to iterate the result of CollectEntities.
+  
+  Parameters
+  ----------
+  entity_type : str
+      Type of the collected entities. Its possible values are:
+      - 'nodes' : Collect nodes
+      - 'elements' : Collect elements
+  
+  specifier : str, optional
+      Option for collecting all, visible, or identified entities. Its possible values are:
+      "all" : All entities (default option)
+      "visible" : Visible entities
+      "identified" : Identified entities
+  
+  window : windows.Window, optional
+      The Window, on which are the visible/identified entities
+  
+  Returns
+  -------
+  Iterable
+      Upon success this function returns a Python iterator to the entities that are specified from the arguments.
+      Upon failure returns None.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import models
+  
+  
+      def main():
+          entity_type = "nodes"
+          nodes_iter = models.CollectEntitiesI(entity_type)
+  
+          for n in nodes_iter:
+              print(n)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

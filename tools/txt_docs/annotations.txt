@@ -1,0 +1,5571 @@
+MODULE: meta.annotations
+========================================================================
+
+FUNCTION: AnnotationById
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_annotations instead.
+SIGNATURE: meta.annotations.AnnotationById(annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_annotations` instead.
+  
+  This function finds the annotation with a given id (annotation_id).
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation with the given id.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          a = annotations.AnnotationById(annotation_id)
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AnnotationGroups
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_annotation_groups instead.
+SIGNATURE: meta.annotations.AnnotationGroups() -> AnnotationGroup
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_annotation_groups` instead.
+  
+  This function collects all annotation groups of all windows.
+  
+  Returns
+  -------
+  AnnotationGroup
+      It returns a list wwhere each member of the list is an object of class AnnotationGroup referring to one specific annotation group of an existing window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.AnnotationGroup
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_groups = annotations.AnnotationGroups()
+          for ag in annotation_groups:
+              print(ag.name, ag.window_name, ag.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AnnotationGroupsByName
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_annotation_groups instead.
+SIGNATURE: meta.annotations.AnnotationGroupsByName(group_name: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_annotation_groups` instead.
+  
+  This function finds annotation groups with a given name (group_name).
+  
+  Parameters
+  ----------
+  group_name : str
+      Name of the group. Wildcards can also be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class AnnotationGroup referring to one specific annotation group with the given name.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.AnnotationGroup
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          group_name = "AnnoGroup"
+          annotation_groups = annotations.AnnotationGroupsByName(group_name)
+          for ag in annotation_groups:
+              print(ag.name, ag.window_name, ag.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AnnotationGroupsOfWindow
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_annotation_groups instead.
+SIGNATURE: meta.annotations.AnnotationGroupsOfWindow(window_name: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_annotation_groups` instead.
+  
+  This function collects all annotation groups of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class AnnotationGroup referring to one specific annotation group of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.AnnotationGroup
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          window_name = "Window1"
+          annotation_groups = annotations.AnnotationGroupsOfWindow(window_name)
+          for ag in annotation_groups:
+              print(ag.name, ag.window_name, ag.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Annotations
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_annotations instead.
+SIGNATURE: meta.annotations.Annotations() -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_annotations` instead.
+  
+  This function collects all annotations of all existing windows.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific annotation of an existing window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          all_annotations = annotations.Annotations()
+          for a in all_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AnnotationsListToDict
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.AnnotationsListToDict(annotations: list[Annotation]) -> dict
+DOCSTRING:
+  This function constructs a dictionary from a given list with objects of class Annotation.
+  
+  Parameters
+  ----------
+  annotations : list[Annotation]
+      List with objects of class Annotation.
+  
+  Returns
+  -------
+  dict
+      It returns a dictionary whose key is the id of the annotation and member is the corresponding annotation object.
+      Upon failure, an empty dictionary is returned.
+  
+  Notes
+  -----
+  If annotations with the same id exist in the given list, then only the first annotation will be saved in the dictionary.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON object
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          all_annotations = annotations.Annotations()
+  
+          dict_annots = annotations.AnnotationsListToDict(all_annotations)
+          for annot_id, a in dict_annots.items():
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AnnotationsOfGroup
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.AnnotationGroup.get_annotations instead.
+SIGNATURE: meta.annotations.AnnotationsOfGroup(group_name: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.AnnotationGroup.get_annotations` instead.
+  
+  This function searches for the annotations of a group with a given name in the list of the annotation groups.
+  
+  Parameters
+  ----------
+  group_name : str
+      Name of the annotation group.
+  
+  Returns
+  -------
+  list[Annotation]
+      Upon success, it returns a list where each member of the list is an object of class Annotation referring to one specific annotation of the given group.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          group_name = "AnnoGroup"
+          group_annotations = annotations.AnnotationsOfGroup(group_name)
+          for a in group_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AnnotationsOfOverlayRun
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.overlay.Overlay.get_annotations instead.
+SIGNATURE: meta.annotations.AnnotationsOfOverlayRun(overlay_run_id: int, overlay_run_type: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.overlay.Overlay.get_annotations` instead.
+  
+  This function searches for the annotations of an overlay run.
+  
+  Parameters
+  ----------
+  overlay_run_id : int
+      Id of the overlay run.
+  
+  overlay_run_type : str
+      Type of the overlay run:
+      - 'session'
+      - 'project'
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one annotation of the given overlay run.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          overlay_run_type = "session"
+          overlay_run_id = 1
+  
+          overlay_run_annotations = annotations.AnnotationsOfOverlayRun(
+              overlay_run_type, overlay_run_id
+          )
+          for a in overlay_run_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AnnotationsOfWindow
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_annotations instead.
+SIGNATURE: meta.annotations.AnnotationsOfWindow(window_name: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_annotations` instead.
+  
+  This function collects all annotations of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific annotation of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          window_name = "Window1"
+          window_annotations = annotations.AnnotationsOfWindow(window_name)
+          for a in window_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: BackgroundColorOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_background_color instead.
+SIGNATURE: meta.annotations.BackgroundColorOfAnnotation(annotation_id: int) -> windows.Color
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_background_color` instead.
+  
+  This function finds background color of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  windows.Color
+      Upon success, it returns a color object with the background color of the corresponding annotation.
+      Else, a non valid color object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Color
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          col = annotations.BackgroundColorOfAnnotation(annotation_id)
+          if col:
+              print(col.name, col.r, col.g, col.b, col.a)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: BorderColorOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_border_color instead.
+SIGNATURE: meta.annotations.BorderColorOfAnnotation(annotation_id: int) -> windows.Color
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_border_color` instead.
+  
+  This function finds border color of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  windows.Color
+      Upon success, it returns a color object with the border color of the corresponding annotation.
+      Else, a non valid color object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Color
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          col = annotations.BorderColorOfAnnotation(annotation_id)
+          if col:
+              print(col.name, col.r, col.g, col.b, col.a)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewAnnotationsEnd
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.CollectNewAnnotationsEnd() -> list[Annotation]
+DOCSTRING:
+  This function ends recording the creation of new annotations. This function should be preceded by a corresponding call to script function CollectNewAnnotationsStart().
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific newly created annotation.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import utils
+  
+  
+      def main():
+          annotations.CollectNewAnnotationsStart()
+  
+          # create new annotations
+          utils.MetaCommand('annotation add 201 "Empty Annotation"')
+          utils.MetaCommand('annotation add 202 "Empty Annotation"')
+  
+          new_annotations = annotations.CollectNewAnnotationsEnd()
+          for a in new_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewAnnotationsStart
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.CollectNewAnnotationsStart() -> int
+DOCSTRING:
+  This function starts recording the creation of new annotations. This function should be followed by a corresponding call to script function CollectNewAnnotationsEnd().
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import utils
+  
+  
+      def main():
+          annotations.CollectNewAnnotationsStart()
+  
+          # create new annotations
+          utils.MetaCommand('annotation add 201 "Empty Annotation"')
+          utils.MetaCommand('annotation add 202 "Empty Annotation"')
+  
+          new_annotations = annotations.CollectNewAnnotationsEnd()
+          for a in new_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateEmptyAnnotation
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.CreateEmptyAnnotation(window_name: str, annotation_text: str, annotation_id: int) -> Annotation
+DOCSTRING:
+  This function creates an annotation on an existing 3D window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  annotation_text : str
+      Text of the annotation.
+  
+  annotation_id : int
+      Id of the annotation. If there is an annotation with the given id then this function will fail. If optional argument "annotation_id" is absent then an id will be chosen from the function.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the newly created annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          window_name = "Window1"
+          annotation_text = "100th Annotation"
+          annotation_id = 100
+          a = annotations.CreateEmptyAnnotation(window_name, annotation_text, annotation_id)
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateEmptyAnnotationOnPlot
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.CreateEmptyAnnotationOnPlot(window_name: str, plot_id: int, annotation_text: str, annotation_id: int) -> Annotation
+DOCSTRING:
+  This function creates an annotation on an specified plot2d window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  plot_id : int
+      Id of the plot.
+  
+  annotation_text : str
+      Text of the annotation.
+  
+  annotation_id : int
+      Id of the annotation. If there is an annotation with the given id then this function will fail. If optional argument "annotation_id" is absent then an id will be chosen from the function.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the newly created annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          window_name = "Window1"
+          plot_id = 0
+          text = "Annotation on plot"
+          annotation_id = 5
+          a = annotations.CreateEmptyAnnotationOnPlot(
+              window_name, plot_id, text, annotation_id
+          )
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateSomeEmptyAnnotations
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.CreateSomeEmptyAnnotations(window_names: list[str], annotation_texts: list[str], annotation_ids: list[int]) -> list[Annotation]
+DOCSTRING:
+  This function creates some empty annotations on some existing 3D windows specified by their names.
+  
+  Parameters
+  ----------
+  window_names : list[str]
+      List with names of the windows.
+  
+  annotation_texts : list[str]
+      List with texts of the annotations.
+  
+  annotation_ids : list[int], optional
+      List with ids of the annotations. If there is an annotation with the given id then this function will fail. If argument "annotation_id" is absent then an id will be chosen from the function.
+  
+  Returns
+  -------
+  list[Annotation]
+      Upon success, it returns a list with objects of class Annotation referring to the newly created annotations.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_window_name = list()
+          list_text = list()
+          list_annotation_id = list()
+  
+          for i in range(100, 110, 2):
+              list_window_name.append("MetaPost")
+              list_text.append("annot_" + str(i))
+              list_annotation_id.append(i + 1)
+          print(list_window_name)
+          print(list_text)
+          print(list_annotation_id)
+  
+          new_annotations = annotations.CreateSomeEmptyAnnotations(
+              list_window_name, list_text, list_annotation_id
+          )
+          for a in new_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateSomeEmptyAnnotationsOnPlot
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.CreateSomeEmptyAnnotationsOnPlot(window_names: list[str], plot_ids: list[int], annotation_texts: list[str], annotation_ids: list[int]) -> list[Annotation]
+DOCSTRING:
+  This function creates some empty annotations on some existing plot2d windows.
+  
+  Parameters
+  ----------
+  window_names : list[str]
+      List with names of the windows.
+  
+  plot_ids : list[int]
+      List with ids of the plots.
+  
+  annotation_texts : list[str]
+      List with texts of the annotations.
+  
+  annotation_ids : list[int], optional
+      List with ids of the annotations. If argument "annotation_id" is absent then an id will be chosen from the function.
+  
+  Returns
+  -------
+  list[Annotation]
+      Upon success, it returns a list with objects of class Annotation referring to the newly created annotations.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  If there is an annotation with the given id then this function will fail.
+  This function works for active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_window_name = list()
+          list_plot_id = list()
+          list_text = list()
+          list_annotation_id = list()
+  
+          for i in range(100, 110, 1):
+              list_window_name.append("Window1")
+              list_plot_id.append(0)
+              list_text.append("annot" + str(i))
+              list_annotation_id.append(i + 1)
+          print(list_window_name)
+          print(list_plot_id)
+          print(list_text)
+          print(list_annotation_id)
+  
+          new_annotations = annotations.CreateSomeEmptyAnnotationsOnPlot(
+              list_window_name, list_plot_id, list_text, list_annotation_id
+          )
+          for a in new_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.delete instead.
+SIGNATURE: meta.annotations.DeleteAnnotation(annotation_id: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.delete` instead.
+  
+  This function deletes an annotation with a specific id.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 8
+          ret = annotations.DeleteAnnotation(annotation_id)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeselectAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.deselect instead.
+SIGNATURE: meta.annotations.DeselectAnnotation(annotation_id: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.deselect` instead.
+  
+  This function deselects an annotation with a specific id.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 8
+          ret = annotations.DeselectAnnotation(annotation_id)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HiddenOnScreenAnnotations
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_annotations instead.
+SIGNATURE: meta.annotations.HiddenOnScreenAnnotations() -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_annotations` instead.
+  
+  This function collects hidden on screen annotations of all existing windows.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific hidden on screen annotation of an existing window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          hidden_annotations = annotations.HiddenOnScreenAnnotations()
+          for a in hidden_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HiddenOnScreenAnnotationsOfWindow
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_annotations instead.
+SIGNATURE: meta.annotations.HiddenOnScreenAnnotationsOfWindow(window_name: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_annotations` instead.
+  
+  This function collects hidden on screen annotations of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific hidden on screen annotation of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          window_name = "MetaPost"
+          hidden_annotations = annotations.HiddenOnScreenAnnotationsOfWindow(window_name)
+          for a in hidden_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HideAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.hide instead.
+SIGNATURE: meta.annotations.HideAnnotation(annotation_id: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.hide` instead.
+  
+  This function hides an annotation with a specific id.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Annotation Id.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          ret = annotations.HideAnnotation(annotation_id)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsAnnotation
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.IsAnnotation(annotation: Any) -> int
+DOCSTRING:
+  This function checks whether an object is of class Annotation.
+  
+  Parameters
+  ----------
+  annotation : Any
+      Any given object.
+  
+  Returns
+  -------
+  int
+      It returns 1 if object is of class Annotation, or 0 if object is not of class Annotation.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          all_entities = annotations.Annotations()
+  
+          for ent in all_entities:
+              if annotations.IsAnnotation(ent):
+                  a = ent
+                  print("This is an object of class Annotation")
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsAnnotationGroup
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.IsAnnotationGroup(annotation_group: object) -> int
+DOCSTRING:
+  This function checks whether a struct is of type AnnotationGroup.
+  
+  Parameters
+  ----------
+  annotation_group : object
+      Any given object.
+  
+  Returns
+  -------
+  int
+      It returns 1 if object is of class AnnotationGroup, 0 otherwise.
+  
+  See Also
+  --------
+  meta.annotations.AnnotationGroup
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          all_entities = annotations.AnnotationGroups()
+  
+          for ent in all_entities:
+              if annotations.IsAnnotationGroup(ent):
+                  ag = ent
+                  print("This is an object of class AnnotationGroup")
+                  print(ag.name, ag.window_name, ag.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PickAnnotations
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.pick_annotations instead.
+SIGNATURE: meta.annotations.PickAnnotations(message: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.pick_annotations` instead.
+  
+  This function allows the user to pick annotations from all the existing windows. The execution of the script will stop and it will restart when the middle mouse button or Enter is pressed.
+  
+  Parameters
+  ----------
+  message : str
+      Argument "message" refers to the message which will be shown in the screen when the fuction is called.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific picked annotation.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          message = "Select Annotations and press Enter when you are ready"
+          picked_annotations = annotations.PickAnnotations(message)
+          for a in picked_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PointerColorOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_pointer_color instead.
+SIGNATURE: meta.annotations.PointerColorOfAnnotation(annotation_id: int) -> windows.Color
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_pointer_color` instead.
+  
+  This function finds pointer color of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  windows.Color
+      Upon success, it returns a color object with the pointer color of the corresponding annotation.
+      Else, a non valid color object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Color
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          col = annotations.PointerColorOfAnnotation(annotation_id)
+          if col:
+              print(col.name, col.r, col.g, col.b, col.a)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PositionOfAnnotationPointerEnd
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_end_pointer_position instead.
+SIGNATURE: meta.annotations.PositionOfAnnotationPointerEnd(annotation_id: int) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_end_pointer_position` instead.
+  
+  This function finds the position of the end of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  list
+      Upon success, it returns a list whose first member is the position of the end of the pointer of a given annotation in the x-axis of the screen plane and second member is for the y-axis, respectively.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          position = annotations.PositionOfAnnotationPointerEnd(annotation_id)
+          if len(position) == 2:
+              xpos = position[0]
+              print(xpos)
+              ypos = position[1]
+              print(ypos)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PositionOfAnnotationPointerStart
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_start_pointer_position instead.
+SIGNATURE: meta.annotations.PositionOfAnnotationPointerStart(annotation_id: int) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_start_pointer_position` instead.
+  
+  This function finds the position of the start of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  list
+      Upon success, it returns a list whose first member is the position of the start of the pointer of a given annotation in the x-axis of the screen plane and second member is the position in the y-axis, respectively.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          position = annotations.PositionOfAnnotationPointerStart(annotation_id)
+          if len(position) == 2:
+              xpos = position[0]
+              print(xpos)
+              ypos = position[1]
+              print(ypos)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReportNewAnnotations
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.ReportNewAnnotations() -> list[Annotation]
+DOCSTRING:
+  This function collects the newly created annotations from the last call of script function CollectNewAnnotationsStart(). This function should be preceded by a corresponding call to script function CollectNewAnnotationsStart() and should be followed by a corresponding call to script function CollectNewAnnotationsEnd().
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific newly created annotation.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import utils
+  
+  
+      def main():
+          annotations.CollectNewAnnotationsStart()
+  
+          # create new annotations
+          utils.MetaCommand('annotation add 201 "Empty Annotation"')
+          utils.MetaCommand('annotation add 202 "Empty Annotation"')
+  
+          new_annotations = annotations.ReportNewAnnotations()
+          for a in new_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+          annotations.CollectNewAnnotationsEnd()
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.select instead.
+SIGNATURE: meta.annotations.SelectAnnotation(annotation_id: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.select` instead.
+  
+  This function selects an annotation with a specific id.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          ret = annotations.SelectAnnotation(annotation_id)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectedAnnotations
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_annotations instead.
+SIGNATURE: meta.annotations.SelectedAnnotations() -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_annotations` instead.
+  
+  This function collects selected annotations of all existing windows.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific selected annotation of an existing window.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          selected_annotations = annotations.SelectedAnnotations()
+          for a in selected_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectedAnnotationsOfWindow
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_annotations instead.
+SIGNATURE: meta.annotations.SelectedAnnotationsOfWindow(window_name: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_annotations` instead.
+  
+  This function collects selected annotations of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific selected annotation of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          window_name = "MetaPost"
+  
+          selected_annotations = annotations.SelectedAnnotationsOfWindow(window_name)
+          for a in selected_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOn2D
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_2d_position instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOn2D(x_pos: float, y_pos: float, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_2d_position` instead.
+  
+  This function sets the pointer of an annotation specified at a position on the screen plane. Down and left corner of the screen is identified by the position (x_pos = 0, y_pos = 0).
+  
+  Parameters
+  ----------
+  x_pos : float
+      Position in the x-axis of the screen plane in the range [0-1].
+  
+  y_pos : float
+      Position in the y-axis of the screen plane in the range [0-1].
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          x_pos = 0.2
+          y_pos = 0.8
+  
+          a = annotations.SetAnnotationPointerOn2D(annotation_id, x_pos, y_pos)
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOn3D
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_3d_position instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOn3D(annotation_id: int, x_coord: float, y_coord: float, z_coord: float) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_3d_position` instead.
+  
+  This function sets the pointer of an annotation at a position in space.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  x_coord : float
+      X coordinate.
+  
+  y_coord : float
+      Y coordinate.
+  
+  z_coord : float
+      Z coordinate.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 3
+          x_coord = 0.998
+          y_coord = 1.252
+          z_coord = 1.352
+  
+          a = annotations.SetAnnotationPointerOn3D(annotation_id, x_coord, y_coord, z_coord)
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnBoundary
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_boundary instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnBoundary(boundary_id: int, boundary_type: int, model_id: int, second_id: int, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_boundary` instead.
+  
+  This function sets the pointer of an annotation on a boundary element. Boundary elements have a second id which is a number greater than or equal to zero.
+  
+  Parameters
+  ----------
+  boundary_id : int
+      Id of the boundary element.
+  
+  boundary_type : int
+      Type of the boundary element (META constant).
+  
+  model_id : int
+      Id of the model of the element.
+  
+  second_id : int
+      Second id of the boundary element.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given model is not loaded in the window of the annotation then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation, constants
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import constants
+  
+  
+      def main():
+          model_id = 0
+          annotation_id = 1
+          boundary_type = constants.PLOAD4
+          boundary_id = 1
+          second_id = 0
+  
+          a = annotations.SetAnnotationPointerOnBoundary(
+              annotation_id, model_id, boundary_type, boundary_id, second_id
+          )
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnCurve
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_curve instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnCurve(curve_id: int, point_id: int, window_name: str, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_curve` instead.
+  
+  This function sets the pointer of an annotation on a curve of a given plot2d window.
+  
+  Parameters
+  ----------
+  curve_id : int
+      Id of the curve.
+  
+  point_id : int
+      Id of the point of the curve.
+  
+  window_name : str
+      Name of the window.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          window_name = "Window1"
+          curve_id = 9
+          point_id = 23
+  
+          a = annotations.SetAnnotationPointerOnCurve(
+              annotation_id, window_name, curve_id, point_id
+          )
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnElement
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_element instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnElement(element_id: int, element_type, model_id: int, second_id: int, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_element` instead.
+  
+  This function sets the pointer of an annotation on an element.
+  
+  Parameters
+  ----------
+  element_id : int
+      Id of the element.
+  
+  element_type : 
+      Type of the element (META constant).
+  
+  model_id : int
+      Id of the model of the element.
+  
+  second_id : int
+      Second id of the element. Some elements may have a second id (GAP, TUBE, JOINT). For the rest types of elements, the value of second_id is -1.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given model is not loaded in the window of the annotation then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation, meta.elements.Element, constants
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import constants
+  
+  
+      def main():
+          annotation_id = 1
+          model_id = 0
+          element_type = constants.SOLID
+          element_id = 16929
+          second_id = -1
+  
+          a = annotations.SetAnnotationPointerOnElement(
+              annotation_id, model_id, element_type, element_id, second_id
+          )
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnGroup
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_group instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnGroup(group_name: str, model_id: int, pointer_position: str, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_group` instead.
+  
+  This function sets the pointer of an annotation on a group.
+  
+  Parameters
+  ----------
+  group_name : str
+      Name of the group.
+  
+  model_id : int
+      Id of the model of the node.
+  
+  pointer_position : str
+      Optional argument 'pointer_position' refers to the entity of the group to which the annotation will point. Its possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'elemmin': Element with minimum centroid value
+      - 'elemmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If optional argument 'pointer_position' is absent, then annotation will refer to the whole group.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given model is not loaded in the window of the annotation then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 5
+          model_id = 0
+          group_name = "My_Group"
+          pointer_position = "disptotmax"
+  
+          a = annotations.SetAnnotationPointerOnGroup(
+              annotation_id, model_id, group_name, pointer_position
+          )
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnGroupInstance
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_group instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnGroupInstance(group_instance: int, group_name: str, model_id: int, pointer_position: str, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_group` instead.
+  
+  This function sets the pointer of an annotation on a group instance.
+  
+  Parameters
+  ----------
+  group_instance : int
+      Instance of the group.
+  
+  group_name : str
+      Name of the group.
+  
+  model_id : int
+      Id of the model of the group.
+  
+  pointer_position : str
+      Optional argument 'pointer_position' refers to the entity of the group to which the annotation will point. Its possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'elemmin': Element with minimum centroid value
+      - 'elemmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If optional argument 'pointer_position' is absent, then annotation will refer to the whole group.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given model is not loaded in the window of the annotation then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          model_id = 0
+          group_name = "pano"
+          group_instance = 1
+          pointer_position = "disptotmax"
+  
+          a = annotations.SetAnnotationPointerOnGroupInstance(
+              annotation_id, model_id, group_name, group_instance, pointer_position
+          )
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnMaterial
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_material instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnMaterial(material_id: int, material_type, model_id: int, pointer_position: str, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_material` instead.
+  
+  This function sets the pointer of an annotation on a material.
+  
+  Parameters
+  ----------
+  material_id : int
+      Id of the material.
+  
+  material_type : 
+      Type of the material (META keyword).
+  
+  model_id : int
+      Id of the model of the material.
+  
+  pointer_position : str
+      Optional argument 'pointer_position' refers to the entity of the material to which the annotation will point. Its possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'elemmin': Element with minimum centroid value
+      - 'elemmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If optional argument 'pointer_position' is absent, then annotation will point to the center of the material.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+      A description of class Annotation can be found as "Annotation" under library category "annotations".
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given model is not loaded in the window of the annotation then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation, constants
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import constants
+  
+  
+      def main():
+          annotation_id = 1
+          model_id = 0
+          material_type = constants.MAT1
+          material_id = 1
+          pointer_position = "centrmax"
+  
+          a = annotations.SetAnnotationPointerOnMaterial(
+              annotation_id, model_id, material_type, material_id, pointer_position
+          )
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnNode
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_node instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnNode(model_id: int, node_id: int, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_node` instead.
+  
+  This function sets the pointer of an annotation on a node.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model of the node.
+  
+  node_id : int
+      Id of the node.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given model is not loaded in the window of the annotation then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 11
+          model_id = 0
+          node_id = 17211
+  
+          a = annotations.SetAnnotationPointerOnNode(annotation_id, model_id, node_id)
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnPart
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_part instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnPart(model_id: int, part_id: int, part_type, pointer_position: str, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_part` instead.
+  
+  This function sets the pointer of an annotation on a part.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model of the part.
+  
+  part_id : int
+      Id of the part.
+  
+  part_type : 
+      Type of the part (META constant).
+  
+  pointer_position : str
+      Optional argument 'pointer_position' refers to the entity of the part to which the annotation will point. Its possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'centrmin': Element with minimum centroid value
+      - 'centrmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If optional argument 'pointer_position' is absent, then annotation will point at a random node of the part.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given model is not loaded in the window of the annotation then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation, constants
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import constants
+  
+  
+      def main():
+          annotation_id = 1
+          model_id = 0
+          part_type = constants.PSOLID
+          part_id = 2
+          pointer_position = "centrmax"
+  
+          a = annotations.SetAnnotationPointerOnPart(
+              annotation_id, model_id, part_type, part_id, pointer_position
+          )
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnPlane
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_plane instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnPlane(plane_name: str, pointer_postion: str, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_plane` instead.
+  
+  This function sets the pointer of an annotation at an existing plane.
+  
+  Parameters
+  ----------
+  plane_name : str
+      Name of the plane.
+  
+  pointer_postion : str
+      Optional argument 'pointer_position' refers to the entity of the plane to which the annotation will point. Its possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'elemmin': Element with minimum centroid value
+      - 'elemmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If optional argument 'pointer_position' is absent, then annotation will refer to the whole plane.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 4
+          plane_name = "DEFAULT_PLANE_YZ"
+          pointer_position = "elemmax"
+  
+          a = annotations.SetAnnotationPointerOnPlane(
+              annotation_id, plane_name, pointer_position
+          )
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAnnotationPointerOnWindow
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_window instead.
+SIGNATURE: meta.annotations.SetAnnotationPointerOnWindow(window_name: str, annotation_id: int) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_window` instead.
+  
+  This function sets the pointer of an annotation at an existing window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, a non valid Annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          window_name = "Window1"
+  
+          a = annotations.SetAnnotationPointerOnWindow(annotation_id, window_name)
+          if a:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetBackgroundColorOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_background_color instead.
+SIGNATURE: meta.annotations.SetBackgroundColorOfAnnotation(annotation_id: int, red: int, green: int, blue: int, alpha: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_background_color` instead.
+  
+  This function sets background color of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  red : int
+      Red color value.
+  
+  green : int
+      Green color value.
+  
+  blue : int
+      Blue color value.
+  
+  alpha : int
+      Alpha channel value.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          red = 100
+          green = 100
+          blue = 100
+          alpha = 255
+          ret = annotations.SetBackgroundColorOfAnnotation(
+              annotation_id, red, green, blue, alpha
+          )
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetBorderColorOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_border_color instead.
+SIGNATURE: meta.annotations.SetBorderColorOfAnnotation(annotation_id: int, red: int, green: int, blue: int, alpha: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_border_color` instead.
+  
+  This function sets border color of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  red : int
+      Red color value.
+  
+  green : int
+      Green color value.
+  
+  blue : int
+      Blue color value.
+  
+  alpha : int
+      Alpha channel value.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          red = 100
+          green = 100
+          blue = 100
+          alpha = 255
+          ret = annotations.SetBorderColorOfAnnotation(annotation_id, red, green, blue, alpha)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetPointerColorOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_pointer_color instead.
+SIGNATURE: meta.annotations.SetPointerColorOfAnnotation(annotation_id: int, red: int, green: int, blue: int, alpha: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_pointer_color` instead.
+  
+  This function sets pointer color of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  red : int
+      Red color value.
+  
+  green : int
+      Green color value.
+  
+  blue : int
+      Blue color value.
+  
+  alpha : int
+      Alpha channel value.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          red = 255
+          green = 0
+          blue = 0
+          alpha = 255
+          ret = annotations.SetPointerColorOfAnnotation(
+              annotation_id, red, green, blue, alpha
+          )
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSettingsOfAllAnnotations
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_annotations_settings instead.
+SIGNATURE: meta.annotations.SetSettingsOfAllAnnotations(window_name: str, annotation_settings: list[str]) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_annotations_settings` instead.
+  
+  This function controls settings of all annotations of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  annotation_settings : list[str]
+      Argument 'annotation_settings' is a list which contains strings as elements with the name and value of each setting separated by comma (e.g. 'options_width,6').
+      The names of the annotation settings and its possible values are:
+      - 'anchor_none': Anchor none
+      - 'anchor_pointer': Anchor relative to pointer (float value,float value)
+      - 'anchor_scrbotleft': Anchor relative to bottom left of screen (float value,float value)
+      - 'anchor_scrbotright': Anchor relative to bottom right of screen (float value,float value)
+      - 'anchor_scrtopright': Anchor relative to top right pointer (float value,float value)
+      - 'anchor_scrtopleft': Anchor relative to top left pointer (float value,float value)
+      - 'background_auto_color': Background automatic color
+      - 'background_color': Background color (string value)
+      - 'background_function_color': Function used for coloring ("default", "funcval",
+      - 'scalfuncval", "vecfuncval", "cmax', "cmin", "dispx", "dispy", "dispz", "disptot")
+      - 'background_expression_color': Expression or annotation variable used for coloring (string value)
+      - 'background_transparency': Background transparency (float value)
+      - 'border_color': Border color (string value)
+      - 'border_color_pident': Border pid/curve color (0,1)
+      - 'border_padding': Border padding (float value)
+      - 'border_width': Border width (float value)
+      - 'border_rounded': Style of border corners (0,1)
+      - 'hide_shadowed': Hide Shadowed Option (0,1)
+      - 'line_color': Line color (string value)
+      - 'line_width': Line width (float value)
+      - 'model_visibility': Model dependent visibility (0,1)
+      - 'planecut_height': Plane cut height (integer value)
+      - 'planecut_width': Plane cut width (integer value)
+      - 'planecut_rotate': Rotate plane cut (float value)
+      - 'planecut_draw': Draw plane cur (0,1)
+      - 'pointer_color': Pointer color (string value)
+      - 'pointer_color_pident': Pointer pid/curve color (0,1)
+      - 'pointer_size': Pointer size (float value)
+      - 'pointer_style': Pointer style ('arrow', 'box', 'circle', 'cross', 'none', 'x')
+      - 'pointer_visibility': Show pointer (0,1)
+      - 'position_xy': Position (float value, float value)
+      - 'size': Size (integer value)
+      - 'text_align': Text alignment ('center', 'left', 'right')
+      - 'text_color': Text color (string value)
+      - 'text_color_pident': Text pid/curve color (0,1)
+      - 'title_color': Title color (string value)
+      - 'title_color_pident': Title pid/curve color
+      - 'title_font': Title font (string value)
+      - 'title_format': Title format ('auto', 'fixed', 'scientific')
+      - 'title_htmltext': Title html text (string value)
+      - 'title_precision': Title precision digits (integer value)
+      - 'title_text': Title text
+      - 'title_vertical': Draw vertical text (0,1)
+      - 'title_visibility': Title visibility ('auto', 'on', 'off')
+      - 'circular': Circular shape (0,1)
+      - 'circular_size': Circular Shape Size (integer value)
+      - 'circular_multiplier': Circular Shape Size Multiplier (integer value)
+      - 'circular_initial': Limit to initial (0,1)
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          window_name = "MetaPost"
+          annotation_settings = list()
+          annotation_settings.append("border_color,yellow")
+          annotation_settings.append("text_color,blue")
+          ret = annotations.SetSettingsOfAllAnnotations(window_name, annotation_settings)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSettingsOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_settings instead.
+SIGNATURE: meta.annotations.SetSettingsOfAnnotation(annotation_id: int, annotation_settings: list[str]) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_settings` instead.
+  
+  This function controls settings of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  annotation_settings : list[str]
+      Argument 'annotation_settings' is a list which contains strings as elements with the name and value of each setting separated by comma (e.g. 'options_width,6').
+      The names of the annotation settings and its possible values are:
+      - 'anchor_none': Anchor none
+      - 'anchor_pointer': Anchor relative to pointer (float value,float value)
+      - 'anchor_scrbotleft': Anchor relative to bottom left of screen (float value,float value)
+      - 'anchor_scrbotright': Anchor relative to bottom right of screen (float value,float value)
+      - 'anchor_scrtopright': Anchor relative to top right pointer (float value,float value)
+      - 'anchor_scrtopleft': Anchor relative to top left pointer (float value,float value)
+      - 'background_auto_color': Background automatic color
+      - 'background_color': Background color (string value)
+      - 'background_function_color': Function used for coloring ('default', 'funcval', 'scalfuncval', 'vecfuncval', 'cmax', 'cmin', 'dispx', 'dispy', 'dispz', 'disptot')
+      - 'background_expression_color': Expression or annotation variable used for coloring (string value)
+      - 'background_transparency': Background transparency (float value, [0,1])
+      - 'border_color': Border color (string value)
+      - 'border_color_pident': Border pid/curve color (0,1)
+      - 'border_padding': Border padding (float value)
+      - 'border_width': Border width (float value)
+      - 'border_rounded': Style of border corners (0,1)
+      - 'hide_shadowed': Hide Shadowed Option (0,1)
+      - 'line_color': Line color (string value)
+      - 'line_width': Line width (float value)
+      - 'model_visibility': Model dependent visibility (0,1)
+      - 'planecut_height': Plane cut height (integer value)
+      - 'planecut_width': Plane cut width (integer value)
+      - 'planecut_rotate': Rotate plane cut (float value)
+      - 'planecut_draw': Draw plane cur (0,1)
+      - 'pointer_color': Pointer color (string value)
+      - 'pointer_color_pident': Pointer pid/curve color (0,1)
+      - 'pointer_size': Pointer size (float value)
+      - 'pointer_style': Pointer style ('arrow', 'box', 'circle', 'cross', 'none', 'x')
+      - 'pointer_visibility': Show pointer (0,1)
+      - 'position_xy': Position (float value, float value)
+      - 'size': Size (integer value)
+      - 'text_align': Text alignment ('center', 'left', 'right')
+      - 'text_color': Text color (string value)
+      - 'text_color_pident': Text pid/curve color (0,1)
+      - 'title_color': Title color (string value)
+      - 'title_color_pident': Title pid/curve color
+      - 'title_font': Title font (string value)
+      - 'title_format': Title format ('auto', 'fixed', 'scientific')
+      - 'title_htmltext': Title html text (string value)
+      - 'title_precision': Title precision digits (integer value)
+      - 'title_text': Title text
+      - 'title_vertical': Draw vertical text (0,1)
+      - 'title_visibility': Title visibility ('auto', 'on', 'off')
+      - 'circular': Circular shape (0,1)
+      - 'circular_size': Circular Shape Size (integer value)
+      - 'circular_multiplier': Circular Shape Size Multiplier (integer value)
+      - 'circular_initial': Limit to initial (0,1)
+  
+  Returns
+  -------
+  int
+      It returns an integer, 1 upon success or 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 7
+          annotation_settings = list()
+          annotation_settings.append("border_color,yellow")
+          annotation_settings.append("text_color,blue")
+          ret = annotations.SetSettingsOfAnnotation(annotation_id, annotation_settings)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOn2D
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_2d_positions_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOn2D(list_annotation_id: list[int], list_x_pos: list[float], list_y_pos: list[float]) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_2d_positions_on_annotations` instead.
+  
+  This function sets the pointers of some annotations specified by their ids (list_annotation_id) at some positions on the screen plane. Down and left corner of the screen is identified by the position (x_pos = 0, y_pos = 0).
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      Ids of the annotations.
+  
+  list_x_pos : list[float]
+      List with positions in the x-axis of the screen plane in the range of [0,1].
+  
+  list_y_pos : list[float]
+      List with positions in the y-axis of the screen plane in the range of [0,1].
+  
+  Returns
+  -------
+  list[Annotation]
+      Upon success, it returns a list of objects of class Annotation referring to the given annotations.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_annotation_ids = list()
+          list_x_pos = list()
+          list_y_pos = list()
+  
+          all_annotations = annotations.Annotations()
+          i = 0
+          for a in all_annotations:
+              list_annotation_ids.append(a.id)
+              list_x_pos.append(20 * i)
+              list_y_pos.append(20 * i)
+              i = i + 1
+          some_annotations = annotations.SetSomeAnnotationsPointerOn2D(
+              list_annotation_ids, list_x_pos, list_y_pos
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOn3D
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_3d_positions_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOn3D(list_annotation_id: list[int], list_x_coord: list[float], list_y_coord: list[float], list_z_coord: list[float]) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_3d_positions_on_annotations` instead.
+  
+  This function sets the pointers of some annotations at 3D positions in space.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotation.
+  
+  list_x_coord : list[float]
+      List with X coordinates.
+  
+  list_y_coord : list[float]
+      List with Y coordinates.
+  
+  list_z_coord : list[float]
+      List with Z coordinates.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_x_coord = list()
+          list_y_coord = list()
+          list_z_coord = list()
+  
+          all_annotations = annotations.Annotations()
+          i = 0
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_x_coord.append(10 * i)
+              list_y_coord.append(10 * i)
+              list_z_coord.append(10 * i)
+              i = i + 1
+          some_annotations = annotations.SetSomeAnnotationsPointerOn3D(
+              list_annotation_id, list_x_coord, list_y_coord, list_z_coord
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnBoundary
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_boundaries_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnBoundary(list_annotation_id: list[int], list_model_id: list[int], list_boundary_type: list[int], list_boundary_id: list[int], list_second_id: list[int]) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_boundaries_on_annotations` instead.
+  
+  This function sets the pointers of some annotations specified by their ids on some boundary elements.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotations.
+  
+  list_model_id : list[int]
+      List with ids of the model of the elements.
+  
+  list_boundary_type : list[int]
+      List with types of the boundary elements (META constants).
+  
+  list_boundary_id : list[int]
+      List with ids of the boundary elements.
+  
+  list_second_id : list[int]
+      List with second ids of the boundary elements.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given models are not loaded in the window of the annotations then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation, constants
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import constants
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_model_id = list()
+          list_boundary_type = list()
+          list_boundary_id = list()
+          list_second_id = list()
+  
+          all_annotations = annotations.Annotations()
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_model_id.append(0)
+              list_boundary_type.append(constants.PLOAD4)
+              list_boundary_id.append(2)
+              list_second_id.append(0)
+          some_annotations = annotations.SetSomeAnnotationsPointerOnBoundary(
+              list_annotation_id,
+              list_model_id,
+              list_boundary_type,
+              list_boundary_id,
+              list_second_id,
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnCurve
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_curves_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnCurve(list_annotation_id: list[int], list_window_name: list[str], list_curve_id: list[int], list_point_id: list[int]) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_curves_on_annotations` instead.
+  
+  This function sets the pointers of some annotations specified by their ids on some curves of some given plot2d windows.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotations
+  
+  list_window_name : list[str]
+      List with names of the windows
+  
+  list_curve_id : list[int]
+      List with ids of the curves.
+  
+  list_point_id : list[int]
+      List with ids of the points of the curves.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_window_name = list()
+          list_curve_id = list()
+          list_point_id = list()
+  
+          all_annotations = annotations.Annotations()
+          i = 0
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_window_name.append("Window1")
+              list_curve_id.append(1)
+              list_point_id.append(i)
+              i = i + 1
+          some_annotations = annotations.SetSomeAnnotationsPointerOnCurve(
+              list_annotation_id, list_window_name, list_curve_id, list_point_id
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnElement
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_elements_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnElement(list_annotation_id: list[int], list_model_id: list[int], list_element_type: list[int], list_element_id: list[int], list_second_id: list[int]) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_elements_on_annotations` instead.
+  
+  This function sets the pointers of some annotations on some elements.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotations.
+  
+  list_model_id : list[int]
+      List with ids of the model of the elements.
+  
+  list_element_type : list[int]
+      List with types of the elements (META constants).
+  
+  list_element_id : list[int]
+      List with ids of the elements.
+  
+  list_second_id : list[int]
+      List with second ids types of the elements.
+  
+  Returns
+  -------
+  list[Annotation]
+      Upon success, it returns alist of objects of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+      A description of class Annotation can be found as "Annotation" under library category "annotations".
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given models are not loaded in the window of the annotations then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation, constants
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import constants
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_model_id = list()
+          list_element_type = list()
+          list_element_id = list()
+          list_second_id = list()
+  
+          all_annotations = annotations.Annotations()
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_model_id.append(0)
+              list_element_type.append(constants.SOLID)
+              list_element_id.append(16929)
+              list_second_id.append(-1)
+          some_annotations = annotations.SetSomeAnnotationsPointerOnElement(
+              list_annotation_id,
+              list_model_id,
+              list_element_type,
+              list_element_id,
+              list_second_id,
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnGroup
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_groups_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnGroup(list_annotation_id: list[int], list_model_id: list[int], list_group_name: list[str], list_pointer_position: list[str]) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_groups_on_annotations` instead.
+  
+  This function sets the pointers of some specific annotations on some groups.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotation
+  
+  list_model_id : list[int]
+      List with ids of the model of the group.
+  
+  list_group_name : list[str]
+      List with names of the groups.
+  
+  list_pointer_position : list[str]
+      List with optional positions of the pointers on the group that refer to the entity of the group to which the annotation will point. Their possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'elemmin': Element with minimum centroid value
+      - 'elemmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If its value is absent, then annotation will refer to the whole group.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given models are not loaded in the window of the annotation then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_model_id = list()
+          list_group_name = list()
+          list_pointer_position = list()
+  
+          all_annotations = annotations.Annotations()
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_model_id.append(0)
+              list_group_name.append("My_Group")
+              list_pointer_position.append("none")
+          some_annotations = annotations.SetSomeAnnotationsPointerOnGroup(
+              list_annotation_id, list_model_id, list_group_name, list_pointer_position
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnGroupInstance
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_groups_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnGroupInstance(list_annotation_id: list[int], list_model_id: list[int], list_group_name: list[str], list_group_instance: list[int], list_pointer_position: list[str]) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_groups_on_annotations` instead.
+  
+  This function sets the pointers of some given annotations on some group instances.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotations.
+  
+  list_model_id : list[int]
+      List with ids of the model of the nodes.
+  
+  list_group_name : list[str]
+      List with names of the groups.
+  
+  list_group_instance : list[int]
+      List with instances of the groups.
+  
+  list_pointer_position : list[str]
+      List with optional positions of the pointers on the group that refer to the entity of the group to which the annotation will point. Their possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'elemmin': Element with minimum centroid value
+      - 'elemmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If its value is absent, then annotation will refer to the whole group.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given models are not loaded in the window of the annotations then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_model_id = list()
+          list_group_name = list()
+          list_group_instance = list()
+          list_pointer_position = list()
+  
+          all_annotations = annotations.Annotations()
+  
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_model_id.append(0)
+              list_group_name.append("My_Group")
+              list_group_instance.append(1)
+              list_pointer_position.append("none")
+          some_annotations = annotations.SetSomeAnnotationsPointerOnGroupInstance(
+              list_annotation_id,
+              list_model_id,
+              list_group_name,
+              list_group_instance,
+              list_pointer_position,
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnMaterial
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_materials_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnMaterial(list_annotation_id: list[int], list_model_id: list[int], list_material_type: list[int], list_material_id: list[int], list_pointer_position: list[str]) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_materials_on_annotations` instead.
+  
+  This function sets the pointers of some specific annotations on some materials.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotations.
+  
+  list_model_id : list[int]
+      List with ids of the model of the materials.
+  
+  list_material_type : list[int]
+      List with types of the materials (META constants).
+  
+  list_material_id : list[int]
+      List with ids of the materials.
+  
+  list_pointer_position : list[str]
+      List with positions of the pointer on the materials.
+      Pointer position refers to the entity of the group to which the annotation will point. Its possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'centrmin': Element with minimum centroid value
+      - 'centrmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If this is absent, then annotation will point to the center of the material.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given models are not loaded in the window of the annotations then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation, constants
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import constants
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_model_id = list()
+          list_material_type = list()
+          list_material_id = list()
+          list_pointer_position = list()
+  
+          all_annotations = annotations.Annotations()
+  
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_model_id.append(0)
+              list_material_type.append(constants.MAT1)
+              list_material_id.append(1)
+              list_pointer_position.append("none")
+          some_annotations = annotations.SetSomeAnnotationsPointerOnMaterial(
+              list_annotation_id,
+              list_model_id,
+              list_material_type,
+              list_material_id,
+              list_pointer_position,
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnNode
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_nodes_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnNode(list_annotation_id: list[int], list_model_id: list[int], list_node_id: list[int]) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_nodes_on_annotations` instead.
+  
+  This function sets the pointers of some annotations on some nodes.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotations.
+  
+  list_model_id : list[int]
+      List with ids of the model of the nodes.
+  
+  list_node_id : list[int]
+      List with ids of the nodes.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given model is not loaded in the window of the annotation then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_model_id = list()
+          list_node_id = list()
+  
+          all_annotations = annotations.Annotations()
+  
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_model_id.append(0)
+              list_node_id.append(17211)
+          some_annotations = annotations.SetSomeAnnotationsPointerOnNode(
+              list_annotation_id, list_model_id, list_node_id
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnPart
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_parts_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnPart(list_annotation_id: list[int], list_model_id: list[int], list_part_type: list[int], list_part_id: list[int], list_pointer_position: list[str]) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_parts_on_annotations` instead.
+  
+  This function sets the pointers of some annotations on some parts.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotations.
+  
+  list_model_id : list[int]
+      List with ids of the model of the parts.
+  
+  list_part_type : list[int]
+      List with types of the parts (META constants)
+  
+  list_part_id : list[int]
+      List with ids of the parts.
+  
+  list_pointer_position : list[str]
+      List with positions of the pointer on the parts.
+      Optional entries of pointer positions refer to the entity of the part to which the annotation will point. Its possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'centrmin': Element with minimum centroid value
+      - 'centrmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If they are absent, then annotation will point to the center of the part.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If the given models are not loaded in the window of the annotations then this function will fail.
+  
+  See Also
+  --------
+  meta.annotations.Annotation, constants
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import constants
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_model_id = list()
+          list_part_type = list()
+          list_part_id = list()
+          list_pointer_position = list()
+  
+          all_annotations = annotations.Annotations()
+  
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_model_id.append(0)
+              list_part_type.append(constants.PSOLID)
+              list_part_id.append(2)
+              list_pointer_position.append("none")
+          some_annotations = annotations.SetSomeAnnotationsPointerOnPart(
+              list_annotation_id,
+              list_model_id,
+              list_part_type,
+              list_part_id,
+              list_pointer_position,
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnPlane
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_planes_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnPlane(list_annotation_id: list[int], list_plane_name: list[str], list_pointer_postion: list[str]) -> Annotation
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_planes_on_annotations` instead.
+  
+  This function sets the pointer of some annotations at some existing planes.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotations.
+  
+  list_plane_name : list[str]
+      List with the names of the planes.
+  
+  list_pointer_postion : list[str]
+      List of the pointer positions.
+      Optional pointer position entries refer to the entity of the plane to which the annotation will point. Their possible values are:
+      - 'dispxmin': Node with minimum X deformation
+      - 'dispxmax': Node with maximum X deformation
+      - 'dispymin': Node with minimum Y deformation
+      - 'dispymax': Node with maximum Y deformation
+      - 'dispzmin': Node with minimum Z deformation
+      - 'dispzmax': Node with maximum Z deformation
+      - 'disptotmin': Node with minumum total deformation
+      - 'disptotmax': Node with maximum total deformation
+      - 'nodalmin': Node with minumum nodal value
+      - 'nodalmax': Node with maximum nodal value
+      - 'elemmin': Element with minimum centroid value
+      - 'elemmax': Element with maximum centroid value
+      - 'cornermin': Element with minimum corner value
+      - 'cornermax': Element with maximum corner value
+      If they are absent, then annotation will refer to the whole plane.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns an object of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_plane_name = list()
+          list_pointer_position = list()
+  
+          all_annotations = annotations.Annotations()
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_plane_name.append("DEFAULT_PLANE_YZ")
+              list_pointer_position.append("none")
+          some_annotations = annotations.SetSomeAnnotationsPointerOnPlane(
+              list_annotation_id, list_plane_name, list_pointer_position
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSomeAnnotationsPointerOnWindow
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_windows_on_annotations instead.
+SIGNATURE: meta.annotations.SetSomeAnnotationsPointerOnWindow(list_annotation_id: list[int], list_window_name: list[str]) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_windows_on_annotations` instead.
+  
+  This function sets the pointers of some annotations.
+  
+  Parameters
+  ----------
+  list_annotation_id : list[int]
+      List with ids of the annotations.
+  
+  list_window_name : list[str]
+      List with names of the windows.
+  
+  Returns
+  -------
+  list[Annotation]
+      Upon success, it returns a list of objects of class Annotation referring to the given annotation.
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          list_annotation_id = list()
+          list_window_name = list()
+  
+          all_annotations = annotations.Annotations()
+          for a in all_annotations:
+              list_annotation_id.append(a.id)
+              list_window_name.append("Window1")
+          some_annotations = annotations.SetSomeAnnotationsPointerOnWindow(
+              list_annotation_id, list_window_name
+          )
+          for a in some_annotations:
+              if a:
+                  print(
+                      a.id,
+                      a.window_name,
+                      a.page_id,
+                      a.text,
+                      a.origin_text,
+                      a.visible,
+                      a.selected,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetTextColorOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_text_color instead.
+SIGNATURE: meta.annotations.SetTextColorOfAnnotation(annotation_id: int, red: int, green: int, blue: int, alpha: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_text_color` instead.
+  
+  This function sets text color of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  red : int
+      Red color value.
+  
+  green : int
+      Green color value.
+  
+  blue : int
+      Blue color value.
+  
+  alpha : int
+      Alpha channel value.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          red = 100
+          green = 100
+          blue = 100
+          alpha = 255
+          ret = annotations.SetTextColorOfAnnotation(annotation_id, red, green, blue, alpha)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetTextOnAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_text instead.
+SIGNATURE: meta.annotations.SetTextOnAnnotation(annotation_id: int, text: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_text` instead.
+  
+  This function sets text on an annotation with a specific id.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  text : str
+      Text of the annotation.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          text = "Annotation on Part 139"
+          ret = annotations.SetTextOnAnnotation(annotation_id, text)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ShowAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.show instead.
+SIGNATURE: meta.annotations.ShowAnnotation(annotation_id: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.show` instead.
+  
+  This function makes visible an annotation with a specific id.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 3
+          ret = annotations.ShowAnnotation(annotation_id)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SubgroupsOfAnnotationGroup
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.AnnotationGroup.get_subgroups instead.
+SIGNATURE: meta.annotations.SubgroupsOfAnnotationGroup(level: int, group_name: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.AnnotationGroup.get_subgroups` instead.
+  
+  This function searches for the subgroups of an annotation group in the list of the annotation groups.
+  
+  Parameters
+  ----------
+  level : int
+      Optional argument 'level' defines the depth of searching for subgroups (1 - one level down, 2 - two levels down, 3 - three levels down etc.). If argument level is absent, then this function will search down all levels for subgroups.
+  
+  group_name : str
+      Name of the annotation group.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class AnnotationGroup referring to one subgroup of the given group of the specified model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.annotations.AnnotationGroup
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          group_name = "AnnoGroup"
+          level = ""
+          subgroups = annotations.SubgroupsOfAnnotationGroup(group_name, level)
+          for ag in subgroups:
+              print(ag.name, ag.window_name, ag.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TextColorOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_text_color instead.
+SIGNATURE: meta.annotations.TextColorOfAnnotation(annotation_id: int) -> windows.Color
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_text_color` instead.
+  
+  This function finds text color of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  windows.Color
+      Upon success, it returns a color object with the text color of the corresponding annotation.
+      Else, a non valid color object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          col = annotations.TextColorOfAnnotation(annotation_id)
+          if col:
+              print(col.name, col.r, col.g, col.b, col.a)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UpdateAnnotation
+MODULE: meta.annotations
+SIGNATURE: meta.annotations.UpdateAnnotation(annotation: Annotation) -> Annotation
+DOCSTRING:
+  This function updates the data of the given Annotation object. Update is based in the field "id" of the given Annotation object.
+  
+  Parameters
+  ----------
+  annotation : Annotation
+      Object of class Annotation.
+  
+  Returns
+  -------
+  Annotation
+      Upon success, it returns the new updated annotation object.
+      Else, a non valid annotation object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+      from meta import utils
+  
+  
+      def main():
+          window_name = "MetaPost"
+          annotation_id = 1
+          a = annotations.AnnotationById(annotation_id)
+  
+          # commands which alter the data of the annotation struct
+          utils.MetaCommand('annotation text 1 text "new_name"')
+  
+          a = annotations.UpdateAnnotation(a)
+          if a:  # Update OK
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+          else:  # Update FAILED
+              print("This is not a valid annotation struct")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VisibleAnnotations
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_annotations instead.
+SIGNATURE: meta.annotations.VisibleAnnotations() -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_annotations` instead.
+  
+  This function collects visible annotations of all existing windows.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific visible annotation of an existing window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          visible_annotations = annotations.VisibleAnnotations()
+          for a in visible_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VisibleAnnotationsOfWindow
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_annotations instead.
+SIGNATURE: meta.annotations.VisibleAnnotationsOfWindow(window_name: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_annotations` instead.
+  
+  This function collects visible on screen annotations of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific visible annotation of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          window_name = "MetaPost"
+          visible_annotations = annotations.VisibleAnnotationsOfWindow(window_name)
+          for a in visible_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VisibleOnScreenAnnotations
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_annotations instead.
+SIGNATURE: meta.annotations.VisibleOnScreenAnnotations() -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_annotations` instead.
+  
+  This function collects visible on screen annotations of all existing windows.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific visible on screen annotation of an existing window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          visible_annotations = annotations.VisibleOnScreenAnnotations()
+          for a in visible_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VisibleOnScreenAnnotationsOfWindow
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_annotations instead.
+SIGNATURE: meta.annotations.VisibleOnScreenAnnotationsOfWindow(window_name: str) -> list[Annotation]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_annotations` instead.
+  
+  This function collects visible on screen annotations of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list[Annotation]
+      It returns a list where each member of the list is an object of class Annotation referring to one specific visible on screen annotation of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          window_name = "MetaPost"
+          visible_annotations = annotations.VisibleOnScreenAnnotationsOfWindow(window_name)
+          for a in visible_annotations:
+              print(
+                  a.id, a.window_name, a.page_id, a.text, a.origin_text, a.visible, a.selected
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TypeOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_type instead.
+SIGNATURE: meta.annotations.TypeOfAnnotationPointer(annotation_id: int) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_type` instead.
+  
+  This function finds the type of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string referring to the type of the annotation pointer.
+      Possible returned values are:
+      - 'node'
+      - 'element'
+      - 'boundary'
+      - 'part'
+      - 'material'
+      - 'group'
+      - 'curve'
+      - 'plane'
+      - 'window'
+      - 'selection'
+      - '2d_pos'
+      - '3d_pos'.
+      Upon failure, an empty string is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          anno_type = annotations.TypeOfAnnotationPointer(annotation_id)
+          print(anno_type)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NodeOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_node instead.
+SIGNATURE: meta.annotations.NodeOfAnnotationPointer(annotation_id: int) -> nodes.Node
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_node` instead.
+  
+  This function finds the node of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  nodes.Node
+      Upon success, it returns a node object with the node of the pointer of the given annotation.
+      Else, a non valid node object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.nodes.Node
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          n = annotations.NodeOfAnnotationPointer(annotation_id)
+          if n:
+              print(n.id, n.x, n.y, n.z, n.visible, n.model_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ElementOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_element instead.
+SIGNATURE: meta.annotations.ElementOfAnnotationPointer(annotation_id: int) -> elements.Element
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_element` instead.
+  
+  This function finds the element of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  elements.Element
+      Upon success, it returns an element object with the element of the pointer of the given annotation.
+      Else, a non valid element object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.elements.Element
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          e = annotations.ElementOfAnnotationPointer(annotation_id)
+          if e:
+              print(e.id, e.second_id, e.type, e.subtype, e.part_id, e.visible, e.model_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: BoundaryOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_boundary instead.
+SIGNATURE: meta.annotations.BoundaryOfAnnotationPointer(annotation_id: int) -> boundaries.Boundary
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_boundary` instead.
+  
+  This function finds the boundary element of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  boundaries.Boundary
+      Upon success, it returns a boundary object with the boundary element of the pointer of the given annotation.
+      Else, a non valid boundary object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.boundaries.Boundary
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          b = annotations.BoundaryOfAnnotationPointer(annotation_id)
+          if b:
+              print(b.id, b.second_id, b.type, b.subtype, b.visible, b.model_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PartOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_part instead.
+SIGNATURE: meta.annotations.PartOfAnnotationPointer(annotation_id: int) -> parts.Part
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_part` instead.
+  
+  This function finds the part of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  parts.Part
+      Upon success, it returns a part object with the part of the pointer of the given annotation.
+      Else, a non valid part object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.parts.Part
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          p = annotations.PartOfAnnotationPointer(annotation_id)
+          if p:
+              print(
+                  p.id,
+                  p.type,
+                  p.subtype,
+                  p.visible,
+                  p.name,
+                  p.mat_id,
+                  p.shell_thick,
+                  p.model_id,
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MaterialOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_material instead.
+SIGNATURE: meta.annotations.MaterialOfAnnotationPointer(annotation_id: int) -> materials.Material
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_material` instead.
+  
+  This function finds the material of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  materials.Material
+      Upon success, it returns a material object with the material of the pointer of the given annotation.
+      Else, a non valid material object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.materials.Material
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          m = annotations.MaterialOfAnnotationPointer(annotation_id)
+          if m:
+              print(m.id, m.type, m.name, m.model_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GroupOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_group instead.
+SIGNATURE: meta.annotations.GroupOfAnnotationPointer(annotation_id: int) -> groups.Group
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_group` instead.
+  
+  This function finds the group of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  groups.Group
+      Upon success, it returns a group object with the group of the pointer of the given annotation.
+      Else, a non valid group object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.groups.Group
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          g = annotations.GroupOfAnnotationPointer(annotation_id)
+          if g:
+              print(
+                  g.name,
+                  g.model_id,
+                  g.module_id,
+                  g.version,
+                  g.representation,
+                  g.study_version,
+              )
+              print(
+                  g.vsc_number,
+                  g.target_mass,
+                  g.user_group,
+                  g.pid_offset,
+                  g.freeze,
+                  g.type,
+                  g.instance,
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CurveOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_curve instead.
+SIGNATURE: meta.annotations.CurveOfAnnotationPointer(annotation_id: int) -> plot2d.Curve
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_curve` instead.
+  
+  This function finds the curve of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  plot2d.Curve
+      Upon success, it returns a curve object with the curve of the pointer of the given annotation.
+      Else, a non valid curve object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.plot2d.Curve
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          c = annotations.CurveOfAnnotationPointer(annotation_id)
+          if c:
+              print(
+                  c.id,
+                  c.name,
+                  c.plot_id,
+                  c.visible,
+                  c.selected,
+                  c.window_name,
+                  c.page_id,
+                  c.command,
+                  c.entity_id,
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PlaneOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_plane instead.
+SIGNATURE: meta.annotations.PlaneOfAnnotationPointer(annotation_id: int) -> planes.Plane
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_plane` instead.
+  
+  This function finds the plane of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  planes.Plane
+      Upon success, it returns a plane object with the plane of the pointer of the given annotation.
+      Else, a non valid plane object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.planes.Plane
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          pl = annotations.PlaneOfAnnotationPointer(annotation_id)
+          if pl:
+              print(pl.name, pl.clip_type)
+              print(pl.origin[0], pl.origin[1], pl.origin[2])
+              print(pl.normal_vector[0], pl.normal_vector[1], pl.normal_vector[2])
+              print(pl.edge_vector[0], pl.edge_vector[1], pl.edge_vector[2])
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: WindowOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_pointer_window instead.
+SIGNATURE: meta.annotations.WindowOfAnnotationPointer(annotation_id: int) -> windows.Window
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_pointer_window` instead.
+  
+  This function finds the window of the pointer of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  windows.Window
+      Upon success, it returns a window object with the window of the pointer of the given annotation.
+      Else, a non valid window object is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          w = annotations.WindowOfAnnotationPointer(annotation_id)
+          if w:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Position2DOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_2d_position instead.
+SIGNATURE: meta.annotations.Position2DOfAnnotationPointer(annotation_id: int) -> list[float, float]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_2d_position` instead.
+  
+  This function finds the 2D position of the annotation pointer of annotations created on 2D Pos.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  list[float,float]
+      Upon success, it returns a list with 2 float elements referring to 2D position of the pointer of the given annotation.
+      2D position on the screen plane is identified by float numbers in the range of [0,1].
+      Down and left corner of the screen is identified by the position (x_pos = 0, y_pos = 0).
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          mat_pos = annotations.Position2DOfAnnotationPointer(annotation_id)
+          if len(mat_pos):
+              print(mat_pos[0], mat_pos[1])
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Position3DOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_3d_position instead.
+SIGNATURE: meta.annotations.Position3DOfAnnotationPointer(annotation_id: int) -> list[float]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_3d_position` instead.
+  
+  This function finds the 3D position of the annotation pointer of annotations created on 3D Pos.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  list[float]
+      Upon success, it returns a list with 3 float elements referring to the 3D position coordinates of the pointer of the given annotation. 
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          mat_pos = annotations.Position3DOfAnnotationPointer(annotation_id)
+          if len(mat_pos):
+              print(mat_pos[0], mat_pos[1], mat_pos[2])
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PositionOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_position instead.
+SIGNATURE: meta.annotations.PositionOfAnnotation(annotation_id: int) -> list[float, float]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_position` instead.
+  
+  This function finds the position of the annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  list[float,float]
+      Upon success, it returns a list with 2 float elements referring to the position of the given annotation.
+      Annotation position is identified by float numbers in the range of [0,1].
+      Else, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          annot_pos = annotations.PositionOfAnnotation(annotation_id)
+          if len(annot_pos):
+              print(annot_pos[0], annot_pos[1])
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AnchorTypeOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_anchor_type instead.
+SIGNATURE: meta.annotations.AnchorTypeOfAnnotation(annotation_id: int) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_anchor_type` instead.
+  
+  This function finds the anchor type of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string referring to the type of the annotation pointer.
+      Possible returned values are:
+      - 'none'
+      - 'scrtopleft'
+      - 'scrbotleft'
+      - 'scrbotright'
+      - 'scrtopright'
+      - 'pointer'.
+      Upon failure, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          anchor_type = annotations.AnchorTypeOfAnnotation(annotation_id)
+          print(anchor_type)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PositionOffsetOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_position_offset instead.
+SIGNATURE: meta.annotations.PositionOffsetOfAnnotation(annotation_id: int) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_position_offset` instead.
+  
+  This function finds the offset (X,Y) of the position of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  list
+      Upon success, it returns a list whose first member is the offset of the position of a given annotation in the x-axis of the screen plane and second member is the offset of the position of a given annotation in the y-axis of the screen plane.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          offset = annotations.PositionOffsetOfAnnotation(annotation_id)
+          if len(offset) == 2:
+              xoffset = offset[0]
+              print(xoffset)
+              yoffset = offset[1]
+              print(yoffset)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SettingsOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_settings instead.
+SIGNATURE: meta.annotations.SettingsOfAnnotation(annotation_id: int) -> list[str]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_settings` instead.
+  
+  This function displays the settings of a given annotation.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      Id of the annotation.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with the settings of the given annotation. Each member of the list is a string which contains as strings separated by comma the name and the value of the setting.  
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          all_settings = annotations.SettingsOfAnnotation(annotation_id)
+          for one_setting in all_settings:
+              print(one_setting)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectionOfAnnotationPointer
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_selection instead.
+SIGNATURE: meta.annotations.SelectionOfAnnotationPointer(annotation_id: int) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_selection` instead.
+  
+  This function returns the string of the id range of a given annotation on Selection.
+  
+  Parameters
+  ----------
+  annotation_id : int
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string of the id range of a given annotation on Selection.
+      Else, an empty string is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annotation_id = 1
+          selection_str = annotations.SelectionOfAnnotationPointer(annotation_id)
+          anchor_type = annotations.TypeOfAnnotationPointer(annotation_id)
+  
+          print(
+              "Annotation "
+              + str(annotation_id)
+              + " element "
+              + anchor_type
+              + " "
+              + selection_str
+          )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributeOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_attributes instead.
+SIGNATURE: meta.annotations.AttributeOfAnnotation(annot_id: int, attrib_name: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_attributes` instead.
+  
+  This function returns the value of a specific attribute.
+  
+  Parameters
+  ----------
+  annot_id : int
+      The id of the annotation
+  
+  attrib_name : str
+      Name of the attribute
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string with the value of the given argument.
+      Else, an empty string is returned
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          name = "Type"
+          annot_id = 1
+          val = annotations.AttributeOfAnnotation(annot_id, name)
+          print("Value " + val)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.set_attribute instead.
+SIGNATURE: meta.annotations.SetAttributeOfAnnotation(annot_id: int, attribute_name: str, attribute_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.set_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given annotation. If the given attribute does not exist it is automatically created and its value is set.
+  
+  Parameters
+  ----------
+  annot_id : int
+      The id of the annotation.
+  
+  attribute_name : str
+      Name of the attribute.
+  
+  attribute_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annot_id = 1
+  
+          name = "test_attr"
+          val = "val"
+          annotations.SetAttributeOfAnnotation(annot_id, name, val)
+          # or
+          name = "num_attr"
+          val = 12.3
+          attribute_type = "numerical"
+          annotations.SetAttributeOfAnnotation(annot_id, name, val, attribute_type)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfAnnotations
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_attributes instead.
+SIGNATURE: meta.annotations.AttributesOfAnnotations(annot_id: int) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_attributes` instead.
+  
+  This function collects all attributes of a given annotation
+  
+  Parameters
+  ----------
+  annot_id : int
+      The id of the annotation
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.annotations.Annotation
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          annot_id = 1
+          all_attributes = annotations.AttributesOfAnnotation(annot_id)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ParentOfGroupAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.AnnotationGroup.get_parent instead.
+SIGNATURE: meta.annotations.ParentOfGroupAnnotation(annotation_group_name: str) -> AnnotationGroup
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.AnnotationGroup.get_parent` instead.
+  
+  Returns the parent annotation group of a given annotation group.
+  
+  Parameters
+  ----------
+  annotation_group_name : str
+      Name of annotation group
+  
+  Returns
+  -------
+  AnnotationGroup
+      Returns the parent annotation group of a given annotation group
+  
+  See Also
+  --------
+  meta.annotations.AnnotationGroup
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          group = annotations.GroupOfAnnotation(annotation_id=1)
+          print(group)
+          group = annotations.ParentOfGroupAnnotation(annotation_group_name=group.name)
+          if annotations.IsAnnotationGroup(group):
+              print(group)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GroupOfAnnotation
+MODULE: meta.annotations
+DEPRECATED: Deprecated since version 20.1.0.Use meta.annotations.Annotation.get_annotation_group instead.
+SIGNATURE: meta.annotations.GroupOfAnnotation(annotation_id: int) -> AnnotationGroup
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.annotations.Annotation.get_annotation_group` instead.
+  
+  Returns the annotation group of the annotation, if it exists.
+  
+  Parameters
+  ----------
+  annotation_id : int
+      The id of the annotation
+  
+  Returns
+  -------
+  AnnotationGroup
+      Returns the annotation group of the annotation, if it exists. Else returns none.
+  
+  See Also
+  --------
+  meta.annotations.AnnotationGroup
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import annotations
+  
+  
+      def main():
+          group = annotations.GroupOfAnnotation(annotation_id=1)
+          if group:
+              print(group)
+              group = annotations.ParentOfGroupAnnotation(annotation_group_name=group.name)
+              if annotations.IsAnnotationGroup(group):
+                  print(group)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

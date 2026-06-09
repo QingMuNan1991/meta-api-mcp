@@ -1,0 +1,676 @@
+MODULE: meta.spreadsheet
+========================================================================
+
+FUNCTION: BoundingAreaOfSpreadsheet
+MODULE: meta.spreadsheet
+SIGNATURE: meta.spreadsheet.BoundingAreaOfSpreadsheet(sheet_name: str) -> list[list]
+DOCSTRING:
+  This function finds the spreadsheet bounding area for a given sheet. Bounding area is described by top and bottom rows and left and right columns.
+  
+  Parameters
+  ----------
+  sheet_name : str
+      Name of the sheet.
+  
+  Returns
+  -------
+  list[list]
+      It returns a 2x2 dimensional list which containts the bounding area for the given sheet. 
+      Member at position [0][0] of list refers to top row.
+      Member at position [0][1] of list refers to left column.
+      Member at position [1][0] of list refers to bottom row.
+      Member at position [1][1] of list refers to right column.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+  
+          bounding_area = spreadsheet.BoundingAreaOfSpreadsheet(sheet_name)
+          if len(bounding_area) > 0:
+              print(bounding_area[0][0])  # top row
+              print(bounding_area[0][1])  # left column
+              print(bounding_area[1][0])  # bottom row
+              print(bounding_area[1][1])  # right column
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsSpreadsheetCell
+MODULE: meta.spreadsheet
+SIGNATURE: meta.spreadsheet.IsSpreadsheetCell(spreadsheet_cell: Any) -> int
+DOCSTRING:
+  This function checks whether an object is of class SpreadsheetCell.
+  
+  Parameters
+  ----------
+  spreadsheet_cell : Any
+      Any given object.
+  
+  Returns
+  -------
+  int
+      It returns 1 if object is of class SpreadsheetCell, or 0 if object is not of class SpreadsheetCell.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+          row = 1
+          column = 1
+  
+          ent = spreadsheet.SpreadsheetCellByRowColumn(sheet_name, row, column)
+          if spreadsheet.IsSpreadsheetCell(ent):
+              cel = ent
+              print("This is a struct of type spreadsheet_cell")
+              print(
+                  cel.row, cel.col, cel.cell_label, cel.spreadsheet, cel.text, cel.orig_text
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NamesOfAllSheets
+MODULE: meta.spreadsheet
+SIGNATURE: meta.spreadsheet.NamesOfAllSheets() -> list[str]
+DOCSTRING:
+  This function get names of all existing sheets of the Spreadsheet Editor.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list where each member of the list is a string referring to the name of an existing sheet of the Spreadsheet Editor.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          all_sheets = spreadsheet.NamesOfAllSheets()
+          for sheet_name in all_sheets:
+              print(sheet_name)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SpreadsheetCellByRowColumn
+MODULE: meta.spreadsheet
+DEPRECATED: Deprecated since version 20.1.0.Use meta.spreadsheet.Sheet.get_cell instead.
+SIGNATURE: meta.spreadsheet.SpreadsheetCellByRowColumn(sheet_name: str, row: int, column: int) -> SpreadsheetCell
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.spreadsheet.Sheet.get_cell` instead.
+  
+  This function finds a spreadsheet cell at a given row and column for a given sheet.
+  
+  Parameters
+  ----------
+  sheet_name : str
+      Name of the sheet.
+  
+  row : int
+      Number of the row.
+  
+  column : int
+      Number of the column.
+  
+  Returns
+  -------
+  SpreadsheetCell
+      Upon success, it returns an object of class SpreadsheetCell referring to the cell of the sheet at the given row and column. 
+      Else, a non valid SpreadsheetCell object is returned.
+  
+  See Also
+  --------
+  meta.spreadsheet.SpreadsheetCell
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+          row = 1
+          column = 1
+  
+          cel = spreadsheet.SpreadsheetCellByRowColumn(sheet_name, row, column)
+          if cel:
+              print(
+                  cel.row, cel.col, cel.cell_label, cel.spreadsheet, cel.text, cel.orig_text
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SpreadsheetCellsByArea
+MODULE: meta.spreadsheet
+DEPRECATED: Deprecated since version 20.1.0.Use meta.spreadsheet.Sheet.get_range instead.
+SIGNATURE: meta.spreadsheet.SpreadsheetCellsByArea(sheet_name: str, top_row: int, left_column: int, bottom_row: int, right_column: int) -> Iterable[Iterable[SpreadsheetCell]]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.spreadsheet.Sheet.get_range` instead.
+  
+  This function finds spreadsheet cells at a given area of a specific sheet. Area is described through top and bottom rows and left and right columns.
+  
+  Parameters
+  ----------
+  sheet_name : str
+      Name of the sheet.
+  
+  top_row : int
+      Number of the top row.
+  
+  left_column : int
+      Number of the left column.
+  
+  bottom_row : int
+      Number of the bottom row.
+  
+  right_column : int
+      Number of the right column.
+  
+  Returns
+  -------
+  Iterable[Iterable[SpreadsheetCell]]
+      It returns a 2-dimensional list with the SpreadsheetCell objects of the corresponding cells at the given area of the specific sheet.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.spreadsheet.SpreadsheetCell
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+          top_row = 1
+          left_column = 1
+          bottom_row = 5
+          right_column = 5
+  
+          cells = spreadsheet.SpreadsheetCellsByArea(
+              sheet_name, top_row, left_column, bottom_row, right_column
+          )
+          for row in cells:
+              for cel in row:
+                  print(
+                      cel.row,
+                      cel.col,
+                      cel.cell_label,
+                      cel.spreadsheet,
+                      cel.text,
+                      cel.orig_text,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SpreadsheetCellsByColumn
+MODULE: meta.spreadsheet
+DEPRECATED: Deprecated since version 20.1.0.Use meta.spreadsheet.Sheet.get_column instead.
+SIGNATURE: meta.spreadsheet.SpreadsheetCellsByColumn(sheet_name: str, column: int) -> list[SpreadsheetCell]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.spreadsheet.Sheet.get_column` instead.
+  
+  This function finds spreadsheet cells at a given column of a specific sheet.
+  
+  Parameters
+  ----------
+  sheet_name : str
+      Name of the sheet.
+  
+  column : int
+      Number of the column.
+  
+  Returns
+  -------
+  list[SpreadsheetCell]
+      It returns a list with the SpreadsheetCell objects of the corresponding cells at the given column of the specific sheet.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.spreadsheet.SpreadsheetCell
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+          column = 1
+          cells = spreadsheet.SpreadsheetCellsByColumn(sheet_name, column)
+          for cel in cells:
+              print(
+                  cel.row, cel.col, cel.cell_label, cel.spreadsheet, cel.text, cel.orig_text
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SpreadsheetCellsByLabel
+MODULE: meta.spreadsheet
+SIGNATURE: meta.spreadsheet.SpreadsheetCellsByLabel(sheet_name: str, label: str) -> list[SpreadsheetCell]
+DOCSTRING:
+  This function finds spreadsheet cells from a given label of a specific sheet.
+  
+  Parameters
+  ----------
+  sheet_name : str
+      Name of the sheet.
+  
+  label : str
+      Label of the cells.
+  
+  Returns
+  -------
+  list[SpreadsheetCell]
+      It returns a 2-dimensional list where each member is an object of class SpreadsheetCell referring to one specific SpreadsheetCell at the given label of the given sheet. 
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.spreadsheet.SpreadsheetCell
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+          label = "A1:B3"
+  
+          cells = spreadsheet.SpreadsheetCellsByLabel(sheet_name, label)
+          for row in cells:
+              for cel in row:
+                  print(
+                      cel.row,
+                      cel.col,
+                      cel.cell_label,
+                      cel.spreadsheet,
+                      cel.text,
+                      cel.orig_text,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SpreadsheetCellsByRow
+MODULE: meta.spreadsheet
+DEPRECATED: Deprecated since version 20.1.0.Use meta.spreadsheet.Sheet.get_row instead.
+SIGNATURE: meta.spreadsheet.SpreadsheetCellsByRow(sheet_name: str, row: int) -> Iterable[SpreadsheetCell]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.spreadsheet.Sheet.get_row` instead.
+  
+  This function finds spreadsheet cells at a given row of a specific sheet.
+  
+  Parameters
+  ----------
+  sheet_name : str
+      Name of the sheet.
+  
+  row : int
+      Number of the row.
+  
+  Returns
+  -------
+  Iterable[SpreadsheetCell]
+      It returns a list with the SpreadsheetCell objects of the corresponding cells at the given row of the specific sheet.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.spreadsheet.SpreadsheetCell
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+          row = 1
+          cells = spreadsheet.SpreadsheetCellsByRow(sheet_name, row)
+          for cel in cells:
+              print(
+                  cel.row, cel.col, cel.cell_label, cel.spreadsheet, cel.text, cel.orig_text
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SpreadsheetCellsListToDict
+MODULE: meta.spreadsheet
+SIGNATURE: meta.spreadsheet.SpreadsheetCellsListToDict(spreadsheet_cells: list[SpreadsheetCell]) -> dict
+DOCSTRING:
+  This function constructs a dictionary from a given list with objects of class SpreadsheetCell.
+  
+  Parameters
+  ----------
+  spreadsheet_cells : list[SpreadsheetCell]
+      List with objects of class SpreadsheetCell.
+  
+  Returns
+  -------
+  dict
+      It returns a dictionary whose key is the cell label and data is the corresponding SpreadsheetCell object.
+      Upon failure, an empty dictionary is returned.
+  
+  Notes
+  -----
+  If cells with the same label exists in the given list, then only the first cell will be saved in the dictionary.
+  
+  See Also
+  --------
+  meta.spreadsheet.SpreadsheetCell
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+          column = 1
+          all_spreadsheet_cells = spreadsheet.SpreadsheetCellsByColumn(sheet_name, column)
+  
+          dict_spreadsheet_cells = spreadsheet.SpreadsheetCellsListToDict(
+              all_spreadsheet_cells
+          )
+          for cell_label, cel in dict_spreadsheet_cells.items():
+              print(
+                  cel.row, cel.col, cel.cell_label, cel.spreadsheet, cel.text, cel.orig_text
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UpdateSpreadsheetCell
+MODULE: meta.spreadsheet
+SIGNATURE: meta.spreadsheet.UpdateSpreadsheetCell(spreadsheet_cell: SpreadsheetCell) -> SpreadsheetCell
+DOCSTRING:
+  This function updates the data of the given spreadsheet_cell struct. Update is based in the fields "row", "col" and "spreadsheet" of the given spreadsheet_cell struct.
+  
+  Parameters
+  ----------
+  spreadsheet_cell : SpreadsheetCell
+      Object of class SpreadsheetCell.
+  
+  Returns
+  -------
+  SpreadsheetCell
+      Upon success, it returns the new updated SpreadsheetCell object.
+      Else, a non valid SpreadsheetCell object is returned.
+  
+  See Also
+  --------
+  meta.spreadsheet.SpreadsheetCell
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+          row = 1
+          column = 1
+          cel = spreadsheet.SpreadsheetCellByRowColumn(sheet_name, row, column)
+          if cel:
+              # commands which alter the data of the spreadsheet object
+              # .....
+              cel = spreadsheet.UpdateSpreadsheetCell(cel)
+              if cel:  # Update OK
+                  print(
+                      cel.row,
+                      cel.col,
+                      cel.cell_label,
+                      cel.spreadsheet,
+                      cel.text,
+                      cel.orig_text,
+                  )
+              else:  # Update FAILED
+                  print("This is not a valid SpreadsheetCell object")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectedAreaOfSpreadsheet
+MODULE: meta.spreadsheet
+DEPRECATED: Deprecated since version 20.1.0.Use meta.spreadsheet.Sheet.get_selection instead.
+SIGNATURE: meta.spreadsheet.SelectedAreaOfSpreadsheet(sheet_name: str) -> list[list]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.spreadsheet.Sheet.get_selection` instead.
+  
+  This function finds the selected area for a given sheet.
+  
+  Parameters
+  ----------
+  sheet_name : str
+      Name of the sheet. If given sheet is an empty string, the selections of the active sheet are found.
+  
+  Returns
+  -------
+  list[list]
+      It returns a triple list which containts the selected areas for the given sheet.
+      Element at position [i][0][0] of matrix refers to top row of i-th selection.
+      Element at position [i][0][1] of matrix refers to left column of i-th selection.
+      Element at position [i][1][0] of matrix refers to bottom row of i-th selection.
+      Element at position [i][1][1] of matrix refers to right column of i-th selection.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          sheet_name = "Sheet1"
+          selected_area = spreadsheet.SelectedAreaOfSpreadsheet(sheet_name)
+          for i in range(0, len(selected_area)):
+              print("Selection ", i + 1)  # Selection
+              print(
+                  "From cell:", selected_area[i][0][0], selected_area[i][0][1]
+              )  # Top-left cell
+              print(
+                  "To cell:", selected_area[i][1][0], selected_area[i][1][1]
+              )  # Bottom-right cell
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateSpreadsheet
+MODULE: meta.spreadsheet
+SIGNATURE: meta.spreadsheet.CreateSpreadsheet(name: str) -> Spreadsheet
+DOCSTRING:
+  Creates a spreadsheet window with the provided name, or a unique generated name if one is not provided. Returns None if a name is provided and a spreadsheet with that name already exists.
+  
+  Parameters
+  ----------
+  name : str, optional
+      Name of the new spreadsheet window.
+  
+  Returns
+  -------
+  Spreadsheet
+      Upon success returns an object of type meta.spreadsheet.Spreadsheet
+      Upon failure returns None.
+  
+  Notes
+  -----
+  Creation fails when a spreadsheet window with the same name exists.
+  
+  See Also
+  --------
+  meta.spreadsheet.Spreadsheet
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          # Create new spreadsheet with autogenerated name
+          s = spreadsheet.CreateSpreadsheet()
+          print(s)
+          # Or
+          # Create new spreadsheet with user-provided name
+          name = "Spreadsheet 1"
+          s2 = spreadsheet.CreateSpreadsheet(name)
+          print(s2)
+  
+          all_s = spreadsheet.Spreadsheets()
+          print(all_s)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteSpreadsheet
+MODULE: meta.spreadsheet
+SIGNATURE: meta.spreadsheet.DeleteSpreadsheet(spreadsheet: Spreadsheet | str, attached: bool) -> bool
+DOCSTRING:
+  Deletes the specified spreadsheet window. The window is specified either by its name or the meta.spreadsheet.Spreadsheet object.
+  
+  Parameters
+  ----------
+  spreadsheet : Spreadsheet | str
+      Either a spreadsheet name as a string or a meta.spreadsheet.Spreadsheet object.
+  
+  attached : bool, optional
+      When a name is provided as the first argument and this is true, it will look for a workspace spreadsheet window with the specified name.
+      When it is false it will look for a floating window.
+      When it is not provided both workspace and floating windows with the provided name will be deleted.
+  
+  Returns
+  -------
+  bool
+      Upon success returns True
+      Upon failure returns False.
+  
+  See Also
+  --------
+  meta.spreadsheet.CreateSpreadsheet
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          s = spreadsheet.CreateSpreadsheet()
+          print(s)
+  
+          # Delete spreadsheet
+          ret = spreadsheet.DeleteSpreadsheet(s)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

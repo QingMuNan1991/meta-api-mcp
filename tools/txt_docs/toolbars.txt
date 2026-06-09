@@ -1,0 +1,1478 @@
+MODULE: meta.toolbars
+========================================================================
+
+FUNCTION: ListAddColumn
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListAddColumn(toolbar_name: str, list_name: str, column_name: str) -> int
+DOCSTRING:
+  Adds a new column with specific title in the list.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  column_name : str
+      Name of the new column.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the column has been added; otherwise, it returns 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          column_name = "Time"
+          # add columns:
+          ret = toolbars.ListAddColumn(toolbar_name, list_name, column_name)
+          print(ret)
+          column_name = "Distance"
+          ret = toolbars.ListAddColumn(toolbar_name, list_name, column_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListAddKey
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListAddKey(toolbar_name: str, list_name: str, row_key: str) -> int
+DOCSTRING:
+  Adds a new row with specific key in the list.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  row_key : str
+      Name of the new row key.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the row has been added; otherwise, it returns 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          row_key = "T01"
+          # add row key:
+          ret = toolbars.ListAddKey(toolbar_name, list_name, row_key)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListAddRow
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListAddRow(toolbar_name: str, list_name: str, row_key: str, value_list: list) -> int
+DOCSTRING:
+  Adds a new row with specific key in the list, along with a set of values.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  row_key : str
+      Name of the new row key.
+  
+  value_list : list
+      List of values to be added.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the row has been added; otherwise, it returns 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          column_name = "Time"
+          # add columns:
+          ret = toolbars.ListAddColumn(toolbar_name, list_name, column_name)
+          print(ret)
+          column_name = "Distance"
+          ret = toolbars.ListAddColumn(toolbar_name, list_name, column_name)
+          print(ret)
+  
+          toolbar_name = "Test"
+          list_name = "TestList"
+          row_key = "T02"
+          value_list = ["0.33s", "25m"]
+          # add rows:
+          ret = toolbars.ListAddRow(toolbar_name, list_name, row_key, value_list)
+          print(ret)
+  
+          # data list may be smaller than column number:
+          row_key = "T03"
+          ret = toolbars.ListAddRow(toolbar_name, list_name, row_key, value_list)
+          print(ret)
+  
+          # data list may contain zero-length elements:
+          row_key = "T04"
+          ret = toolbars.ListAddRow(toolbar_name, list_name, row_key, value_list)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListClear
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListClear(toolbar_name: str, list_name: str) -> int
+DOCSTRING:
+  Clears the list. All row and column entries are removed.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the list has been cleared; otherwise, it returns 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          ret = toolbars.ListClear(toolbar_name, list_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListGetAllKeys
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListGetAllKeys(toolbar_name: str, list_name: str) -> list[str]
+DOCSTRING:
+  Returns an array of the row keys of the specified list.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  Returns
+  -------
+  list[str]
+      Returns a list object of the row keys.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          vColumns = toolbars.ListGetColumns(toolbar_name, list_name)
+          print("List Columns: " + str(vColumns))
+  
+          vKeys = toolbars.ListGetAllKeys(toolbar_name, list_name)
+          print("List Keys: " + str(vKeys))
+  
+          vRows = toolbars.ListGetAllRows(toolbar_name, list_name)
+          print("List Contents: " + str(vRows))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListGetAllRows
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListGetAllRows(toolbar_name: str, list_name: str) -> dict
+DOCSTRING:
+  Returns the row contents of the specified list.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  Returns
+  -------
+  dict
+      Returns a map object of the row keys along with their row contents;
+      the row contents are returned as list objects.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          vRows = toolbars.ListGetAllRows(toolbar_name, list_name)
+          print("List Contents: " + str(vRows))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListGetColumns
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListGetColumns(toolbar_name: str, list_name: str) -> list[str]
+DOCSTRING:
+  Returns an array of the list's column names.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  Returns
+  -------
+  list[str]
+      Return a list object containing the names of the list's columns.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          vColumns = toolbars.ListGetColumns(toolbar_name, list_name)
+          print("List Columns: " + str(vColumns))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListGetSelectedKeys
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListGetSelectedKeys(toolbar_name: str, list_name: str) -> list
+DOCSTRING:
+  Returns the selected row's or rows' keys of a list.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  Returns
+  -------
+  list
+      Returns an arrray object containing the selected list row keys.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          vSelection = toolbars.ListGetSelectedKeys(toolbar_name, list_name)
+          print("Selected IDs: " + str(vSelection))
+  
+          vSelectionRows = toolbars.ListGetSelectedRows(toolbar_name, list_name)
+          print("Selected Rows: " + str(vSelectionRows))
+  
+          for rowId in vSelection:
+              column_name = "Time"
+              print(
+                  "Selected time: "
+                  + toolbars.ListGetValue(toolbar_name, list_name, rowId, column_name)
+              )
+              column_name = "Distance"
+              print(
+                  "Selected distance: "
+                  + toolbars.ListGetValue(toolbar_name, list_name, rowId, column_name)
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListGetSelectedRows
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListGetSelectedRows(toolbar_name: str, list_name: str) -> dict
+DOCSTRING:
+  Returns the selected rows of the specified list.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  Returns
+  -------
+  dict
+      Returns a map object of the selected row keys along with their row contents. 
+      The row contents are returned as list objects.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          vSelection = toolbars.ListGetSelectedKeys(toolbar_name, list_name)
+          print("Selected IDs: " + str(vSelection))
+          vSelectionRows = toolbars.ListGetSelectedRows(toolbar_name, list_name)
+          print("Selected Rows: " + str(vSelectionRows))
+          for rowId in vSelection:
+              column_name = "Time"
+              print(
+                  "Selected time: "
+                  + toolbars.ListGetValue(toolbar_name, list_name, rowId, "Time")
+              )
+              column_name = "Distance"
+              print(
+                  "Selected distance: "
+                  + toolbars.ListGetValue(toolbar_name, list_name, rowId, "Distance")
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListGetValue
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListGetValue(toolbar_name: str, list_name: str, row_key: str, column_name: str) -> str
+DOCSTRING:
+  Returns the list value that is in a specific row and column combination.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  row_key : str
+      Name of the row key.
+  
+  column_name : str
+      Name of the column.
+  
+  Returns
+  -------
+  str
+      Returns the value that a list has on a specific row and column combination.
+      If there is not such value, returns an empty string.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          vSelection = toolbars.ListGetSelectedKeys(toolbar_name, list_name)
+          print("Selected IDs: " + str(vSelection))
+          vSelectionRows = toolbars.ListGetSelectedRows(toolbar_name, list_name)
+          print("Selected Rows: " + str(vSelectionRows))
+          for rowId in vSelection:
+              column_name = "Time"
+              print(
+                  "Selected time: " + toolbars.ListGetValue("Test", "TestList", rowId, "Time")
+              )
+              column_name = "Distance"
+              print(
+                  " Selected distance: "
+                  + toolbars.ListGetValue("Test", "TestList", rowId, "Distance")
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListRemoveRow
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListRemoveRow(toolbar_name: str, list_name: str, row_key: str) -> int
+DOCSTRING:
+  Removes the row, having the specified key, from the list.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  row_key : str
+      Name of the row key.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the row has been removed; otherwise, it returns 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          vSelection = toolbars.ListGetSelectedKeys(toolbar_name, list_name)
+          for rowId in vSelection:
+              bOk = toolbars.ListRemoveRow(toolbar_name, list_name, rowId)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListSetValue
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListSetValue(toolbar_name: str, list_name: str, row_key: str, column_name: str, new_value: str) -> int
+DOCSTRING:
+  Sets a new value into the specificed row and column field.
+  Any pre-existed content will be replaced.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  row_key : str
+      Name of the row key.
+  
+  column_name : str
+      Name of the column.
+  
+  new_value : str
+      Value to be set.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the value has been set; otherwise, returns 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Test"
+          list_name = "TestList"
+          column_name = "Time"
+          # add columns:
+          ret = toolbars.ListAddColumn(toolbar_name, list_name, column_name)
+          print(ret)
+          column_name = "Distance"
+          ret = toolbars.ListAddColumn(toolbar_name, list_name, column_name)
+          print(ret)
+          # add row (verbose style):
+          row_key = "T01"
+          ret = toolbars.ListAddKey(toolbar_name, list_name, row_key)
+          print(ret)
+          column_name = "Time"
+          new_value = "0.11s"
+          ret = toolbars.ListSetValue(
+              toolbar_name, list_name, row_key, column_name, new_value
+          )
+          print(ret)
+          column_name = "Distance"
+          new_value = "10m"
+          ret = toolbars.ListSetValue(
+              toolbar_name, list_name, row_key, column_name, new_value
+          )
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CheckboxGetState
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.CheckboxGetState(toolbar_name: str, checkbox_name: str)
+DOCSTRING:
+  This function gets the state, checked or not checked, of a checkbox of a
+  given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  checkbox_name : str
+      Name of the checkbox.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          checkbox_name = "Checkbox 1"
+  
+          state = meta.toolbars.CheckboxGetState(toolbar_name, checkbox_name)
+          if state == 1:
+              print("Checked")
+          elif state == 0:
+              print("Not checked")
+          elif state == -1:
+              print("Failure!")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: RadiobuttonGetState
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.RadiobuttonGetState(toolbar_name: str, radio_name: str) -> int
+DOCSTRING:
+  This function gets the state (checked or not checked) of a radio button of a
+  given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  radio_name : str
+      Name of the radio button.
+  
+  Returns
+  -------
+  int
+      It returns an integer, 1 if radio button is checked and 0 if it is not checked.
+      Upon failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          radio_name = "Radiobutton 1"
+          state = toolbars.RadiobuttonGetState(toolbar_name, radio_name)
+          if state == 1:
+              print("Enabled")
+          elif state == 0:
+              print("Disabled")
+          elif state == -1:
+              print("Failure!")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SliderGetMaxValue
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.SliderGetMaxValue(toolbar_name: str, slider_name: str) -> int
+DOCSTRING:
+  This function gets the max value of a slider of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  slider_name : str
+      Name of the slider.
+  
+  Returns
+  -------
+  int
+      It returns an integer referring to the maximum value of the slider of the given
+      toolbar. Upon failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          slider_name = "Slider 1"
+  
+          slider_value = toolbars.SliderGetMaxValue(toolbar_name, slider_name)
+          print(slider_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SliderGetMinValue
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.SliderGetMinValue(toolbar_name: str, slider_name: str) -> int
+DOCSTRING:
+  This function gets the min value of a slider of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  slider_name : str
+      Name of the slider.
+  
+  Returns
+  -------
+  int
+      It returns an integer, referring to the min value of the slider of the given 
+      toolbar. Upon failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          slider_name = "Slider 1"
+  
+          slider_value = toolbars.SliderGetMinValue(toolbar_name, slider_name)
+          print(slider_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SliderGetValue
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.SliderGetValue(toolbar_name: str, slider_name: str) -> int
+DOCSTRING:
+  This function gets the value of a slider of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  slider_name : str
+      Name of the slider.
+  
+  Returns
+  -------
+  int
+      It returns an integer referring to the value of the slider of the given toolbar.
+      Upon failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          slider_name = "Slider 1"
+  
+          slider_value = toolbars.SliderGetValue(toolbar_name, slider_name)
+          print(slider_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TextboxGetValue
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.TextboxGetValue(toolbar_name: str, textbox_name: str) -> str
+DOCSTRING:
+  This function gets the text of a textbox of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  textbox_name : str
+      Name of the textbox.
+  
+  Returns
+  -------
+  str
+      It returns a string referring to the text of the textbox of the given toolbar.
+      Upon failure, an empty string is returned.
+  
+  See Also
+  --------
+  meta.toolbars.TextboxGetAllValues, meta.toolbars.TextboxIsEditable
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          textbox_name = "Textbox 1"
+  
+          text = toolbars.TextboxGetValue(toolbar_name, textbox_name)
+          print(text)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TogglebuttonGetState
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.TogglebuttonGetState(toolbar_name: str, togglebutton_name: str) -> int
+DOCSTRING:
+  This function gets the state (pushed or not pushed) of a togglebutton of a given
+  toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  togglebutton_name : str
+      Name of the togglebutton.
+  
+  Returns
+  -------
+  int
+      Upon success an integer, 1 if checkbox is checked and 0 if it is not checked.
+      Upon failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          togglebutton_name = "Togglebutton 1"
+  
+          state = toolbars.TogglebuttonGetState(toolbar_name, togglebutton_name)
+          if state == 1:
+              print("Pushed")
+          elif state == 0:
+              print("Not pushed")
+          elif state == -1:
+              print("Failure!")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TextboxGetAllValues
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.TextboxGetAllValues(toolbar_name: str, textbox_name: str) -> list[str]
+DOCSTRING:
+  Returns an array of the history values contained in the specified textbox. The 
+  same function may be used to retrieve the history entries of a file or directory
+  textbox.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  textbox_name : str
+      Name of the textbox.
+  
+  Returns
+  -------
+  list[str]
+      Returns a list object of the textbox entries.
+  
+  See Also
+  --------
+  meta.toolbars.FileTextboxGetAllWildcards
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "MyToolbar"
+          textbox_name = "MyTextbox"
+          vValues = toolbars.TextboxGetAllValues(toolbar_name, textbox_name)
+          print("Contents: " + str(vValues))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GroupGetCheckState
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.GroupGetCheckState(toolbar_name: str, group_name: str) -> int
+DOCSTRING:
+  This function returns the current checked status of a user toolbar checkable 
+  group.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of toolbar
+  
+  group_name : str
+      Name of (checkable) group
+  
+  Returns
+  -------
+  int
+      The function returns 1 if the group is checked, 0 if unchecked. If the group is 
+      not checkable or in case of failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "MyToolbar"
+          group_name = "MyGroup"
+          c = toolbars.GroupGetCheckState(toolbar_name, group_name)
+          if c == 1:
+              print("Group is checked")
+          elif c == 0:
+              print("Group is not checked")
+          elif c == -1:
+              print("Not a checkable group")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetLabel
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.GetLabel(toolbar_name: str, item_name: str) -> str
+DOCSTRING:
+  This function returns the label of a user toolbar item.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of toolbar
+  
+  item_name : str
+      Name of item
+  
+  Returns
+  -------
+  str
+      Returns the label string. If the item is not found, it returns an empty string.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "ToolbarLabels"
+          item_name = "MyButton"
+          # Need some documentation? Run this with F5
+          label = toolbars.GetLabel(toolbar_name, item_name)
+          print(label)
+          item_name = "MyCheckbox"
+          label = toolbars.GetLabel(toolbar_name, item_name)
+          print(label)
+          item_name = "MyTextbox"
+          label = toolbars.GetLabel(toolbar_name, item_name)
+          print(label)
+          item_name = "MyLabel"
+          label = toolbars.GetLabel(toolbar_name, item_name)
+          print(label)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListSelectRows
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListSelectRows(toolbar_name: str, list_name: str, row_key_list: list) -> int
+DOCSTRING:
+  Selects list rows having the specified keys. An empty row_key_list will clear
+  (any) current row selections. The toolbar containing the list must be visible
+  during the call of this function. 
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  row_key_list : list
+      List of keys of rows to be selected.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the selection has been applied; otherwise, it returns 0.
+  
+  Notes
+  -----
+  Any associated user commands set to run during selection will be executed; in
+  order to avoid the command execution during the selection, please use the 
+  ListOnlySelectRows() variation.
+  
+  See Also
+  --------
+  meta.toolbars.ListOnlySelectRows
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "TOOLBAR"
+          list_name = "LIST"
+          row_key_list = "A,B"
+          ret = toolbars.ListSelectRows(toolbar_name, list_name, row_key_list)
+          print(ret)
+          strSelected = str(toolbars.ListGetSelectedRows(toolbar_name, list_name))
+          print("Selected rows: " + strSelected)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListOnlySelectRows
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListOnlySelectRows(toolbar_name: str, list_name: str, row_key_list: list) -> int
+DOCSTRING:
+  Selects list rows having the specified keys without executing the associated
+  user commands. An empty row_key_list will clear (any) current row selections.
+  The toolbar containing the list must be visible during the call of this
+  function. 
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  row_key_list : list
+      List of keys of rows to be selected.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the selection has been applied; otherwise, it returns 0.
+  
+  Notes
+  -----
+  Any associated user commands set to run during selection will be skipped; in
+  order to allow the command execution during the selection, please use the 
+  ListSelectRows() variation.
+  
+  See Also
+  --------
+  meta.toolbars.ListSelectRows
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "TOOLBAR"
+          list_name = "LIST"
+          row_key_list = "A,B"
+          ret = toolbars.ListOnlySelectRows(toolbar_name, list_name, row_key_list)
+          print(ret)
+          strSelected = str(toolbars.ListGetSelectedRows(toolbar_name, list_name))
+          print("Selected rows: " + strSelected)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ToolbarGetDefaultsPath
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ToolbarGetDefaultsPath(toolbar_name: str) -> str
+DOCSTRING:
+  Returns the path of the toolbar's default's file.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of toolbar
+  
+  Returns
+  -------
+  str
+      Returns the defaults path of the toolbar. If the toolbar is not found, an empty
+      string will be returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Pedestrian"
+          default_path = toolbars.ToolbarGetDefaultsPath(toolbar_name)
+          print("Defaults path: " + default_path)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TextboxIsEditable
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.TextboxIsEditable(toolbar_name: str, textbox_name: str) -> int
+DOCSTRING:
+  This function checks if a textbox of a given toolbar can be edited by the user.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  textbox_name : str
+      Name of the textbox.
+  
+  Returns
+  -------
+  int
+      This function returns 1 if the textbox is editable, and 0 if it's not. 
+      If there is not a textbox with such name, it returns 0.
+  
+  Notes
+  -----
+  File textboxes and directory textboxes always return 1.
+  
+  See Also
+  --------
+  meta.toolbars.TextboxGetValue, meta.toolbars.TextboxGetAllValues
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          textbox_name = "Textbox 1"
+          isEditable = toolbars.TextboxIsEditable(toolbar_name, textbox_name)
+          print(str(isEditable))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ItemIsVisible
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ItemIsVisible(toolbar_name: str, item_name: str) -> int
+DOCSTRING:
+  This function checks the visibility status of a user toolbar item, e.g. button, 
+  label, etc.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  item_name : str
+      Item name.
+  
+  Returns
+  -------
+  int
+      This function returns 1 if the item has visible status, and 0 if it has not. 
+      If there is not an item with such name, it returns 0.
+  
+  Notes
+  -----
+  The visibility flag of the item is not affected by its parent visibility. This 
+  function checks only the item's visibility status which was set by the user (via 
+  invoking the session command "toolbar edit show/hide ..."). This means that the 
+  function will return 1 for a visible item, even if its parent toolbar is hidden.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          item_name = "Textbox 1"
+          isVisible = toolbars.ItemIsVisible(toolbar_name, item_name)
+          print(str(isVisible))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: FileTextboxGetAllWildcards
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.FileTextboxGetAllWildcards(toolbar_name: str, filetextbox_name: str) -> list[str]
+DOCSTRING:
+  Returns an array of the wildcards (filters) set to the specified file textbox.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+  
+  filetextbox_name : str
+  
+  Returns
+  -------
+  list[str]
+      Returns a list containing the File Textbox wildcards.
+  
+  See Also
+  --------
+  meta.toolbars.TextboxGetAllValues
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          toolbar_name = "MyToolbar"
+          filetextbox_name = "MyFileTextbox"
+          vValues = toolbars.FileTextboxGetAllWildcards(toolbar_name, filetextbox_name)
+          print("Wildcards: " + str(vValues))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListSetSorting
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListSetSorting(toolbar_name: str, list_name: str, column_name: str, sorting_method: str) -> int
+DOCSTRING:
+  Sorts list rows based on the items of a specific column; supports ascending / descending sorting methods.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  column_name : str
+      Name of the column to be used as a base for sorting.
+  
+  sorting_method : str
+      Possible entries are 'ascending', 'descending', and 'off'.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the sorting succeeded; otherwise, returns 0.
+  
+  See Also
+  --------
+  meta.toolbars.ListGetSorting
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          # Need some documentation? Run this with F5
+  
+          toolbar_name = "MyToolbar"
+          list_name = "MyList"
+          column_name = "Column_K"
+          method = "ascending"
+  
+          toolbars.ListSetSorting(toolbar_name, list_name, column_name, method)
+          vRows = toolbars.ListGetAllRows(toolbar_name, list_name)
+          print(str(vRows))
+  
+          column_name_sort, method_sort = toolbars.ListGetSorting(toolbar_name, list_name)
+          print("sorted by " + column_name_sort)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListGetSorting
+MODULE: meta.toolbars
+SIGNATURE: meta.toolbars.ListGetSorting(toolbar_name: str, list_name: str) -> list
+DOCSTRING:
+  Returns list sorted column (if any) along with the used sorting method.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  list_name : str
+      Name of the list.
+  
+  Returns
+  -------
+  list
+      Returns sorted column name and the method used. The method can be 'ascending', 'descending' or 'off'.
+  
+  See Also
+  --------
+  meta.toolbars.ListSetSorting
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import toolbars
+  
+  
+      def main():
+          # Need some documentation? Run this with F5
+  
+          toolbar_name = "MyToolbar"
+          list_name = "MyList"
+          column_name = "Column_K"
+          method = "ascending"
+  
+          toolbars.ListSetSorting(toolbar_name, list_name, column_name, method)
+          vRows = toolbars.ListGetAllRows(toolbar_name, list_name)
+          print(str(vRows))
+  
+          column_name_sort, method_sort = toolbars.ListGetSorting(toolbar_name, list_name)
+          print("sorted by " + column_name_sort)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

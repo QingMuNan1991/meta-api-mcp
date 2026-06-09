@@ -1,0 +1,250 @@
+MODULE: meta.__init__
+========================================================================
+
+FUNCTION: ImportCode
+MODULE: meta.__init__
+SIGNATURE: meta.__init__.ImportCode(path: str) -> int
+DOCSTRING:
+  This function imports the code from another python module (py or pyb).
+  
+  Parameters
+  ----------
+  path : str
+      The name of the script file to import.
+  
+  Returns
+  -------
+  int
+      Returns 0 on success, else an exception is raised.
+  
+  Raises
+  ------
+  FileNotFoundError
+      Cannot read the file.
+  
+  Notes
+  -----
+  If you want to import Python modules (.py), it is recommended to use the native Python mechanism.
+  This function should ideally be used only for importing Beta encrypted Python modules (.pyb).
+  Notice, that in this case, you don't have to add the filepath in python system path.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+  
+      file1 = "/home/demo/module1.pyb"
+      file2 = "C:\\demo\\module2.pyb"
+  
+      meta.ImportCode(file1)
+      meta.ImportCode(file2.replace("\\", "/"))
+  
+  
+      def main():
+          module1.function1()
+          module2.function1()
+
+----------------------------------------
+
+FUNCTION: ScriptCurrentDir
+MODULE: meta.__init__
+SIGNATURE: meta.__init__.ScriptCurrentDir() -> str
+DOCSTRING:
+  Returns the current working directory path.
+  
+  Returns
+  -------
+  str
+      Returns the current working directory.
+  
+  See Also
+  --------
+  meta.ScriptHomeDir, meta.ScriptUserDir
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+  
+  
+      def main():
+          print(meta.ScriptCurrentDir())
+
+----------------------------------------
+
+FUNCTION: ScriptHomeDir
+MODULE: meta.__init__
+DEPRECATED: Deprecated.Use meta.constants.app_root_dir instead.
+SIGNATURE: meta.__init__.ScriptHomeDir() -> str
+DOCSTRING:
+  .. deprecated::
+      Use :py:const:`meta.constants.app_root_dir` instead.
+  
+  Returns the ANSA/META Home directory path
+  
+  Returns
+  -------
+  str
+      Returns the ANSA/META Home directory path.
+  
+  See Also
+  --------
+  meta.ScriptCurrentDir, meta.ScriptUserDir
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+  
+  
+      def main():
+          print(meta.ScriptHomeDir())
+
+----------------------------------------
+
+FUNCTION: ScriptUserDir
+MODULE: meta.__init__
+DEPRECATED: Deprecated.Use meta.constants.app_home_dir instead.
+SIGNATURE: meta.__init__.ScriptUserDir() -> str
+DOCSTRING:
+  .. deprecated::
+      Use :py:const:`meta.constants.app_home_dir` instead.
+  
+  Returns the BetaHome directory path.
+  
+  Returns
+  -------
+  str
+      Returns the BetaHome directory path.
+  
+  See Also
+  --------
+  meta.ScriptCurrentDir, meta.ScriptHomeDir
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+  
+  
+      def main():
+          print(meta.ScriptUserDir())
+
+----------------------------------------
+
+FUNCTION: CompileScript
+MODULE: meta.__init__
+SIGNATURE: meta.__init__.CompileScript(fileInput: str, fileOutput: str, moduleName: str, mode: bool=True) -> int
+DOCSTRING:
+  Creates a compiled (pyb/bsx) file from the given script path.
+  
+  Parameters
+  ----------
+  fileInput : str
+      The path of the script that we want to compile.
+  
+  fileOutput : str
+      The destination path of the created compiled file.
+  
+  moduleName : str
+      The name of the module.
+  
+  mode : bool, optional
+      Declares whether to include the input script's imported modules, inside the final compiled file.
+      (Applicable to all the modules imported through the "ansa.ImportCode" API function)
+  
+      - True, to include dependencies in the compiled script. (Default)
+      - False, otherwise.
+  
+      It has effect only for Python scripts.
+  
+  Returns
+  -------
+  int
+      Returns 1 on success, 0 on failure.
+  
+  Notes
+  -----
+  This function does not support named arguments.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+  
+  
+      def main():
+          meta.CompileScript(
+              "/home/user/scripts/some_script.py",
+              "/home/user/scripts/some_script.pyb",
+              "moduleName",
+              False,
+          )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PybImport
+MODULE: meta.__init__
+SIGNATURE: meta.__init__.PybImport(module_name: str, script_file_path: str) -> ModuleType
+DOCSTRING:
+  A function that imports python scripts (pyb).
+  Returns the imported module.
+  
+  Parameters
+  ----------
+  module_name : str
+      The name of the module.
+  
+  script_file_path : str
+      The filepath of the script.
+  
+  Returns
+  -------
+  ModuleType
+      Returns the imported module.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+  
+  
+      def main():
+          x = meta.PybImport("moduleName", "/module/file/path/moduleNameCompiled.pyb")
+          x.funcInModuleNameCompiled()
+
+----------------------------------------
+
+FUNCTION: ReadingFile
+MODULE: meta.__init__
+SIGNATURE: meta.__init__.ReadingFile() -> str
+DOCSTRING:
+  Function that returns the currently reading physical file on disk.
+  
+  Returns
+  -------
+  str
+      Returns the currently reading physical file on disk.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+  
+  
+      def main():
+          x = meta.ReadingFile()
+          print(x)
+
+----------------------------------------

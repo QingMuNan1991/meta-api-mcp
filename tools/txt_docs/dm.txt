@@ -1,0 +1,4081 @@
+MODULE: meta.dm
+========================================================================
+
+FUNCTION: AddAttachmentToFolder
+MODULE: meta.dm
+SIGNATURE: meta.dm.AddAttachmentToFolder(entity: object, server_id: str, folder_name: str, filename: str, attribute_name: str, entity_type: str, link: bool) -> int
+DOCSTRING:
+  This function can be used to:
+  - add a file under a folder in the Library Items,
+  - attach a file/folder under a DM Object's attribute of type Attached File/Directory
+    respectively. If this attribute does not exist, it is created as Additional Attribute.
+  A DM root should have been specified.
+  
+  Parameters
+  ----------
+  entity : object, optional
+      the ANSA entity to be found in the connected
+      DM root. The file/folder will be attached under
+      an attribute of this object (if found in DM).
+  
+  server_id : str, optional
+      the server id of the object contained to the
+      connected DM root. The file/folder will be
+      attached under an attribute of this object.
+  
+  folder_name : str, optional
+      the name of the folder in the Library Items,
+      where the specified file will be attached.
+      For DM Objects in file-based DM, a sub-folder
+      with this name will be created, and the file
+      will be placed there.
+  
+  filename : str
+      the full path of the file/folder to be attached.
+  
+  attribute_name : str, optional
+      the name of the DM Object's attribute where the
+      specified file/folder will be attached.
+  
+  entity_type : str, optional
+      the type of the DM object.
+  
+  link : bool, optional
+      enables the ability to link a folder and not copy
+      its contents under a DM Object's attribute. By
+      default, the contents are copied (False).
+  
+  Returns
+  -------
+  int
+      Returns 1 on success and 0 on failure.
+  
+  See Also
+  --------
+  meta.dm.DeleteAttachment, meta.dm.DownloadAttachment
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import base
+      from meta import dm
+  
+  
+      def main():
+          # 1st Use Case: Create a folder under the Library Items and attach a file to that
+          create_folder = dm.CreateNewSubFolder(folder_name="batch_mesh_sessions")
+          file_path = "/full/path/of/file/or/folder/to/attach/"
+          attach_file = dm.AddAttachmentToFolder(
+              folder_name="batch_mesh_sessions", filename=file_path
+          )
+  
+          # Alternatively, attach a file under a sub-folder
+          attach_file = dm.AddAttachmentToFolder(
+              folder_name="batch_mesh_sessions/crash", filename=file_path
+          )
+          attach_file = dm.AddAttachmentToFolder(
+              folder_name="LIBRARY_ITEMS/batch_mesh_sessions", filename=file_path
+          )
+  
+          # 2nd Use Case: File-based DM - Create a sub-folder under an attribute of DM Object
+          # and place the file there.
+          file_path = "/full/path/of/file/or/folder/to/attach/"
+          part = base.GetPartFromModuleId("100")
+          create_subfolder = base.CreateNewSubFolder(
+              entity=part, folder_name="Additional_Results", attribute_name="Results"
+          )
+          attach_file = dm.AddAttachmentToFolder(
+              entity=part,
+              folder_name="Additional_Results",
+              filename=file_path,
+              attribute_name="Results",
+          )
+  
+          # Alternatively, the file could be placed directly under the DM Object's attribute
+          attach_file = dm.AddAttachmentToFolder(
+              entity=part, filename=file_path, attribute_name="Results"
+          )
+          attach_file = dm.AddAttachmentToFolder(
+              server_id="200", filename=file_path, attribute_name="Results"
+          )
+  
+          # 3rd Use Case: SPDRM - Attach a file/folder under an attribute of type Attached
+          # File/Directory respectively. If this attribute does not exist (was not specified
+          # in the dm_structure.xml), it is created as Additional Attribute.
+          folder_path = "/full/path/of/file/or/folder/to/attach/"
+          attach_file = dm.AddAttachmentToFolder(
+              server_id="200", filename=folder_path, attribute_name="Results"
+          )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteAttachment
+MODULE: meta.dm
+SIGNATURE: meta.dm.DeleteAttachment(entity: base.Entity, server_id: str, folder_name: str, filename: str, entity_type: str) -> int
+DOCSTRING:
+  When connected to a DM, this function allows for an existing attachment to a DM object to be deleted. 
+  If no DM Object is specified, a library item can be deleted.
+  
+  Parameters
+  ----------
+  entity : base.Entity, optional
+      When this argument is given, the ANSA entity will be searched in DM and if found, 
+      the attachment will be deleted from the corresponding DM Object.
+  
+  server_id : str, optional
+      The DM Object's server id, whose attachment will be deleted.
+  
+  folder_name : str, optional
+      A subfolder with this name will be deleted.
+  
+  filename : str, optional
+      The filename which will be deleted.
+  
+  entity_type : str, optional
+      If the server_id is given as an argument, one may define the Object's type by 
+      using this argument.
+  
+  Returns
+  -------
+  int
+      Returns 1 on success and 0 on failure.
+  
+  See Also
+  --------
+  meta.dm.AddAttachmentToFolder, meta.dm.DownloadAttachment
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import base
+      from meta import dm
+  
+  
+      def deleteAnAttachedFolder():
+          part = base.GetPartFromModuleId("4282")
+          dm.DeleteAttachment(entity=part, folder_name="VBT_Info")
+          dm.DeleteAttachment(entity=part, folder_name="DA/Translated_files")
+          dm.DeleteAttachment(entity=part)
+  
+          # in case we know the Object's server id:
+          file_ret = dm.DeleteAttachment(server_id="100", folder_name="Folder1")
+          # or:
+          file_ret = dm.DeleteAttachment(
+              server_id="100", entity_type="parts", folder_name="Folder1"
+          )
+  
+          # In order to delete a file under "batch_mesh_sessions" folder:
+          dm.DeleteAttachment(
+              folder_name="batch_mesh_sessions", filename="example_7mm.ansa_qual"
+          )
+
+----------------------------------------
+
+FUNCTION: DownloadAttachment
+MODULE: meta.dm
+SIGNATURE: meta.dm.DownloadAttachment(entity: base.Entity, server_id: str, folder_name: str, output_folder: str, subfolder_name: str, filename: str, entity_type: str, attribute_name: str, action: str) -> int
+DOCSTRING:
+  Downloads the attachments of an object contained to the defined DM root. A DM root
+  should have been specified.
+  
+  Parameters
+  ----------
+  entity : base.Entity, optional
+      the ANSA entity to be found in the connected
+      DM root. The attachments of this object (if
+      found in DM) will be downloaded.
+  
+  server_id : str, optional
+      the server id of the object contained to the
+      connected DM root. The attachments of this
+      object will be downloaded.
+  
+  folder_name : str, optional
+      the name of the folder which contains the
+      attachments.
+  
+  output_folder : str, optional
+      the full path of the folder where the attachments
+      will be downloaded.
+  
+  subfolder_name : str, optional
+      the name of the subfolder to be downloaded.
+  
+  filename : str, optional
+      the name of the file to be downloaded.
+  
+  entity_type : str, optional
+      the type of the DM object.
+  
+  attribute_name : str, optional
+      the name of attribute which contains the
+      attachments.
+  
+  action : str, optional
+      The exported file from the server will be copied to the target directory by default.
+      It is possible to create a hard link in the target directory when this argument has the value "link" and the output_folder is relative to the NodeExec directory. 
+      Note that this is only possible when connected to a SPDRM DM and the application is launched through a Process Node and works for Subsystems, parts, Rich Library Items and Library Files.
+  
+  Returns
+  -------
+  int
+      Returns 1 on success and 0 on failure.
+  
+  Notes
+  -----
+  Either entity or server_id should be specified. If a file with same fiename already
+  exists in the output_folder, the server_id is added as prefix in the filename
+  of the downloaded attached file.
+  
+  See Also
+  --------
+  meta.dm.DeleteAttachment, meta.dm.AddAttachmentToFolder, meta.dm.DMObject.download_attachment
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import base
+      from meta import dm
+  
+  
+      def main():
+          part = base.GetPartFromModuleId("100")
+          dm.DownloadAttachment(
+              entity=part,
+              output_folder="/full/path/of/output/folder/",
+              attribute_name="Image_JT",
+          )
+  
+          dm.DownloadAttachment(
+              server_id="200",
+              output_folder="/full/path/of/output/folder/",
+              attribute_name="Image_PNG",
+          )
+  
+          # Download attachements from meta-based DM
+          dm.DownloadAttachment(
+              server_id="300",
+              subfolder_name="/relative/path/to/the/top/level/folder/",
+              output_folder="/full/path/of/output/folder/",
+              attribute_name="Results",
+          )
+          dm.DownloadAttachment(
+              server_id="400",
+              filename="/relative/path/to/the/top/level/folder/filename.ext",
+              output_folder="/full/path/of/output/folder/",
+              attribute_name="Results",
+          )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateAttachedFolder
+MODULE: meta.dm
+SIGNATURE: meta.dm.CreateAttachedFolder(entity: base.Entity, server_id: str, attribute_name: str, entity_type: str) -> int
+DOCSTRING:
+  Creates an empty attached folder under an existing object in DM. New files/folders
+  can be added as attachments in that folder afterwards. A DM root should have been
+  specified.
+  
+  Parameters
+  ----------
+  entity : base.Entity, optional
+      the ANSA entity to be found in the connected
+      DM root. The new folder will be attached under
+      this object (if found in DM).
+  
+  server_id : str, optional
+      the server id of the object contained to the
+      connected DM root. The new folder will be
+      attached under this object.
+  
+  attribute_name : str, optional
+      the name of the folder to be attached.
+  
+  entity_type : str, optional
+      the type of the DM object.
+  
+  Returns
+  -------
+  int
+      Returns 1 on success and 0 on failure.
+  
+  Notes
+  -----
+  Either entity or server_id should be specified.
+  
+  See Also
+  --------
+  meta.dm.CreateNewSubFolder, meta.dm.DeleteAttachment, meta.dm.DownloadAttachment, meta.dm.AddAttachmentToFolder
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import base
+      from meta import dm
+  
+  
+      def main():
+          part = base.GetPartFromModuleId("100")
+          dm.CreateAttachedFolder(entity=part, attribute_name="Info")
+  
+          dm.CreateAttachedFolder(server_id="200", attribute_name="Info")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateNewSubFolder
+MODULE: meta.dm
+SIGNATURE: meta.dm.CreateNewSubFolder(entity: base.Entity, server_id: str, folder_name: str, attribute_name: str, entity_type: str) -> int
+DOCSTRING:
+  Creates an empty subfolder in an existing attached folder of a DM object. New
+  files/folders can be added as attachments in that subfolder afterwards. A DM root
+  should have been specified. This function can also be used to create subfolders
+  for library items in DM (e.g."batch_mesh_sessions").
+  
+  Parameters
+  ----------
+  entity : base.Entity, optional
+      the ANSA entity to be found in the connected
+      DM root. The new subfolder will be attached
+      under this object (if found in DM).
+  
+  server_id : str, optional
+      the server id of the object contained to the
+      connected DM root. The new subfolder will
+      be attached under this object.
+  
+  folder_name : str, optional
+      the name of the subfolder to be attached.
+  
+  attribute_name : str, optional
+      the name of the parent attribute/folder where
+      the new subfolder will be created. The default
+      value id 'DA'.
+  
+  entity_type : str, optional
+      the type of the DM object.
+  
+  Returns
+  -------
+  int
+      Returns 1 on success and 0 on failure.
+  
+  Notes
+  -----
+  This function can be used in SPDRM-based DM only for the creation of folders/
+  subfolders under the Library Items.
+  Other backends can use this function for creating attachments as well.
+  
+  See Also
+  --------
+  meta.dm.CreateAttachedFolder, meta.dm.DeleteAttachment, meta.dm.DownloadAttachment, meta.dm.AddAttachmentToFolder
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import base
+      from meta import dm
+  
+  
+      def main():
+          part = base.GetPartFromModuleId("100")
+          dm.CreateNewSubFolder(
+              entity=part, folder_name="New_Subfolder", attribute_name="VIP"
+          )
+  
+          dm.CreateNewSubFolder(
+              server_id="200", folder_name="New_Subfolder", attribute_name="VIP"
+          )
+  
+          dm.CreateNewSubFolder(folder_name="batch_mesh_sessions")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DownloadLibraryItem
+MODULE: meta.dm
+SIGNATURE: meta.dm.DownloadLibraryItem(library: str, output_folder: str, filename: str, action: str) -> int
+DOCSTRING:
+  This function is used to download a file from the DM library items, e.g. a "batch_mesh_session".  
+  
+  Parameters
+  ----------
+  library : str
+      The library item's type.
+  
+  output_folder : str, optional
+      The folder where the item will be copied.
+      Although it's an optional argument, it needs to be defined.
+  
+  filename : str, optional
+      The library item's name.
+      Although it's an optional argument, it needs to be defined.
+  
+  action : str, optional
+      The exported file from the server will be copied to the target directory by default.
+      It is possible to create a hard link in the target directory when this argument has the value "link" and the output_folder is relative to the NodeExec directory. 
+      Note that this is only possible when connected to a SPDRM DM and the application is launched through a Process Node.
+  
+  Returns
+  -------
+  int
+      Returns 1 on success and 0 on failure.
+  
+  See Also
+  --------
+  meta.dm.GetAvailableLibraryItems
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          results = dm.GetAvailableLibraryItems("batch_mesh_sessions", search_for="*.ansa")
+          for result in results:
+              dm.DownloadLibraryItem(
+                  "batch_mesh_sessions",
+                  output_folder="C:\\Users\\demo\\Desktop\\ttt\\",
+                  filename=result,
+              )
+
+----------------------------------------
+
+FUNCTION: GetAvailableLibraryItems
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetAvailableLibraryItems(folder_name: str, search_for: str) -> list
+DOCSTRING:
+  This function can be used to get a list with all the items in a library in DM,
+  e.g. all "batch_mesh_sessions" or specific "batch_mesh_sessions" that match a 
+  search pattern.
+  
+  Parameters
+  ----------
+  folder_name : str
+      The library's name.
+  
+  search_for : str, optional
+      This can be a search pattern that will be used for the query.
+  
+  Returns
+  -------
+  list
+      Returns a list with all the library item names.
+  
+  See Also
+  --------
+  meta.dm.DownloadLibraryItem
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          results = dm.GetAvailableLibraryItems("batch_mesh_sessions", search_for="*.ansa")
+          if results:
+              for result in results:
+                  print("Found batch_mesh_session: ", result)
+          all_results = dm.GetAvailableLibraryItems("batch_mesh_sessions")
+          if all_results:
+              for result in all_results:
+                  print("Found batch_mesh_session: ", result)
+
+----------------------------------------
+
+FUNCTION: IsConnectionValid
+MODULE: meta.dm
+SIGNATURE: meta.dm.IsConnectionValid(dm_root: str, reconnect: bool) -> int
+DOCSTRING:
+  The function is used to check if the connection to the url-based DM root is actually valid.
+  If no arguments are given, the current DM is checked.
+  If a "dm_root" argument pair is given, then that url will be checked.
+  
+  Parameters
+  ----------
+  dm_root : str, optional
+      When this argument is given, then that url will be checked.
+  
+  reconnect : bool, optional
+      Set to True, if you automatically wish to try and reconnect if the connection is invalid.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the connection is valid, or 0 if it is invalid or no DM root has been defined.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          if dm.IsConnectionValid():
+              print("Connection to current DM is valid.")
+          else:
+              print("Connection to current DM is lost.")
+          # OR:
+          if dm.IsConnectionValid(dm_root="http://ektoras:8080/"):
+              print("Connection to http://ektoras:8080/ is valid.")
+          else:
+              print("Connection to http://ektoras:8080/ is lost.")
+
+----------------------------------------
+
+FUNCTION: GetRoot
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetRoot() -> str
+DOCSTRING:
+  Returns the path that currently points to DM.
+  
+  Returns
+  -------
+  str
+      Returns a string containing the current DM root.
+      A string of length 0 is returned if no DM path is currently set.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm_root = dm.GetRoot()
+          print(dm_root)
+
+----------------------------------------
+
+FUNCTION: SetRoot
+MODULE: meta.dm
+SIGNATURE: meta.dm.SetRoot(dm_root: str, username: str, password: str, role: str, ticket: str) -> int
+DOCSTRING:
+  Sets the current DM root to the path DM_PATH.
+  
+  Parameters
+  ----------
+  dm_root : str
+      A string that describes the path of the DM root directory.
+  
+  username : str, optional
+      Username (For login to web based DMs).
+  
+  password : str, optional
+      Password (For login to web based DMs).
+  
+  role : str, optional
+      User role (For setting the user's role to web based DMs).
+  
+  ticket : str, optional
+      Ticket (For login to web based DMs). This argument is provided
+      when the connection should employ an already available ticket,
+      and there is no need to authenticate with username / password.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the new DM root has been set successfully and 0 otherwise.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm.SetRoot("C:/Users/Local_Work_files/")
+  
+  
+      # Set SPDRM vault as DM Root
+      def main():
+          dm.SetRoot("http://magneto.localdomain:8080/", username="user1", password="pass1")
+          # when we want to change the user's role(when supported):
+          dm.SetRoot(
+              "http://magneto.localdomain:8080/",
+              username="user1",
+              password="pass1",
+              role="Administrator",
+          )
+
+----------------------------------------
+
+FUNCTION: RemoveRoot
+MODULE: meta.dm
+SIGNATURE: meta.dm.RemoveRoot(dm_root: str) -> int
+DOCSTRING:
+  Removes the specified DM path or url from the "Set DM Paths" window list.
+  
+  Parameters
+  ----------
+  dm_root : str
+      The DM path in question.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the specified DM root has been removed successfully and 0 otherwise.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm.RemoveRoot("C:/Users/Local_Work_files/")
+
+----------------------------------------
+
+FUNCTION: GetRootsList
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetRootsList() -> None | list[dict]
+DOCSTRING:
+  Returns the whole DM Roots list, with all the info about which DM is current or 
+  is enabled for "Check DM Updates".
+  
+  Returns
+  -------
+  None | list[dict]
+      Returns None in case no DM paths found or a list of dictionaries containing the information of each DM Root.
+      The keys in each dictionary are shown in the following example:
+  
+      [{'updates_enabled': True, 'is_current': True, 'dm_root': '//mnt/DM1/'},
+       {'updates_enabled': True, 'is_current': False, 'dm_root': '//mnt/DM2/'},
+       {'updates_enabled': False, 'is_current': False, 'dm_root': 'http://dm3:8989/'}]
+  
+  See Also
+  --------
+  meta.dm.ShowDMPathsWindow
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          print(dm.GetRootsList())
+
+----------------------------------------
+
+FUNCTION: GetAcceptedValuesForAttribute
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetAcceptedValuesForAttribute(type: str, attribute_name: str, return_accepted_values_from_rules: bool=False) -> list
+DOCSTRING:
+  Given a type and an attribute's name, this function will return the accepted 
+  values, as they are defined in the dm_structure.xml or hardcoded, if they exist.
+  
+  Parameters
+  ----------
+  type : str
+      The type whose Attribute the values are requested. The specified type
+      can be ANSA type (e.g. ANSA_LOADCASE) or the DM type defined
+      through the Data Model (e.g. Loadcase).
+  
+  attribute_name : str
+      The Attribute's name. It can either be a Primary or Secondary Attribute.
+  
+  return_accepted_values_from_rules : bool, optional
+      Defines if the returned accepted values will be based on the specified rules (True) or if they will be ignored (False)
+      Default value: False
+  
+  Returns
+  -------
+  list
+      If 'return_accepted_values_from_rules' is False, the function returns a list with the accepted values as strings, if they exist, otherwise returns an empty list.
+      If 'return_accepted_values_from_rules' is True, the function returns a list [accepted_values, base_object_type, base_property_name],
+      where:
+          'accepted_values' is a dictionary with keys the values of the property of the base object and values the accepted values according to the specified rules.
+          'base_object_type' is a string with the type of the base object
+          'base_property_name' is a string with the property of the base object
+      If the Attribute or the Type don't exist, or if any other DM error occurs, None is returned.
+  
+  See Also
+  --------
+  meta.dm.IsAttributeRuleGenerated
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def example1():
+          dm.SetRoot("http://ektoras:7080/", username="admin", password="admin")
+          accepted_values = dm.GetAcceptedValuesForAttribute("parts", "Status")
+          print(accepted_values)
+  
+  
+      def example2():
+          dm_item_type = "Module"
+          attribute = "Group"
+  
+          if dm.HasAttributeConditionRule(dm_item_type, attribute):
+              ret = dm.GetAcceptedValuesForAttribute(dm_item_type, attribute, True)
+              print(
+                  "The accepted values of the "
+                  + attribute
+                  + " are specified from the "
+                  + ret[2]
+                  + " value of the "
+                  + ret[1]
+                  + " as follows:"
+              )
+              for val in ret[0].keys():
+                  print("------------------------------------------------------------")
+                  print("When " + ret[2] + " = " + val + ", the accepted values are:")
+                  for accepted_val in ret[0][val]:
+                      print(accepted_val)
+          else:
+              ret = dm.GetAcceptedValuesForAttribute(dm_item_type, attribute, False)
+              print("The accepted values of the " + attribute + " attribute are:")
+              for val in ret:
+                  print(val)
+
+----------------------------------------
+
+FUNCTION: GetAttachmentAttributeValues
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetAttachmentAttributeValues(server_id: str, filename: str, entity_type: str) -> dict
+DOCSTRING:
+  This function will collect all attributes and their values for a DM Object's attachment.
+  
+  Parameters
+  ----------
+  server_id : str, optional
+      The DM Object's server id.
+      It's optional but the function doesn't work if it's not provided.
+  
+  filename : str, optional
+      The attachment's filename, relative to the DM Object.
+      It's optional but the function doesn't work if it's not provided.
+  
+  entity_type : str, optional
+      The type of the DM Object. The specified type can be ANSA type
+      (e.g. ANSA_LOADCASE) or the DM type defined through the Data
+      Model (e.g. Loadcase).
+  
+  Returns
+  -------
+  dict
+      Returns a dictionary with attribute names/values as the key/data.
+      If nothing is found, None is returned.
+  
+  Notes
+  -----
+  Works only with SimManager as the backend.
+  
+  See Also
+  --------
+  meta.dm.SetAttachmentAttributeValues
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          result = dm.GetAttachmentAttributeValues(
+              server_id="ABy4Ww:Cuo", filename="DA/job_definition.xml"
+          )
+          if result:
+              print(result)
+
+----------------------------------------
+
+FUNCTION: SetAttachmentAttributeValues
+MODULE: meta.dm
+SIGNATURE: meta.dm.SetAttachmentAttributeValues(server_id: str, filename: str, entity_type: str, names_values: dict) -> int
+DOCSTRING:
+  This function will set values for attributes for a DM Object's attachment.
+  
+  Parameters
+  ----------
+  server_id : str, optional
+      The DM Object's server id.
+      Although it's an optional argument, it needs to be defined.
+  
+  filename : str, optional
+      The attachment's filename, relative to the DM Object.
+  
+  entity_type : str, optional
+      The type of the DM Object. The specified type can be ANSA type
+      (e.g. ANSA_LOADCASE) or the DM type defined through the Data
+      Model (e.g. Loadcase).
+  
+  names_values : dict, optional
+      A dictionary which holds the attributes to be set, along with their values.
+  
+  Returns
+  -------
+  int
+      Returns 1 on success, or 0 on failure.
+  
+  Notes
+  -----
+  Works only with SimManager as the backend.
+  
+  See Also
+  --------
+  meta.dm.GetAttachmentAttributeValues
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          result = dm.SetAttachmentAttributeValues(
+              server_id="ABy4Ww:Cuo",
+              filename="DA/job_definition.xml",
+              names_values={"TEST": "1"},
+          )
+          print("Function returned: ", str(result))
+  
+          result = dm.GetAttachmentAttributeValues(
+              server_id="ABy4Ww:Cuo", filename="DA/job_definition.xml"
+          )
+          if result:
+              print(result)
+
+----------------------------------------
+
+FUNCTION: GetAttributesFromUniqueRepresentations
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetAttributesFromUniqueRepresentations(server_id: Any, type: str, values: dict, ask_sdm: bool, object_id: Any) -> list[dict]
+DOCSTRING:
+  This function will return all Properties/Attributes for a specific input, 
+  either server ids, a filter or a DM Browser window item.
+  
+  Parameters
+  ----------
+  server_id : Any, optional
+      The server id of the DM Object, or a list with server ids, if it is already known.
+      Required even though it's optional.
+  
+  type : str, optional
+      The type of the DM Object. The specified type can be ANSA type
+      (e.g. ANSA_LOADCASE) or the DM type defined through the Data
+      Model (e.g. Loadcase).
+  
+  values : dict, optional
+      A dictionary which holds a filter (names - values)
+      that will be used when no server ids or object ids are defined.
+  
+  ask_sdm : bool, optional
+      In case of SDM CONSOLE, we can query the already downloaded values
+      instead of querying DM. It should be used in cases where the query is expected 
+      to be very slow.
+  
+  object_id : Any, optional
+      When this function is called through an action in DM Browser or SDM CONSOLE,
+      object_id is the GUI item's id, or a list with object ids. It can be used when 
+      we don't know the server_id.
+  
+  Returns
+  -------
+  list[dict]
+      Returns a list with dictionaries, with the specified attribute values. 
+      If the function fails, the list will be empty.
+  
+  Notes
+  -----
+  All arguments are optional, but a specific combination needs to be defined in
+  order for the function to work.
+  Either the server_id/server_ids need to be defined,
+  or the values or the object_id/object_ids.
+  If none of the above are defined, the function will not work.
+  
+  See Also
+  --------
+  meta.dm.DMObject
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          vals = {"Project": "L1", "Discipline": "Crash"}
+          ret = dm.GetObjectId("parts", vals)
+          if ret:
+              list_of_dicts = dm.GetAttributesFromUniqueRepresentations(
+                  server_id=ret, type="parts"
+              )
+              len_of_list_of_dicts = len(list_of_dicts)
+              for each_dict in list_of_dicts:
+                  print("Representation: ", each_dict["Representation"])
+
+----------------------------------------
+
+FUNCTION: GetSubHierarchyChildIds
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetSubHierarchyChildIds(names_values: dict, server_id: str, child_server_id: str, hierarchy: str, get_group_ids: bool) -> list[str]
+DOCSTRING:
+  Use this function to get server ids for the children of a DM Object, but at an inner level in the hierarchy.
+  
+  Parameters
+  ----------
+  names_values : dict, optional
+      A dictionary which holds the DM Object's property values
+      (all property values must be present for the object's identification).
+  
+  server_id : str, optional
+      The server id of the DM Object, if it is already known.
+      If present, the type and names_values arguments can be omitted.
+  
+  child_server_id : str, optional
+      The child server id whose subhierarchy will be searched.
+      It is used along with the 'hierarchy' argument.
+  
+  hierarchy : str, optional
+      The "Hierarchy" value for the child whose subhierarchy will be searched.
+      It is used along with the 'child_server_id' argument.
+  
+  get_group_ids : bool, optional
+      If set to True (default), server ids for Groups will also be returned.
+      Otherwise, only items that have no children will be returned.
+  
+  Returns
+  -------
+  list[str]
+      Returns a list with server ids for DM Objects that exist in the subhierarchy.
+  
+  See Also
+  --------
+  meta.dm.GetComponentsChildIds
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          result = dm.GetSubHierarchyChildIds(
+              server_id="ABy4Ww:Cuo",
+              child_server_id="AAQlbA:Cuo",
+              hierarchy="P4E7656_A-_10_A_F16-KOGR-4100-001-VORDERBAU-ROHKAROSSERI/",
+          )
+          print(str(result))
+          # will print: ['AAQlbA:Cuo', 'ABwdqw:Cuo', 'ABwqjw:Cuo']
+
+----------------------------------------
+
+FUNCTION: GetComponentsChildIds
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetComponentsChildIds(server_id: str, get_group_ids: bool, ask_sdm: bool, object_id: int) -> list
+DOCSTRING:
+  Use this function to get server ids for the children of a DM Object.
+  
+  Parameters
+  ----------
+  server_id : str, optional
+      The DM Object's server id.
+      Required even though it's optional.
+  
+  get_group_ids : bool, optional
+      When this is True (default), server ids for Groups will also be returned.
+      Otherwise, only items that have no children will be returned.
+  
+  ask_sdm : bool, optional
+      In case of SDM CONSOLE, we can query the already downloaded values 
+      instead of querying DM. It should be used in cases where the query is expected to be very slow.
+  
+  object_id : int, optional
+      When this function is called through an action in DM Browser or SDM CONSOLE,
+      object_id is the GUI item's id. It can be used when
+      we don't know the server_id.
+  
+  Returns
+  -------
+  list
+      A list with server ids for DM Objects that exist in the hierarchy.
+  
+  See Also
+  --------
+  meta.dm.GetSubHierarchyChildIds
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          result = dm.GetComponentsChildIds(server_id="ABy4Ww:Cuo", get_group_ids=False)
+          print(len(result))
+          # will print: 55
+  
+          result = dm.GetComponentsChildIds(server_id="ABy4Ww:Cuo")
+          print(len(result))
+          # will print: 67
+
+----------------------------------------
+
+FUNCTION: ExecuteSimManagerQuery
+MODULE: meta.dm
+SIGNATURE: meta.dm.ExecuteSimManagerQuery(query_string: str, dm_root: str, progress_bar: guitk.BCGuiObject) -> list[dict]
+DOCSTRING:
+  Runs a query using the SimManager's REST API functionality.
+  It is about requesting data for a set of objects.
+  
+  Parameters
+  ----------
+  query_string : str
+      type=[OT]&expr=[EL]&view=[VIEW1]&view=[VIEW2]&pageSize=[SIZE]&page=[PAGE]
+      oid=[OID]&expr=[EL]
+      query=[QUERY_SPEC]
+      query=[QUERY_SPEC]&f=[EL1]&f=[EL2]
+  
+      type: Object type, Is the type of the objects on which the expression is evaluated 
+            (optional, but either type, oid, or query are required).	
+      expr: EL expression, Is an EL expression being evaluated on the object type.
+            It's optional. If missing, "this" is assumed. The expression can be a filter
+            (e.g. [name == 'ABC*'], or a navigation expression (e.g. results.keyResults), 
+            or any combination of both. Sorting is also supported.	
+      view: View, Is the name of a view. It defines the fields being returned for each 
+            object. If multiple views are specified, then fields of the first valid view in 
+            the list will be returned. It's optional. If missing, "Default" is assumed.	
+      pageSize: Integer, Defines the maximum number of objects to be returned.
+                It's optional. If missing, "100" is assumed.
+      page: Integer, Defines the which page of the data is returned if there are more 
+            than SIZE objects. It's optional. If missing, "1" is assumed.		
+      oid: Object id, Is the ID of an object (id:tid). It can be used instead of an object 
+           type as a starting point. Then the expression will be evaluated in this object.
+      query: Query, A serialized query definition 
+             (optional, but either type, oid, or query are required).
+      f: EL expression, Instead of providing the name of a view, fields can be specified 
+         defining a new "view". Those fields could be any kind of EL expression.
+  
+  dm_root : str, optional
+      The target DM root(URL). If not provided, the current DM is assumed.
+  
+  progress_bar : guitk.BCGuiObject, optional
+      The progress can be shown in a BCProgressBar,
+      created with guitk.BCProgressBarCreate.
+  
+  Returns
+  -------
+  list[dict]
+      Returns a list of dictionaries, with name/value pairs.
+  
+  See Also
+  --------
+  meta.dm.LaunchSimManagerAction, meta.dm.ExportFileFromSimManager, meta.dm.UploadFileToSimManagerVault
+  
+  Examples
+  --------
+  ::
+  
+      #!/usr/bin/env python
+      import os
+  
+  
+      def module_exists(module_name):
+          try:
+              __import__(module_name)
+          except ImportError:
+              return False
+          else:
+              return True
+  
+  
+      def main():
+          if module_exists("ansa"):
+              import meta
+              from meta import dm
+          elif module_exists("meta"):
+              import meta
+              from meta import dm
+          dm.SetRoot(
+              "http://sim-manager-psa:9495/cb2/", username="aroubies", password="aroubies"
+          )
+          results = dm.ExecuteSimManagerQuery(
+              "type=Project&expr=[name=='/CAE']&view=Detailed"
+          )
+          if results:
+              print(
+                  "ExecuteSimManagerQuery  'type=Project&expr=[name=='/CAE']&view=Detailed' returned "
+                  + str(len(results))
+                  + " total results!"
+              )
+              project_id = results[0].get("_server_id_")
+              if project_id:
+                  arguments = {"project": project_id}  # AkmSDQ:AOk
+                  print(
+                      "LaunchSimManagerAction 'Search' in Project "
+                      + str(project_id)
+                      + "  returned "
+                      + str(dm.LaunchSimManagerAction("Search", arguments))
+                  )
+                  arguments = {"project": "AkmSDQ:AOks"}
+                  print(
+                      "LaunchSimManagerAction 'Search' in Project AkmSDQ:AOks returned "
+                      + str(dm.LaunchSimManagerAction("Search", arguments))
+                  )
+          else:
+              print(
+                  "ExecuteSimManagerQuery  'type=Project&expr=[name=='/CAE']&view=Detailed' failed!"
+              )
+          results = dm.ExecuteSimManagerQuery(
+              "type=Project&expr=[name=='/CAE1']&view=Detailed"
+          )
+          if results:
+              print(
+                  "ExecuteSimManagerQuery  'type=Project&expr=[name=='/CAE1']&view=Detailed' returned "
+                  + str(len(results))
+                  + " total results!"
+              )
+          else:
+              print(
+                  "ExecuteSimManagerQuery  'type=Project&expr=[name=='/CAE1']&view=Detailed' failed!"
+              )
+
+----------------------------------------
+
+FUNCTION: LaunchSimManagerAction
+MODULE: meta.dm
+SIGNATURE: meta.dm.LaunchSimManagerAction(action_name: str, arguments: dict, dm_root: str, return_process_id: bool, progress_bar: guitk.BCGuiObject, json: str, secs_to_sleep: int=0) -> Any
+DOCSTRING:
+  Launches an Action in SimManager, using the REST API functionality.
+  
+  Parameters
+  ----------
+  action_name : str
+      The Action's name, e.g. "Search".
+  
+  arguments : dict, optional
+      A dictionary with the Action's parameters.
+      The values need to be percent encoded.
+  
+  dm_root : str, optional
+      The target DM root(URL). If not provided, the current DM is assumed.
+  
+  return_process_id : bool, optional
+      In case you need the process id returned, this argument should be set to True.
+  
+  progress_bar : guitk.BCGuiObject, optional
+      The progress can be shown in a BCProgressBar,
+      created with guitk.BCProgressBarCreate.
+  
+  json : str, optional
+      User can provide their own JSON string which will be passed to the Action.
+      No validation occurs, it's up to the user to make sure the JSON is valid.
+  
+  secs_to_sleep : int, optional
+      Suspend execution of the application for the given number of seconds right after launching the respective SimManager Action.
+  
+  Returns
+  -------
+  Any
+      If the Action runs successfully, True is returned.
+      Otherwise, False is returned.
+      If the argument return_process_id=True, the process id is returned. If it fails, 
+      None will be returned.
+  
+  See Also
+  --------
+  meta.dm.ExecuteSimManagerQuery, meta.dm.ExportFileFromSimManager, meta.dm.UploadFileToSimManagerVault
+  
+  Examples
+  --------
+  ::
+  
+      #!/usr/bin/env python
+      def module_exists(module_name):
+          try:
+              __import__(module_name)
+          except ImportError:
+              return False
+          else:
+              return True
+  
+  
+      if module_exists("ansa"):
+          import meta
+          from meta import dm
+      elif module_exists("ansa"):
+          import meta
+          from meta import dm
+      import urllib
+      from urllib import parse
+  
+  
+      def _getObjectIdByName(objectName, objectType):
+          expr = "type=" + objectType + "&expr=[name=='" + objectName + "']&f=objectId"
+          results = dm.ExecuteSimManagerQuery(expr)
+          objectId = ""
+          if results and len(results) == 1:
+              objectId = results[0].get("Id")
+          return objectId
+  
+  
+      def _addUserToProject(user_info, project_id, role_name):
+          # First get all the Users that are assigned to this Project because it's needed for the next call:
+          existing_users = dm.ExecuteSimManagerQuery(
+              "type=ProjectSubject&expr=[projectDomain[domain.name == 'Default'].project.objectId=='%s' AND subject.type.name=='User' AND role.name!='Project-Visitor']&page=1&pageSize=1000&f=subject.name&f=role&f=role.objectId&f=role.type.objectId&f=subject.objectId&f=subject.type.objectId"
+              % project_id.split(":")[0]
+          )
+          role_id = _getObjectIdByName(role_name, "Role")
+          arguments = dict()
+          arguments["project"] = project_id
+          arguments["projectToUpdate"] = project_id
+          arguments["propagate"] = "true"
+          arguments["varSets"] = "userAndRole"  # needed for the list below
+          users_list = list()
+          for user in existing_users:
+              user_dict = {
+                  "user": user.get("User"),
+                  "role": user.get("role.objectId") + ":" + user.get("role.type.objectId"),
+              }
+              users_list.append(user_dict)
+          selected_user_dict = {"user": selected_user.get("Name"), "role": role_id}
+          users_list.append(selected_user_dict)
+          arguments["users"] = users_list
+          return dm.LaunchSimManagerAction("AssignUsersToProjectSimActivity", arguments)
+  
+  
+      def _CreateNewComment(project, parent_oid, title, text, comment_type):
+          if not text or text.isspace():
+              text = "-"
+          project_id = _getObjectIdByName(project, "Project")
+          arguments = {
+              "project": project_id,
+              "object": parent_oid,
+              "title": urllib.parse.quote(title),
+              "text": urllib.parse.quote(text),
+              "commentType": comment_type,
+          }
+  
+          return dm.LaunchSimManagerAction("CreateCommentSimActivity", arguments)
+  
+  
+      def main():
+          dm.SetRoot(
+              "http://sim-manager-psa:9495/cb2/", username="aroubies", password="aroubies"
+          )
+          results = dm.ExecuteSimManagerQuery(
+              "type=Project&expr=[name=='/CAE']&view=Detailed"
+          )
+          if results:
+              print(
+                  "ExecuteSimManagerQuery  'type=Project&expr=[name=='/CAE']&view=Detailed' returned "
+                  + str(len(results))
+                  + " total results!"
+              )
+              project_id = results[0].get("Id")
+              if project_id:
+                  arguments = {"project": project_id}  # AkmSDQ:AOk
+                  print(
+                      "LaunchSimManagerAction 'Search' in Project "
+                      + str(project_id)
+                      + "  returned "
+                      + str(dm.LaunchSimManagerAction("Search", arguments))
+                  )
+                  arguments = {"project": "AkmSDQ:AOks"}
+                  print(
+                      "LaunchSimManagerAction 'Search' in Project AkmSDQ:AOks returned "
+                      + str(dm.LaunchSimManagerAction("Search", arguments))
+                  )
+                  arguments = {"project": "AkmSDQ:AOks"}
+                  print(
+                      "LaunchSimManagerAction 'Search' in Project AkmSDQ:AOks returned the id: "
+                      + str(
+                          dm.LaunchSimManagerAction(
+                              "Search", arguments, return_process_id=True
+                          )
+                      )
+                  )
+          else:
+              print(
+                  "ExecuteSimManagerQuery  'type=Project&expr=[name=='/CAE']&view=Detailed' failed!"
+              )
+          results = dm.ExecuteSimManagerQuery(
+              "type=Project&expr=[name=='/CAE1']&view=Detailed"
+          )
+          if results:
+              print(
+                  "ExecuteSimManagerQuery  'type=Project&expr=[name=='/CAE1']&view=Detailed' returned "
+                  + str(len(results))
+                  + " total results!"
+              )
+          else:
+              print(
+                  "ExecuteSimManagerQuery  'type=Project&expr=[name=='/CAE1']&view=Detailed' failed!"
+              )
+          ##########################################################################################################
+          # In order to pass DynamicProperties to the Action Arguments:
+  
+          project_id = _getObjectIdByName("/Data/Car/Stamp-X-Mapping", "Project")
+          phase_id = _getObjectIdByName("ALU", "ProjectPhase")
+          template_id = _getObjectIdByName(
+              "DCMCrashMappingTemplate", "EnterpriseWorkRequestTemplate"
+          )
+          name = "TRALALA5"
+  
+          dynamic_properties_list = list()
+          dynamic_property_dict = {
+              "objectTypeName": "String",
+              "AttrName": "Product Line",
+              "AttrType": "String",
+              "DynamicString": "L6",
+          }
+          dynamic_properties_list.append(dynamic_property_dict)
+          dynamic_property_dict = {
+              "objectTypeName": "String",
+              "AttrName": "Derivat",
+              "AttrType": "String",
+              "DynamicString": "G31",
+          }
+          dynamic_properties_list.append(dynamic_property_dict)
+          dynamic_property_dict = {
+              "objectTypeName": "DCMPartModel",
+              "AttrName": "Parts",
+              "AttrType": "DbObjectList",
+              "DynamicDbObjectList": "Aegt2g:Cuo,AegwRQ:Cuo,Aegp3Q:Cuo,AegwTg:Cuo,AegwXQ:Cuo",
+          }
+          dynamic_properties_list.append(dynamic_property_dict)
+  
+          arguments = {
+              "project": project_id,
+              "phase": phase_id,
+              "template": template_id,
+              "name": name,
+              "DynamicProperties": dynamic_properties_list,
+          }
+          dm.LaunchSimManagerAction("PublishWorkRequest", arguments)
+  
+  
+      def main():
+          json = {"name":"PublishWorkRequest","label":"Publish WorkRequest","params":{"template":{"name":"template","value":[""],"label":"Template","required":true,"type":"ONE_REFERENCE","objectType":"EnterpriseWorkRequestTemplate","array":false},"DynamicProperties":{"varSets":{"DynamicProperties":{"params":{"DynamicDocument":{"name":"DynamicDocument","required":false,"type":"FILE","array":false},"AttrName":{"name":"AttrName","required":false,"type":"STRING","array":false},"AttrType":{"name":"AttrType","required":false,"type":"STRING","array":false},"DynamicDbObjectList":{"name":"DynamicDbObjectList","required":false,"type":"ONE_REFERENCE","objectType":"SDMBase","array":true},"DynamicBoolean":{"name":"DynamicBoolean","required":false,"type":"BOOLEAN","array":false},"DynamicString":{"name":"DynamicString","required":false,"type":"STRING","array":false},"DynamicDbObject":{"name":"DynamicDbObject","required":false,"type":"ONE_REFERENCE","objectType":"SDMBase","array":false},"DynamicDouble":{"name":"DynamicDouble","required":false,"type":"DOUBLE","array":false},"DynamicLong":{"name":"DynamicLong","required":false,"type":"LONG","array":false},"DynamicFile":{"name":"DynamicFile","required":false,"type":"FILE","array":false},"objectTypeName":{"name":"objectTypeName","required":false,"type":"STRING","array":false},"DynamicDate":{"name":"DynamicDate","required":false,"type":"DATE","array":false}},"values":[{"AttrName":["Product Line"],"AttrType":["String"],"DynamicString":["L6"],"objectTypeName":["String"]},{"AttrName":["Derivat"],"AttrType":["String"],"DynamicString":["G31"],"objectTypeName":["String"]},{"AttrName":["Parts"],"AttrType":["DbObjectList"],"DynamicDbObjectList":["Aegt2g:Cuo","AegwRQ:Cuo","Aegp3Q:Cuo","AegwTg:Cuo","AegwXQ:Cuo"],"objectTypeName":["DCMPartModel"]}]},"DynamicMeasure":{"values":[],"params":{"MeasureName":{"name":"MeasureName","required":false,"type":"STRING","array":false},"Quantity":{"name":"Quantity","required":false,"type":"DOUBLE","array":false},"QuantityType":{"name":"QuantityType","required":false,"type":"STRING","array":false},"Unit":{"name":"Unit","required":false,"type":"STRING","array":false},"objectTypeName":{"name":"objectTypeName","required":false,"type":"STRING","array":false}}}},"name":"DynamicProperties","value":[],"label":"DynamicProperties","required":false,"type":"LIST","array":false},"startDate":{"name":"startDate","value":[],"label":"Start Date","required":false,"type":"DATE","array":false},"edit":{"name":"edit","value":[],"label":"Edited Object","required":false,"type":"ONE_REFERENCE","objectType":"EnterpriseWorkRequestInstance","array":false},"finishDate":{"name":"finishDate","value":[],"label":"Finish Date","required":false,"type":"DATE","array":false},"parent":{"name":"parent","value":[],"label":"Parent","required":false,"type":"ONE_REFERENCE","objectType":"EnterpriseWorkRequestInstance","array":false},"workRequest":{"name":"workRequest","value":[],"label":"Work Request","required":false,"type":"ONE_REFERENCE","objectType":"EnterpriseWorkRequestInstance","array":false},"type":{"name":"type","value":[],"label":"Work Request Template Type","required":false,"type":"ONE_REFERENCE","objectType":"ObjectType","array":false},"phase":{"name":"phase","value":["Czw:AJk"],"label":"Phase","required":false,"type":"ONE_REFERENCE","objectType":"ProjectPhase","filter":"[isActive=='true']","array":false},"project":{"name":"project","value":[""],"label":"Project","required":true,"type":"ONE_REFERENCE","objectType":"Project","array":false},"inputs":{"name":"inputs","value":[],"label":"Inputs","required":false,"type":"ONE_REFERENCE","objectType":"SDMObject","array":true},"description":{"name":"description","value":[],"label":"Description","required":false,"type":"STRING","array":false},"name":{"name":"name","value":["TRALALA5"],"label":"Name","required":true,"type":"STRING","array":false},"copy":{"name":"copy","value":[],"label":"Copied Object","required":false,"type":"ONE_REFERENCE","objectType":"EnterpriseWorkRequestInstance","array":false},"autoRelease":{"name":"autoRelease","value":[],"label":"Auto Release","required":false,"type":"BOOLEAN","array":false}},"execution":"LocalImmediate","version":"1.5.1"}
+          dm.LaunchSimManagerAction("PublishWorkRequest", json=json)
+
+----------------------------------------
+
+FUNCTION: GetConnectedUsername
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetConnectedUsername(dm_root: str) -> str
+DOCSTRING:
+  The function is used to return the username that was used to connect to the url-based DM.
+  If no arguments are given, the current DM is checked.
+  If a "dm_root" argument pair is given, then that url will be checked.
+  
+  Parameters
+  ----------
+  dm_root : str, optional
+      When this argument is given, then that url will be checked.
+  
+  Returns
+  -------
+  str
+      Returns the Username.
+      If something goes wrong, None will be returned.
+  
+  See Also
+  --------
+  meta.dm.IsConnectionValid
+  
+  Examples
+  --------
+  ::
+  
+      # no imports needed in this stage
+  
+  
+      def module_exists(module_name):
+          try:
+              __import__(module_name)
+          except ImportError:
+              return False
+          else:
+              return True
+  
+  
+      def main():
+          if module_exists("ansa"):
+              import meta
+              from meta import base, dm
+          elif module_exists("ansa"):
+              import meta
+              from meta import base, dm
+          dm.SetRoot("http://ektoras:8080/", username="aroubies", password="aroubies")
+          print("Connected user: ", dm.GetConnectedUsername())
+
+----------------------------------------
+
+FUNCTION: GetLogFileText
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetLogFileText() -> str
+DOCSTRING:
+  This function assembles logging data from the current My_DM.log file, as well
+  as the previously rotated, compressed archives and returns it as a single
+  string.
+  
+  When the lock cannot be acquired, a Runtime exception is thrown. The reason may
+  be a transient failure (other operations are running which need to lock the log
+  file), or a stale lock file. Stale lock files may be remnants of abnormally
+  terminated processes, whose locks have not expired yet.
+  
+  Returns
+  -------
+  str
+      Returns a string holding all My_DM.log data.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+      try:
+          log_data = dm.GetLogFileText()
+          print(log_data)
+      except:
+          print("Couldn't get logging data from My_DM.log")
+
+----------------------------------------
+
+FUNCTION: GetLibraryItemAttributeValues
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetLibraryItemAttributeValues(library: str, filename: str) -> dict
+DOCSTRING:
+  This function will collect all attributes and their values for a library item File.
+  It needs to be a generic Library Item file.
+  
+  Parameters
+  ----------
+  library : str
+      The library's name, e.g. "batch_mesh_sessions".
+  
+  filename : str
+      The file's filename, relative to the library, e.g. "test1/test2/file.txt".
+  
+  Returns
+  -------
+  dict
+      Returns a dictionary with attribute names/values as the key/data.
+      If nothing is found, an empty dictionary is returned.
+  
+  See Also
+  --------
+  meta.dm.DownloadLibraryItem, meta.dm.GetAvailableLibraryItems
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm.SetRoot("http://spdrm-dev:40080/", username="admin", password="admin")
+          results = dm.GetAvailableLibraryItems("spdrm_scripts")
+          if results:
+              print(results)
+              for result in results:
+                  try:
+                      print(
+                          result
+                          + ":   "
+                          + str(dm.GetLibraryItemAttributeValues("spdrm_scripts", result))
+                          + "\n"
+                      )
+                  except:
+                      pass
+          results = dm.GetAvailableLibraryItems("tmp_library_items")
+          if results:
+              print(results)
+              for result in results:
+                  try:
+                      print(
+                          result
+                          + ":   "
+                          + str(dm.GetLibraryItemAttributeValues("tmp_library_items", result))
+                          + "\n"
+                      )
+                  except:
+                      pass
+          dm.SetRoot("//mnt/raid_disk/titanas/roubies/DMs/DM_BIG/")
+          results = dm.GetAvailableLibraryItems("batch_mesh_sessions")
+          if results:
+              print(results)
+              for result in results:
+                  try:
+                      print(
+                          result
+                          + ":   "
+                          + str(
+                              dm.GetLibraryItemAttributeValues("batch_mesh_sessions", result)
+                          )
+                          + "\n"
+                      )
+                  except:
+                      pass
+          dm.SetRoot("http://sim-manager:9495/cb2/", username="admin", password="admin")
+          results = dm.GetAvailableLibraryItems("batch_mesh_sessions")
+          if results:
+              print(results)
+              for result in results:
+                  try:
+                      print(
+                          result
+                          + ":   "
+                          + str(
+                              dm.GetLibraryItemAttributeValues("batch_mesh_sessions", result)
+                          )
+                          + "\n"
+                      )
+                  except:
+                      pass
+
+----------------------------------------
+
+FUNCTION: PrintToLogFile
+MODULE: meta.dm
+SIGNATURE: meta.dm.PrintToLogFile(text: str, with_timestamp: bool)
+DOCSTRING:
+  Prints a line of text to My_DM.log. 
+  
+  If 'with_timestamp' is set to 'True', additional timestamp and user data are printed along with 'text'.
+  If 'with_timestamp' is set to 'False', only 'text' is printed.
+  
+  Parameters
+  ----------
+  text : str
+      The line of text to be printed in the My_DM.log.
+  
+  with_timestamp : bool, optional
+      Determines wether to print additional timestamp and user data along with 'text'.
+      (Default: True)
+  
+  See Also
+  --------
+  meta.dm.GetLogFileText, meta.dm.ClearLogFile
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm.PrintToLogFile(
+              "My text to be printed in the My_DM.log", True
+          )  # print with timestamp data
+
+----------------------------------------
+
+FUNCTION: ClearLogFile
+MODULE: meta.dm
+SIGNATURE: meta.dm.ClearLogFile(clear_archived_files: bool) -> bool
+DOCSTRING:
+  Clears the contents of the My_DM.log.
+  
+  If 'clear_archived_files' is set to True, archived log files (if any) are also deleted.
+  If 'clear_archived_files' is set to False, only the contents of the current log file are cleared.
+  By default, 'clear_archived_files' is True.
+  
+  Parameters
+  ----------
+  clear_archived_files : bool, optional
+      Determines wether to clear the archived DM log files along with the current.
+      (Default: True)
+  
+  Returns
+  -------
+  bool
+      Returns:
+      True: If both the current log file and the archived were successfully cleared.
+      False: If any of the log files failed to be cleared.
+  
+  See Also
+  --------
+  meta.dm.GetLogFileText
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm.ClearLogFile(
+              False
+          )  # clears all the contents of the current My_DM.log but not the archived log files (if any)
+
+----------------------------------------
+
+FUNCTION: GetDMTypeAttributes
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetDMTypeAttributes(type: str, hardcoded: bool) -> list
+DOCSTRING:
+  Gets the secondary attributes of a particular DM object type  
+  (e.g. part, include etc.)
+  
+  Parameters
+  ----------
+  type : str
+      The type of the DM Object. The specified type can be ANSA type
+      (e.g. ANSA_LOADCASE) or the DM type defined through the Data
+      Model (e.g. Loadcase).
+  
+      In case of file-based DM with no dm_structure.xml, 
+      the accepted values for the argument "type" are:
+      "parts", "includes", "configurations", "subsystems",
+      "simulation_model", "simulation_run", "report",
+      "session", "loadcase", "dm_library_item"
+  
+  hardcoded : bool, optional
+      The Hardcoded Attributes are not returned by default.
+      In order to retrieve those as well, this argument needs to be True.
+  
+  Returns
+  -------
+  list
+      Returns a list of secondary attributes. Each secondary attribute in the list 
+      is a dictionary of key:value (strings) pairs for all the supported attribute 
+      member properties:
+  
+      'name': the name of the attribute
+      'type': the type of the attribute
+      'format': the max number of digits allowed by the attribute format, as a string
+      'prefix': the prefix for the attribute value
+      'default_value': the default value of the attribute
+      'accepted_values': a comma seperated list of the attribute's accepted values 
+      'accepted_values_descriptions': a comma separated string of the accepted values along with their descriptions
+      'colors_for_accepted_values': a comma seperated list of accepted values colors
+      'allow_null': 'YES'/'NO', whether the attribute accepts empty (null) values
+      'read_only': 'YES'/'NO', whether the attribute is ReadOnly
+      'description': the description of the attribute
+  
+  Raises
+  ------
+  TypeError
+      Raises a type error exception in case of an invalid 'type' argument.
+  
+  See Also
+  --------
+  meta.dm.GetDMTypeProperties
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          sec_attributes = dm.GetDMTypeAttributes("parts")
+          for attr_dict in sec_attributes:
+              print(attr_dict)
+
+----------------------------------------
+
+FUNCTION: GetDMTypeProperties
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetDMTypeProperties(type: str) -> list
+DOCSTRING:
+  Gets the properties (primary attributes) of a particular DM object type 
+  (e.g. part, include etc.)
+  
+  Parameters
+  ----------
+  type : str
+      The type of the DM Object. The specified type can be ANSA type
+      (e.g. ANSA_LOADCASE) or the DM type defined through the Data
+      Model (e.g. Loadcase).
+  
+      In case of file-based DM with no dm_structure.xml, 
+      the accepted values for the argument "type" are:
+      "parts", "includes", "configurations", "subsystems",
+      "simulation_model", "simulation_run", "report",
+      "session", "loadcase", "dm_library_item"
+  
+  Returns
+  -------
+  list
+      Returns a list of properties. Each property in the list is a dictionary of 
+      key:value (strings) pairs for all the supported property member attributes:
+  
+      'name': the name of the property
+      'type': the type of the property
+      'format': the max number of digits allowed by the property format, as a string
+      'prefix': the prefix for the property value
+      'default_value': the default value of the property
+      'accepted_values': a comma seperated list of the property's accepted values 
+      'accepted_values_descriptions': a comma separated string of the accepted values along with their descriptions
+      'colors_for_accepted_values': a comma seperated list of accepted values colors
+      'allow_null': 'YES'/'NO', whether the property accepts empty (null) values
+      'read_only': 'YES'/'NO', whether the property is ReadOnly
+      'description': the description of the property
+  
+  Raises
+  ------
+  TypeError
+      Raises a type error exception in case of an invalid 'type' argument.
+  
+  See Also
+  --------
+  meta.dm.GetDMTypeAttributes
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          properties = dm.GetDMTypeProperties("parts")
+          for prop_dict in properties:
+              print(prop_dict)
+
+----------------------------------------
+
+FUNCTION: ExportFileFromSimManager
+MODULE: meta.dm
+SIGNATURE: meta.dm.ExportFileFromSimManager(server_id: str, expr: str, extension: str, dm_root: str, progress_bar: guitk.BCGuiObject) -> str
+DOCSTRING:
+  Exports a file using the SimManager's REST API functionality.
+  This is about exporting files from the vault.
+  The server transfers the file in its original format and will supply 
+  a MIME type based on the extension of the file name.
+  
+  Parameters
+  ----------
+  server_id : str
+      Is the ID of an object (id:tid). It can be used instead of an object type as a starting point. Then the expression will be evaluated in this object.
+  
+  expr : str
+      Is the EL epxression leading from the given object to the file to be transfered. Care has to be taken that only one file is referenced, e.g. files.model, file.pom_ExportedData.
+  
+  extension : str
+      The extension that will be added to the downloaded file.
+      SimManager will not add any extension, therefore it's up to the user to define it.
+  
+  dm_root : str, optional
+      The target DM root(URL). If not provided, the current DM is assumed.
+  
+  progress_bar : guitk.BCGuiObject, optional
+      The progress can be shown in a BCProgressBar,
+      created with guitk.BCProgressBarCreate.
+  
+  Returns
+  -------
+  str
+      Returns the exported filename, usually in a temporary location.
+      Returns None in case of failure.
+  
+  See Also
+  --------
+  meta.dm.LaunchSimManagerAction, meta.dm.ExecuteSimManagerQuery, meta.dm.UploadFileToSimManagerVault
+  
+  Examples
+  --------
+  ::
+  
+      #!/usr/bin/env python
+      import os
+  
+  
+      def module_exists(module_name):
+          try:
+              __import__(module_name)
+          except ImportError:
+              return False
+          else:
+              return True
+  
+  
+      def main():
+          if module_exists("ansa"):
+              import meta
+              from meta import dm
+          elif module_exists("ansa"):
+              import meta
+              from meta import dm
+          dm.SetRoot("http://sim-manager:9495/cb2/", username="aroubies", password="aroubies")
+          # export file from a Model
+          print(
+              dm.ExportFileFromSimManager(
+                  server_id="AecJ6Q:CuE", expr="files.model", extension="ansa"
+              )
+          )
+          # export file from a Process
+          print(
+              dm.ExportFileFromSimManager(
+                  server_id="A3l8Ow:AN4", expr="file.pom", extension="xml"
+              )
+          )
+
+----------------------------------------
+
+FUNCTION: GetLibraryItemTypes
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetLibraryItemTypes(dm_root: str) -> list[str]
+DOCSTRING:
+  This function returns a list containing the names of all the Rich Library Item
+  types that can exist for the DM.
+  
+  Parameters
+  ----------
+  dm_root : str, optional
+      When this argument is given, then that DM will be used.
+      Otherwise, the current DM root is used.
+  
+  Returns
+  -------
+  list[str]
+      Returns a list containing strings.
+      An empty list is returned if no Rich Library Item types are defined.
+      If something goes wrong, None is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import dm
+  
+      print(dm.GetLibraryItemTypes())
+      print(dm.GetLibraryItemTypes(dm_root="C:/test/"))
+
+----------------------------------------
+
+FUNCTION: GetObjectHierarchyIds
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetObjectHierarchyIds(server_id: str) -> list[tuple]
+DOCSTRING:
+  This function provides hierarchy related information for all directly contained
+  DM objects. With 'directly contained', it is meant that a single query on the
+  Server ID provided as argument will only be done. No recursive, follow-up
+  queries on children objects will be done, in order to check whether they 
+  contain children of their own.
+  
+  For example, when a Simulation Model gets queried with this function, all 
+  contained Subsystems will be returned only, without any information about 
+  possible groups or parts within the subsystems.
+  
+  On the other hand, when a Subsystem gets queried, all contained groups / parts
+  will be returned (which may form arbitrary subhierarchies).
+  
+  Parameters
+  ----------
+  server_id : str
+      The DM Object's server id.
+  
+  Returns
+  -------
+  list[tuple]
+      This function returns a list of tuples. For each contained DM object, a tuple of
+      the form (server_id, parent_server_id) is to be found in the list.
+  
+  See Also
+  --------
+  meta.dm.GetComponentsChildIds
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          hier = dm.GetObjectHierarchyIds(server_id="A2w7qg:Cuo")
+          print(hier)
+          # [('A2w9Sg:Cuo', 'A2w9Rw:Cuo'), ('A2w9Rw:Cuo', 'A2w7qg:Cuo'), ...]
+
+----------------------------------------
+
+FUNCTION: RunDMSession
+MODULE: meta.dm
+SIGNATURE: meta.dm.RunDMSession(server_id: str, session_id: str)
+DOCSTRING:
+  Run a DM Session on a certain DM server id
+  
+  Parameters
+  ----------
+  server_id : str
+      The server id on which the session will run
+  
+  session_id : str
+      The id of the session
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm.RunDMSession(server_id="48", session_id="79")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HasAttributeConditionRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.HasAttributeConditionRule(type: str, attribute_name: str) -> bool
+DOCSTRING:
+  Given a type and an attribute's name, this function will check whether a condition rule is defined.
+  
+  Parameters
+  ----------
+  type : str
+      The type of the DM Object. The specified type can be ANSA type
+      (e.g. ANSA_LOADCASE) or the DM type defined through the Data
+      Model (e.g. Loadcase).
+  
+  attribute_name : str
+      The Attribute's name. It can either be a Primary or Secondary Attribute.
+  
+  Returns
+  -------
+  bool
+      Returns True if the attribute has a condition rule. Otherwise, it returns False.
+  
+  See Also
+  --------
+  meta.dm.GetAcceptedValuesForAttribute, meta.dm.IsAttributeRuleGenerated
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm_item_type = "Module"
+          attribute = "Group"
+  
+          if dm.HasAttributeConditionRule(dm_item_type, attribute):
+              ret = dm.GetAcceptedValuesForAttribute(dm_item_type, attribute, True)
+              print(
+                  "The accepted values of the "
+                  + attribute
+                  + " are specified from the "
+                  + ret[2]
+                  + " value of the "
+                  + ret[1]
+                  + " as follows:"
+              )
+              for val in ret[0].keys():
+                  print("------------------------------------------------------------")
+                  print("When " + ret[2] + " = " + val + ", the accepted values are:")
+                  for accepted_val in ret[0][val]:
+                      print(accepted_val)
+          else:
+              ret = dm.GetAcceptedValuesForAttribute(dm_item_type, attribute, False)
+              print("The accepted values of the " + attribute + " attribute are:")
+              for val in ret:
+                  print(val)
+
+----------------------------------------
+
+FUNCTION: IsAttributeRuleGenerated
+MODULE: meta.dm
+SIGNATURE: meta.dm.IsAttributeRuleGenerated(type: str, attribute_name: str) -> bool
+DOCSTRING:
+  Given a type and an attribute's name, this function will check whether the value of this attribue is auto-generated by a rule.
+  
+  Parameters
+  ----------
+  type : str
+      The type of the DM Object. The specified type can be ANSA type
+      (e.g. ANSA_LOADCASE) or the DM type defined through the Data
+      Model (e.g. Loadcase).
+  
+  attribute_name : str
+      The Attribute's name. It can either be a Primary or Secondary Attribute.
+  
+  Returns
+  -------
+  bool
+      Returns True if the attribute value is auto-generated by a rule. Otherwise, it returns False.
+  
+  See Also
+  --------
+  meta.dm.GetAcceptedValuesForAttribute, meta.dm.HasAttributeConditionRule
+
+----------------------------------------
+
+FUNCTION: GetAttributeValueFromGenerationRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetAttributeValueFromGenerationRule(type: str, attribute_name: str, attribute_values: dict) -> str
+DOCSTRING:
+  Given a type, an attribute's name and the attribute values, this function will 
+  return the generated value that is defined by the rule in the dm_structure.xml.
+  
+  Parameters
+  ----------
+  type : str
+      The type whose Attribute the value is requested. The specified type can be ANSA type (e.g. ANSA_LOADCASE) or the DM type defined through the Data Model (e.g. Loadcase).
+  
+  attribute_name : str
+      The Attribute' s name. It can either be a Primary or Secondary Attribute.
+  
+  attribute_values : dict
+      A dictionary containing the attribute name-values dictionary per attribute type that determine the value of the input attribute. e.g. {'Parts' : {'Name': 'my_name', 'Module Id':''001'}, 'Subsystems : {'Name':'subsystem_name', 'Version':A}}
+  
+  Returns
+  -------
+  str
+      The generated attribute value.
+      If the attribute is not rule generated it will return None.
+      If not all required attribute values are given in 'attribute_values' the default values will be selected.
+      If the argument 'attribute_values' is not a dict with dicts as value it will return None.
+  
+  See Also
+  --------
+  meta.dm.GetAttributeGenerationRule
+  
+  Examples
+  --------
+  ::
+  
+      import os
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          attr_type = "Module"
+          attribute = "Name"
+  
+          if dm.IsAttributeRuleGenerated(type=attr_type, attribute_name=attribute):
+              rule = dm.GetAttributeGenerationRule(type=attr_type, attribute_name=attribute)
+              values = {
+                  "Subsystems": {"Module Id": 1000, "Version": "AAA", "Study Version": "0001"}
+              }
+              new_val = dm.GetAttributeValueFromGenerationRule(
+                  type=attr_type, attribute_name=attribute, attribute_values=values
+              )
+
+----------------------------------------
+
+FUNCTION: ShowDMPathsWindow
+MODULE: meta.dm
+SIGNATURE: meta.dm.ShowDMPathsWindow() -> str
+DOCSTRING:
+  Shows the "Set DM Paths" window.
+  
+  Returns
+  -------
+  str
+      Returns a string containing the current DM root if it succeeds.
+      Returns None in case of "Cancel" or failure to add a DM.
+  
+  See Also
+  --------
+  meta.dm.GetRoot, meta.dm.SetRoot, meta.dm.GetRootsList
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm_root = dm.ShowDMPathsWindow()
+          print(dm_root)
+
+----------------------------------------
+
+FUNCTION: GetAttributeGenerationRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetAttributeGenerationRule(type: str, attribute_name: str) -> dict
+DOCSTRING:
+  Given a type and an attribute's name, this function will return the generation
+  rule, if exists.
+  
+  Parameters
+  ----------
+  type : str
+      The type whose Attribute the generation rule is requested. The specified type
+      can be ANSA type (e.g. ANSA_LOADCASE) or the DM type defined
+      through the Data Model (e.g. Loadcase).
+  
+  attribute_name : str
+      The Attribute's name. It can either be a Primary or Secondary Attribute.
+  
+  Returns
+  -------
+  dict
+      A dictionary with key the attribute type and value a list of the attribute names 
+      that determine the value of the input attribute.
+      e.g. {'Subsystems': ['Module Id', 'Version', 'Study Version']}
+      If the attribute is not rule generated, it will return None.
+  
+  See Also
+  --------
+  meta.dm.GetAttributeValueFromGenerationRule
+  
+  Examples
+  --------
+  ::
+  
+      import os
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          attr_type = "Module"
+          attribute = "Name"
+  
+          if dm.IsAttributeRuleGenerated(type=attr_type, attribute_name=attribute):
+              rule = dm.GetAttributeGenerationRule(type=attr_type, attribute_name=attribute)
+              values = {
+                  "Subsystems": {"Module Id": 1000, "Version": "AAA", "Study Version": "0001"}
+              }
+              new_val = dm.GetAttributeValueFromGenerationRule(
+                  type=attr_type, attribute_name=attribute, attribute_values=values
+              )
+
+----------------------------------------
+
+FUNCTION: ExportDMStructureXml
+MODULE: meta.dm
+SIGNATURE: meta.dm.ExportDMStructureXml(filename: str) -> bool
+DOCSTRING:
+  Exports the current Data Model to an XML file in the user defined directory. 
+  
+  Parameters
+  ----------
+  filename : str, optional
+      The full path directory (including the filename) where the XML file will be exported.
+      If filename is not defined the XML file will replace the dm_structure.xml of the current DM.
+  
+  Returns
+  -------
+  bool
+      Funtion returns a boolean  defining the result of the function.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Save to Current DM XML file (Warning:Using the bellow function will overwrite your current dm_structure.xml)
+          result = dm.ExportDMStructureXml()
+          print(result)
+          # Save to a user defined location
+          result = dm.ExportDMStructureXml(filename="/path/to/export/your_xml_file.xml")
+          print(result)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAcceptedValuesForAttribute
+MODULE: meta.dm
+SIGNATURE: meta.dm.SetAcceptedValuesForAttribute(type: str, attr_name: str, accepted_values: str) -> bool
+DOCSTRING:
+  Changes the Accepted Values of an Attribute if the Type of that specific Attribute allows it.
+  
+  Parameters
+  ----------
+  type : str
+      The name of the object that contains the Attribute whose Accepted Values will change.
+  
+  attr_name : str
+      The name of the Attribute whose Accepted Values will change.
+  
+  accepted_values : str
+      The Accepted values that will be applied to the Attribute.
+  
+  Returns
+  -------
+  bool
+      Function returns a boolean variable defining the result of the function.
+  
+  See Also
+  --------
+  meta.dm.GetAcceptedValuesForAttribute
+  
+  Examples
+  --------
+  ::
+  
+      # Python Script
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Change Accepted Values
+          result = dm.SetAcceptedValuesForAttribute(
+              type="type", attr_name="attr_name", accepted_values="the,new,accepted,values"
+          )
+          print(result)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetDefaultValueForAttribute
+MODULE: meta.dm
+SIGNATURE: meta.dm.SetDefaultValueForAttribute(type: str, attr_name: str, default_value: str) -> bool
+DOCSTRING:
+  Changes the Default Value of an Attribute if the Type of that specific Attribute allows it.
+  
+  Parameters
+  ----------
+  type : str
+      The name of the object that contains the Attribute whose Default Value will change.
+  
+  attr_name : str
+      The name of the Attribute whose Default Value will change.
+  
+  default_value : str
+      The Default Value that will be applied to the Attribute.
+  
+  Returns
+  -------
+  bool
+      Function returns a boolean variable defining the result of the function.
+  
+  See Also
+  --------
+  meta.dm.GetDefaultValueForAttribute
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Change Default Value
+          dm.SetDefaultValueForAttribute(
+              type="type", attr_name="attr_name", default_value="new_default_value"
+          )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetDefaultValueForAttribute
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetDefaultValueForAttribute(type: str, attr_name: str) -> str
+DOCSTRING:
+  Returns the current Default Value of an Attribute.
+  
+  Parameters
+  ----------
+  type : str
+      The name of the object that contains the Attribute whose Default Value will be returned.
+  
+  attr_name : str
+      The name of the Attribute whose Default Value will be returned.
+  
+  Returns
+  -------
+  str
+      Function returns a string with the Default Value of the Attribute contained in the Object Type.
+  
+  See Also
+  --------
+  meta.dm.SetDefaultValueForAttribute
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          def_val = dm.GetDefaultValueForAttribute(type="type", attr_name="attr_name")
+          print(def_val)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateGenerationRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.CreateGenerationRule(type: str, rule_name: str, disc_chars: str, generated_value: str, rejected_characters: str, generator_name: str, generator_value: str, trim_empty_values: bool=False) -> bool
+DOCSTRING:
+  This function is used in order to create a new Generation Rule for the current DM.
+  
+  Parameters
+  ----------
+  type : str
+      The name of the object that will contain the created Generation Rule.
+  
+  rule_name : str
+      The name of the Generation Rule that will be created.
+  
+  disc_chars : str, optional
+      The Discarded values of the Generation Rule.
+  
+  generated_value : str, optional
+      The Generated Value of the Generation Rule.
+  
+  rejected_characters : str, optional
+      The discarded characters of the Generation Rule.
+  
+  generator_name : str, optional
+      The Generator Name of the Generation Rule condition.
+  
+  generator_value : str, optional
+      The Generator Value of the Generation Rule condition.
+  
+  trim_empty_values : bool, optional
+      If True the trailing empty sections of the Generated Value are trimmed.
+  
+  Returns
+  -------
+  bool
+      Function returns a boolean variable defining the result of the function.
+  
+  See Also
+  --------
+  meta.dm.DeleteGenerationRule, meta.dm.SetGeneratedValueOfGenerationRule, meta.dm.GetGeneratedValueOfGenerationRule
+  
+  Examples
+  --------
+  ::
+  
+      # Python Script
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Create Generation Rule
+          result = dm.CreateGenerationRule(
+              type="ANSA_SUBSYSTEM",
+              rule_name="Name",
+              generated_value="[Module Id]_[Project]_[Phase]",
+              generator_name="Discipline",
+              generator_value="CRASH",
+              trim_empty_values=True,
+          )
+          print(result)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteGenerationRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.DeleteGenerationRule(type: str, rule_name: str, generator_name: str, generator_value: str) -> bool
+DOCSTRING:
+  This function is used in order to delete a Generation Rule for the current DM.
+  
+  Parameters
+  ----------
+  type : str
+      The name of the object that contains the Generation Rule about to be deleted.
+  
+  rule_name : str
+      The name of the Generation Rule that will be deleted.
+  
+  generator_name : str, optional
+      The Generator Name of the Generation Rule condition.
+  
+  generator_value : str, optional
+      The Generator Value of the Generation Rule condition.
+  
+  Returns
+  -------
+  bool
+      Function returns a boolean variable defining the result of the function.
+  
+  See Also
+  --------
+  meta.dm.CreateGenerationRule, meta.dm.SetGeneratedValueOfGenerationRule, meta.dm.GetGeneratedValueOfGenerationRule
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Delete Generation Rule (Assuming that the object and the rule exists)
+          result = dm.DeleteGenerationRule(
+              type="ANSA_SUBSYSTEM",
+              rule_name="Name",
+              generator_name="Discipline",
+              generator_value="CRASH",
+          )
+          print(result)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetGeneratedValueOfGenerationRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetGeneratedValueOfGenerationRule(type: str, rule_name: str, generator_name: str, generator_value: str) -> str
+DOCSTRING:
+  Returns the current Generated Value of a Generated Rule.
+  
+  Parameters
+  ----------
+  type : str
+      The name of the object that contains the Generation Rule.
+  
+  rule_name : str
+      The name of the Generation Rule whose Generated Value will be returned.
+  
+  generator_name : str, optional
+      The condition name of the generation rule, if conditionally defined.
+  
+  generator_value : str, optional
+      The condition value of the generation rule, if conditionally defined.
+  
+  Returns
+  -------
+  str
+      Function returns a string of the generation rules of the requested object type for the requested property/attribute name.
+  
+      If the generation rules are conditionally defined and no condition name and value are given, all rules are returned. If there's no generation rule for the requested object type and property/attribute, boolean False value is returned.
+  
+  See Also
+  --------
+  meta.dm.CreateGenerationRule, meta.dm.DeleteGenerationRule, meta.dm.SetGeneratedValueOfGenerationRule
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Get Generated Value of the Name Generation Rule of the Simulation Model
+          result = dm.GetGeneratedValueOfGenerationRule(
+              type="Simulation_Model", rule_name="Name"
+          )
+          print(result)
+          # In the default DM Schema, the result will be "[Model Id]_[Project]_[Release]_[Model Variant]_[Discipline]_[Iteration]"
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetGeneratedValueOfGenerationRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.SetGeneratedValueOfGenerationRule(type: str, rule_name: str, generated_value: str, generator_name: str, generator_value: str) -> bool
+DOCSTRING:
+  Using this function you can change the Generated Value of an existing Generation Rule.
+  
+  Parameters
+  ----------
+  type : str
+      The name of the object that contains the Generation Rule.
+  
+  rule_name : str
+      The name of the Generation Rule whose Generated Value will be modified.
+  
+  generated_value : str
+      The new Generated Value of the Generation Rule.
+  
+  generator_name : str, optional
+      The Generator Name of the Generation Rule condition.
+  
+  generator_value : str, optional
+      The Generator Value of the Generation Rule condition.
+  
+  Returns
+  -------
+  bool
+      Function returns a boolean variable defining the result of the function.
+  
+  See Also
+  --------
+  meta.dm.CreateGenerationRule, meta.dm.DeleteGenerationRule, meta.dm.GetGeneratedValueOfGenerationRule
+  
+  Examples
+  --------
+  ::
+  
+      # Python Script
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Set Generated Value of Generation Rule
+          result = dm.SetGeneratedValueOfGenerationRule(
+              type="ANSA_SUBSYSTEM",
+              rule_name="Name",
+              generated_value="[Module Id]_[Project]_[Phase]",
+          )
+          print(result)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateConditionRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.CreateConditionRule(type: str, rule_name: str, generator_name: str, generator_value: str, accepted_values: str, accepted_values_descriptions: str) -> bool
+DOCSTRING:
+  This function is used in order to create a new Condition Rule for the current DM.
+  
+  Parameters
+  ----------
+  type : str
+      The name of the object that will contain the created Condition Rule.
+  
+  rule_name : str
+      The name of the Condition Rule that will be created.
+  
+  generator_name : str
+      The Generator Name of the Condition Rule.
+  
+  generator_value : str, optional
+      The Generator Value of the Condition Rule.
+  
+  accepted_values : str, optional
+      The Accepted Values of the Condition Rule.
+  
+  accepted_values_descriptions : str, optional
+      The Accepted Values Descriptions of the Condition Rule.
+  
+  Returns
+  -------
+  bool
+      Function returns a boolean variable defining the result of the function.
+  
+  See Also
+  --------
+  meta.dm.DeleteConditionRule, meta.dm.GetGeneratorValuesOfConditionRules, meta.dm.SetGeneratorValueOfConditionRule
+  
+  Examples
+  --------
+  ::
+  
+      # Python Script
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Create Condition Rule
+          result = dm.CreateConditionRule(
+              type="type",
+              rule_name="rule_name",
+              generator_name="generator_name",
+              generator_value="generator_value",
+              accepted_values="accepted_values",
+              accepted_values_descriptions="accepted_values_descriptions",
+          )
+          print(result)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteConditionRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.DeleteConditionRule(type: str, rule_name: str, generator_value: str) -> bool
+DOCSTRING:
+  This function is used in order to delete a Condition Rule for the current DM.
+  
+  Parameters
+  ----------
+  type : str
+      The name of the object that contains the Condition Rule about to be deleted.
+  
+  rule_name : str
+      The name of the Condition Rule that will be deleted.
+  
+  generator_value : str
+      The Generator Value of the Condition Rule.
+  
+  Returns
+  -------
+  bool
+      Function returns a boolean variable defining the result of the function.
+  
+  See Also
+  --------
+  meta.dm.CreateConditionRule, meta.dm.GetGeneratorValuesOfConditionRules, meta.dm.SetGeneratorValueOfConditionRule
+  
+  Examples
+  --------
+  ::
+  
+      # Python Script
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Delete Condition Rule
+          dm.DeleteConditionRule(
+              type="type", rule_name="rule_name", generator_value="new_generator_value"
+          )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetGeneratorValuesOfConditionRules
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetGeneratorValuesOfConditionRules(type: str, rule_name: str) -> list[str]
+DOCSTRING:
+  This function returns all the Generator Values used by a specific rule name.
+  Multiple Condition Rules can have the same rule and generator name but different generator values.
+  
+  Parameters
+  ----------
+  type : str
+      The type of the object that will contain Condition Rules.
+  
+  rule_name : str
+      The name of the Condition Rules that contain the Generator Values.
+  
+  Returns
+  -------
+  list[str]
+      Returns a list of strings with the generator values of the specific Condition Rule contained in the specific Object Type
+  
+  See Also
+  --------
+  meta.dm.CreateConditionRule, meta.dm.DeleteConditionRule, meta.dm.SetGeneratorValueOfConditionRule
+  
+  Examples
+  --------
+  ::
+  
+      # Python Script
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Get Generator Values of the Condition Rules contained in a specific type with a specific rule_name
+          dm.GetGeneratorValuesOfConditionRules(
+              type="parts", rule_name="RepresentationRule01"
+          )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetGeneratorValueOfConditionRule
+MODULE: meta.dm
+SIGNATURE: meta.dm.SetGeneratorValueOfConditionRule(type: str, rule_name: str, old_generator_value: str, generator_value: str) -> bool
+DOCSTRING:
+  This Function is used in order to change the Generator Value of a specific Condition Rule.
+  
+  Parameters
+  ----------
+  type : str
+      The type of the object that contains the Condition Rule about to be modified.
+  
+  rule_name : str
+      The name of the Condition Rule that will be modified.
+  
+  old_generator_value : str
+      The old value of the Generator Value. This value is needed because multiple Condition Rules can have the same rule name.
+  
+  generator_value : str
+      The new value of the Generator Value.
+  
+  Returns
+  -------
+  bool
+      Function returns a boolean variable defining the result of the function.
+  
+  See Also
+  --------
+  meta.dm.CreateConditionRule, meta.dm.DeleteConditionRule, meta.dm.GetGeneratorValuesOfConditionRules
+  
+  Examples
+  --------
+  ::
+  
+      # Python Script
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Set Generator Value of Condition Rule
+          dm.SetGeneratorValueOfConditionRule(
+              type="type",
+              rule_name="rule_name",
+              old_generator_value="old_generator_value",
+              generator_value="new_generator_value",
+          )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UploadFileToSimManagerVault
+MODULE: meta.dm
+SIGNATURE: meta.dm.UploadFileToSimManagerVault(file_path: str, sim_activity_name: str, file_param_name: str, object_type: str, progress_bar: guitk.BCGuiObject) -> str
+DOCSTRING:
+  Uploads a file to the SimManager vault and retrieves the vault id.
+  
+  Parameters
+  ----------
+  file_path : str
+      The file that will be uploaded to SimManager.
+  
+  sim_activity_name : str
+      The activity's name is needed for SimManager 2014.
+  
+  file_param_name : str
+      The name of the FILE parameter in the SimActivity.
+  
+  object_type : str
+      The object type of the object to which the file will be attached. 
+      If there is no target object type, use "Project".
+  
+  progress_bar : guitk.BCGuiObject, optional
+      The progress can be shown in a BCProgressBar,
+      created with guitk.BCProgressBarCreate.
+  
+  Returns
+  -------
+  str
+      If the file is successfully added, the vault id will be returned.
+      Returns None in case of failure.
+  
+  See Also
+  --------
+  meta.dm.ExportFileFromSimManager, meta.dm.LaunchSimManagerAction, meta.dm.ExecuteSimManagerQuery
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+  
+  
+      def main():
+          selected_import_file = meta.utils.SelectOpenFile(0)
+          if not selected_import_file:
+              return
+          selected_import_file = selected_import_file[0]
+  
+          ret_vault_id = meta.dm.UploadFileToSimManagerVault(
+              selected_import_file, "Import", "importFile", "Project"
+          )
+          print(ret_vault_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetObjectTypeFromAnsaKeyword
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetObjectTypeFromAnsaKeyword(keyword: str, dm_root: str) -> str
+DOCSTRING:
+  This function returns the DM object type of dm_root that corresponds to the input ANSA keyword.
+  If dm_root is not defined, the current DM root is used.
+  
+  Parameters
+  ----------
+  keyword : str
+      The input ANSA keyword.
+  
+  dm_root : str, optional
+      When this argument is given, then that DM will be used.
+      Otherwise, the current DM root is used.
+  
+  Returns
+  -------
+  str
+      Returns the DM object type. If no object type is found, it returns None.
+  
+  See Also
+  --------
+  meta.dm.GetAnsaKeywordFromObjectType
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          ansa_keyword = "ANSAPART"
+          dm_object = dm.GetObjectTypeFromAnsaKeyword(ansa_keyword)
+          print("The returned dm_object is: " + dm_object)
+  
+          ansa_keyword = dm.GetAnsaKeywordFromObjectType(dm_object)
+          print("The returned ansa_keyword is: " + ansa_keyword)
+
+----------------------------------------
+
+FUNCTION: GetAnsaKeywordFromObjectType
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetAnsaKeywordFromObjectType(type: str, dm_root: str) -> str
+DOCSTRING:
+  This function returns the ANSA keyword that corresponds to the input DM object type of dm_root.
+  If dm_root is not defined, the current DM root is used.
+  
+  Parameters
+  ----------
+  type : str
+      The input DM object type.
+  
+  dm_root : str, optional
+      When this argument is given, then that DM will be used.
+      Otherwise, the current DM root is used.
+  
+  Returns
+  -------
+  str
+      Returns the ANSA keyword. If no ANSA keyword is found, it returns None.
+  
+  See Also
+  --------
+  meta.dm.GetObjectTypeFromAnsaKeyword
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          ansa_keyword = "ANSAPART"
+          dm_object = dm.GetObjectTypeFromAnsaKeyword(ansa_keyword)
+          print("The returned dm_object is: " + dm_object)
+  
+          ansa_keyword = dm.GetAnsaKeywordFromObjectType(dm_object)
+          print("The returned ansa_keyword is: " + ansa_keyword)
+
+----------------------------------------
+
+FUNCTION: GetDMReferences
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetDMReferences(server_id: str, ref_server_id: str, ref_type: str, find_sim_runs_through_contents: bool=False) -> object
+DOCSTRING:
+  This function queries the DM for all references that satisfy certain criteria.
+  Each of the 4 optional arguments provides a filtering criterion:
+  * server_id
+    Server ID of the object doing the referring (reference source). This argument
+    defines the object that is using some other objects.
+  * ref_server_id
+    Server ID of the object being referred-to (reference target). This argument
+    defines the object that is being used by some other objects.
+  * ref_type
+    Reference type
+  * find_sim_runs_through_contents
+    Flag indicating whether Simulation Runs' history references 
+    based on its contents should be searched.
+  
+  When multiple arguments are provided, then the corresponding criteria are 
+  combined with an AND logical operator.
+  
+  Parameters
+  ----------
+  server_id : str, optional
+      When present, the DM References query will
+      search for references that originate from
+      the object with this specific Server ID
+      (Object is user)
+  
+  ref_server_id : str, optional
+      When present, the DM References query will
+      search for references that point to the
+      object with this specific Server ID.
+      (Object is being used)
+  
+  ref_type : str, optional
+      When present, the DM References query will
+      search for references of the specific type.
+  
+  find_sim_runs_through_contents : bool, optional
+      When True, if the Server ID refers to a Simulation Run,
+      the DM References query will search for references of 
+      history type based on the contained Simulation Model 
+      and Loadcase.
+  
+  Returns
+  -------
+  object
+      Returns the list of DMReferences that satisfy the provided criteria
+  
+  See Also
+  --------
+  meta.dm.DMReference, meta.dm.RemoveDMReference
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def removeStrongReferences():
+          # Remove all manually added strong references
+          strong_refs = dm.GetDMReferences(ref_type="strong")
+          for ref in strong_refs:
+              print(
+                  "Removing strong reference from {} to {}".format(
+                      ref.server_id, ref.ref_server_id
+                  )
+              )
+              dm.RemoveDMReference(ref)
+  
+  
+      def getPreviousDMO(dmo_server_id):
+          # Get the previous DM Object that have a history link with the current one
+          # (Current DM Object with Id = dmo_server_id, was created based on this)
+  
+          dmo = dm.DMObject(server_id=dmo_server_id)
+          if not dmo.is_valid():
+              print(
+                  "Invalid server Id or DM Object with Id %s does not exist!" % dmo_server_id
+              )
+              return None
+  
+          refs = dm.GetDMReferences(server_id=dmo_server_id, ref_type="history")
+  
+          for ref in refs:
+              print("Current DM Object Id: ", ref.server_id)
+              print("Previous DM Object Id: ", ref.ref_server_id)
+  
+  
+      def getNextDMOs(dmo_server_id):
+          # Get the next DM Objects that have a history link with the current one
+          # (DM Objects that were created from the DM Object with Id = dmo_server_id)
+  
+          dmo = dm.DMObject(server_id=dmo_server_id)
+          if not dmo.is_valid():
+              print(
+                  "Invalid server Id or DM Object with Id %s does not exist!" % dmo_server_id
+              )
+              return None
+  
+          refs = dm.GetDMReferences(ref_server_id=dmo_server_id, ref_type="history")
+  
+          for ref in refs:
+              print("Current DM Object Id: ", ref.server_id)
+              print("Next DM Object Id(s): ", ref.ref_server_id)
+  
+  
+      def getRunAncestors(dmo_server_id):
+          # Get the previous Sim Run that have a history link with the current one,
+          # searching through the contents of the current Sim Run (Sim Model, Loadcase)
+          # (Current Sim Run with Id = dmo_server_id, was created based on this)
+          dmo = dm.DMObject(server_id=dmo_server_id)
+          if not dmo.is_valid():
+              print(
+                  "Invalid server Id or DM Object with Id %s does not exist!" % dmo_server_id
+              )
+              return None
+  
+          refs = dm.GetDMReferences(
+              server_id=dmo_server_id, ref_type="history", find_sim_runs_through_contents=True
+          )
+          for ref in refs:
+              print("Current Sim Run Id: ", ref.server_id)
+              print("Previous Sim Run Id: ", ref.ref_server_id)
+  
+  
+      def getSolverFileTypeSubs(dmo_server_id):
+          # Get the Solver File Type Subsystems
+          # that were produced from Subsystem with ANSA File Type
+          sub = dm.DMObject(server_id=dmo_server_id)
+          if not sub.is_valid():
+              print(
+                  "Invalid server Id or DM Object with Id %s does not exist!" % dmo_server_id
+              )
+              return None
+  
+          refs = dm.GetDMReferences(ref_server_id=dmo_server_id, ref_type="repr_derivation")
+          for ref in refs:
+              print("Current Subsystem Id: ", ref.ref_server_id)
+              print("Subsystem with Solver File Type Id: ", ref.server_id)
+
+----------------------------------------
+
+FUNCTION: RemoveDMReference
+MODULE: meta.dm
+SIGNATURE: meta.dm.RemoveDMReference(reference: object) -> bool
+DOCSTRING:
+  This function deletes a Reference from the DM
+  
+  Parameters
+  ----------
+  reference : object
+      DMReference object, describing the reference to be removed
+  
+  Returns
+  -------
+  bool
+      Returns True when the removal operation was successful, regardless of whether an
+      actual reference existed / got deleted from the DM or not. It is certain though
+      that such a reference no longer exists.
+  
+  See Also
+  --------
+  meta.dm.DMReference, meta.dm.GetDMReferences
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          # Remove all manually added strong references
+          strong_refs = dm.GetDMReferences(ref_type="strong")
+          for ref in strong_refs:
+              print(
+                  "Removing strong reference from {} to {}".format(
+                      ref.server_id, ref.ref_server_id
+                  )
+              )
+              dm.RemoveDMReference(ref)
+
+----------------------------------------
+
+FUNCTION: AddClusterMember
+MODULE: meta.dm
+SIGNATURE: meta.dm.AddClusterMember(path: str, nickname: str) -> bool
+DOCSTRING:
+  This function inserts a new, read only member into the currently configured
+  Cluster DM.
+  
+  Parameters
+  ----------
+  path : str
+      DM Root of the DM that will be backing the new
+      cluster member.
+  
+  nickname : str, optional
+      String to be used as nickname for the new
+      cluster member. May contain the latin letters, 
+      digits, the underscore and dash characters.
+      If this argument is not provided, the new
+      cluster member's nickname will be auto generated
+      from the path argument.
+  
+  Returns
+  -------
+  bool
+      Returns True if the new member was successfully admitted into the cluster.
+  
+  See Also
+  --------
+  meta.dm.DMClusterMember, meta.dm.GetClusterMembers, meta.dm.RemoveClusterMember
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm.SetRoot("cluster://home/user/DMs/main/")
+          dm.AddClusterMember("/home/user/DMs/library/rlis/")
+          dm.AddClusterMember("/home/user/DMs/library/subsystems/", "subs")
+
+----------------------------------------
+
+FUNCTION: GetClusterMembers
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetClusterMembers() -> object
+DOCSTRING:
+  This function fetches information about all the cluster members existing in the
+  currently configured Cluster DM.
+  
+  Returns
+  -------
+  object
+      Returns all cluster members as a list of DMClusterMember objects.
+  
+  See Also
+  --------
+  meta.dm.AddClusterMember, meta.dm.DMClusterMember
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def getFlagsString(flags):
+          flags_strings = []
+  
+          # Iterate through all defined flags even though all combinations are not
+          # possible, e.g. a member cannot be both Primary and Read Only.
+          if flags & dm.constants.PRIMARY_MEMBER:
+              flags_strings.append("Primary")
+          if flags & dm.constants.READ_ONLY_MEMBER:
+              flags_strings.append("Read Only")
+          return ", ".join(flags_strings)
+  
+  
+      def main():
+          # A Cluster DM is configured as current DM Root
+          members = dm.GetClusterMembers()
+          for member in members:
+              print("Path      :", member.path)
+              print("Nickname  :", member.nickname)
+              print("Identifier:", member.identifier)
+              print("Flags     :", getFlagsString(member.flags))
+
+----------------------------------------
+
+FUNCTION: RemoveClusterMember
+MODULE: meta.dm
+SIGNATURE: meta.dm.RemoveClusterMember(path: str) -> bool
+DOCSTRING:
+  This function removes an existing, read only member from the currently 
+  configured Cluster DM, provided that there are no cluster level dependencies on
+  it.
+  
+  Parameters
+  ----------
+  path : str
+      DM Root of the cluster member to be removed.
+  
+  Returns
+  -------
+  bool
+      Returns True if the member was successfully removed from the cluster.
+  
+  See Also
+  --------
+  meta.dm.DMClusterMember, meta.dm.AddClusterMember, meta.dm.GetClusterMembers
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm.SetRoot("cluster://home/user/DMs/main/")
+          dm.RemoveClusterMember("/home/user/DMs/library/rlis/")
+
+----------------------------------------
+
+FUNCTION: GetTicket
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetTicket(dm_root: str) -> str
+DOCSTRING:
+  This function returns the authentication ticket that is currently being used in
+  a connection to a remote, web based DM (SPDRM or SimManager).
+  
+  Parameters
+  ----------
+  dm_root : str, optional
+      The URL of the remote, web based DM. If this argument
+      is not provided, the Current DM Root will be used.
+  
+  Returns
+  -------
+  str
+      Returns the authentication ticket as a string.
+  
+  See Also
+  --------
+  meta.dm.SetRoot
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def amin():
+          dm.SetRoot("http://magneto.localdomain:8080/", username="user1", password="pass1")
+          ticket = dm.GetTicket()
+          print("Ticket used in Current DM Connection:", ticket)
+
+----------------------------------------
+
+FUNCTION: GetFeatureItemTypes
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetFeatureItemTypes(dm_root: str) -> list[str]
+DOCSTRING:
+  This function returns a list containing the names of all the Feature Item types
+  that can exist for the DM.
+  
+  Parameters
+  ----------
+  dm_root : str, optional
+      When this argument is given, then that DM will 
+      be used. Otherwise, the current DM root is used.
+  
+  Returns
+  -------
+  list[str]
+      Returns a list containing strings.
+      An empty list is returned if no Feature Item types are defined.
+      If an error occurs, None is returned.
+  
+  See Also
+  --------
+  meta.dm.GetLibraryItemTypes
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import dm
+  
+      print(dm.GetFeatureItemTypes())
+      print(dm.GetFeatureItemTypes(dm_root="C:/test/"))
+
+----------------------------------------
+
+FUNCTION: GetMultiDMReferences
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetMultiDMReferences(server_ids: list[str], ref_types: list[str], recursive: bool, returned_ents: int) -> list[DMReferences]
+DOCSTRING:
+  This function queries the DM for all references that involve multiple Server IDs
+  and for possibly multiple reference types. The query can be recursive and it is
+  user selectable whether the query should search for the objects being used or
+  are using the Server IDs provided as arguments
+  
+  Parameters
+  ----------
+  server_ids : list[str]
+      Sequence of strings, holding the Server IDs for
+      which references will be queried.
+  
+  ref_types : list[str], optional
+      Sequence of strings, holding the Reference Types
+      for which reference will be queried. If empty, 
+      then all types of references will be returned.
+      Default value: Empty list
+  
+  recursive : bool, optional
+      This value defines whether references should be
+      recursively queried, using the provided server ids
+      as starting points.
+      Default value: False
+  
+  returned_ents : int, optional
+      This value defines whether references originating
+      from or terminating into the provided Server IDs
+      should be queried.
+      Default value: dm.constants.DM_REF_FROM
+  
+  Returns
+  -------
+  list[DMReferences]
+      Returns the list of DMReferences that satisfy the provided criteria
+  
+  See Also
+  --------
+  meta.dm.DMReference, meta.dm.GetDMReferences
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+      server_ids = ["main:6", "lib:3"]
+      ref_types = ["history"]
+      refs = dm.GetMultiDMReferences(
+          server_ids, ref_types, returned_ents=dm.constants.DM_REF_FROM, recursive=True
+      )
+  
+      for ref in refs:
+          print(ref)
+
+----------------------------------------
+
+FUNCTION: RebuildFromDisk
+MODULE: meta.dm
+SIGNATURE: meta.dm.RebuildFromDisk(dm_root: str) -> bool
+DOCSTRING:
+  The DM's database file is updated by scanning the DM directory contents.
+  
+  Parameters
+  ----------
+  dm_root : str, optional
+      The function works on the current DM, unless this
+      argument is specified.
+  
+  Returns
+  -------
+  bool
+      False when the DM isn't Filebased.
+      True if the DM is Filebased.
+  
+  Examples
+  --------
+  ::
+  
+      def module_exists(module_name):
+          try:
+              __import__(module_name)
+          except ImportError:
+              return False
+          else:
+              return True
+  
+  
+      def main():
+          if module_exists("ansa"):
+              import meta
+              from meta import dm
+          elif module_exists("ansa"):
+              import meta
+              from meta import dm
+          elif module_exists("ansa"):
+              import meta
+              from meta import dm
+          print(dm.RebuildFromDisk())
+
+----------------------------------------
+
+FUNCTION: IsIntermodularConnectivityLinksFeatureSupported
+MODULE: meta.dm
+SIGNATURE: meta.dm.IsIntermodularConnectivityLinksFeatureSupported() -> bool
+DOCSTRING:
+  The function is used to check if intermodular_connectivity_links 
+  feature is supported by current DM schema.
+  
+  Returns
+  -------
+  bool
+      Returns True if feature is supported, or False if not supported.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          if dm.IsIntermodularConnectivityLinksFeatureSupported():
+              print("Feature supported.")
+          else:
+              print("Feature not supported.")
+
+----------------------------------------
+
+FUNCTION: QueryDMTypes
+MODULE: meta.dm
+SIGNATURE: meta.dm.QueryDMTypes(rich_library_items: bool, feature_items: bool) -> list
+DOCSTRING:
+  Collect all object types that exist in DM.
+  Only the DM Schema types are returned unless the optional arguments are specified,
+  in which case Rich Library Items or Feature Items will also be returned
+  (if found).
+  
+  Parameters
+  ----------
+  rich_library_items : bool, optional
+      Optional boolean argument to determine if Rich Library Items will also be returned.
+  
+  feature_items : bool, optional
+      Optional boolean argument to determine if Feature Items will also be returned.
+  
+  Returns
+  -------
+  list
+      Returns a list containing the found object types.
+      None is returned when the DM is not properly initialized.
+  
+  See Also
+  --------
+  meta.dm.GetDMSchemaTypes
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+      # only get the DM Schema types:
+      print(dm.QueryDMTypes())
+  
+      # return also Rich Library Items and Feature Items:
+      print(dm.QueryDMTypes(rich_library_items=True, feature_items=True))
+
+----------------------------------------
+
+FUNCTION: GetDMSchemaTypes
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetDMSchemaTypes(dm_root: str) -> list
+DOCSTRING:
+  Collect all the DM Schema object types that can exist for the DM.
+  
+  Parameters
+  ----------
+  dm_root : str, optional
+      When this argument is given, then that DM will be used.
+      Otherwise, the current DM root is used.
+  
+  Returns
+  -------
+  list
+      Returns a list containing the object types.
+      If something goes wrong, None is returned.
+      Example return values:
+  
+      ['parts', 'includes', 'configurations', 'Subsystems', 'Simulation_Model', 'LoadCase', 'Simulation_Run', 'Session', 'Changeset', 'Predictor', 'Optimization_Study', 'Modular_Environment_Profile', 'Report']
+      ['parts', 'includes', 'configurations', 'Simulation_Model', 'Session', 'Changeset', 'Predictor', 'Optimization_Study', 'Modular_Environment_Profile', 'Component', 'Run', 'Loadcase', 'Report']
+      ['parts', 'includes', 'configurations', 'Subsystems', 'Simulation_Model', 'LoadCase', 'Simulation_Run', 'Session', 'Changeset', 'Predictor', 'Optimization_Study', 'Modular_Environment_Profile', 'CAE_Top_Node', 'Input_Deck', 'Report']
+  
+  See Also
+  --------
+  meta.dm.GetFeatureItemTypes, meta.dm.GetLibraryItemTypes
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import dm
+  
+      print(dm.GetDMSchemaTypes())
+      print(dm.GetDMSchemaTypes(dm_root="C:/test/"))
+
+----------------------------------------
+
+FUNCTION: GetLastErrorMessage
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetLastErrorMessage() -> str
+DOCSTRING:
+  Returns the last error message from DM operations.
+  
+  Returns
+  -------
+  str
+      Returns a string containing the last error message.
+      An empty string is returned when no error exists.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+      print(dm.GetLastErrorMessage())
+
+----------------------------------------
+
+FUNCTION: GetConnectionStatus
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetConnectionStatus() -> int
+DOCSTRING:
+  The function performs a ping operation on the connected SPDRM DM.
+  A valid SPDRM DM root should have been specified first.
+  
+  Returns
+  -------
+  int
+      Returns the ping value in milliseconds on success or an exception on error.
+  
+  Notes
+  -----
+  Only SPDRM DMs of version 1.8.0 and above are supported.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          ping_val = dm.GetConnectionStatus()
+          print(ping_val)
+
+----------------------------------------
+
+FUNCTION: QueryForAllResults
+MODULE: meta.dm
+SIGNATURE: meta.dm.QueryForAllResults(type: str) -> list[dict]
+DOCSTRING:
+  Get the attributes of all the items of a specific type in DM.
+  
+  Parameters
+  ----------
+  type : str
+      is the type of the DM item.
+  
+  Returns
+  -------
+  list[dict]
+      Return a list with dictionaries. One dictionary with all the attributes for each
+      DM item.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          type = "parts"
+          all_parts = dm.QueryForAllResults(type)
+          if all_parts:
+              for part_info in all_parts:
+                  for key in part_info.keys():
+                      print("attribute::", key, "value::", part_info[key])
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: OpenDMObjectsInNewTab
+MODULE: meta.dm
+SIGNATURE: meta.dm.OpenDMObjectsInNewTab(server_ids: list[str], type: str, view: str, dm_system: str, tab_name: str, expand_all: bool, open_in_viewer: bool, open_in_reports_table: bool) -> bool
+DOCSTRING:
+  This function can be used to open one or more hierarchies of any DM Object type,
+  in a new tab, in DM Browser.
+  
+  Parameters
+  ----------
+  server_ids : list[str], optional
+      A list with DM Object server ids.
+  
+  type : str, optional
+      The type of the DM Object, as it is defined through the Data Model
+      (e.g. Loadcase).
+  
+  view : str, optional
+      The new Tab's view, e.g. "Default", "Flat" or a user defined in the
+      dm_views.xml. When undefined, the function will return False.
+  
+  dm_system : str, optional
+      The DM root that will be queried.
+  
+  tab_name : str, optional
+      The new tab will be given this name.
+  
+  expand_all : bool, optional
+      If set to True, all items in the new tab will be expanded.
+  
+  open_in_viewer : bool, optional
+      If set to True, all items in the new tab will be loaded to the meta viewer.
+  
+  open_in_reports_table : bool, optional
+      If set to True, Reports Table will also be launched for all  the items in the
+      new tab that is opened. In case the requested Type is not supported in
+      Reports Table (SimulationModel, LoadCase, SimulationRun) or no Reports
+      are found in DM for the requested server_ids, the scipt function will just 
+      open the server_ids in a new tab and no Reports Table tabs will be opened.
+  
+  Returns
+  -------
+  bool
+      Returns True if the tab is opened succesfully, otherwise False.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          server_ids = ["689861"]
+          view = "Flat"
+          type = "Run"
+          ret = dm.OpenDMObjectsInNewTab(server_ids, view, type, open_in_reports_table=True)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: QueryDMObjects
+MODULE: meta.dm
+SIGNATURE: meta.dm.QueryDMObjects(query: object, type: str, free_text_targets: object) -> dict
+DOCSTRING:
+  Search in DM for objects which satisfy the specified query.
+  
+  Parameters
+  ----------
+  query : object
+      The query can be expressed in one of the following forms:
+      * A list of [<attribute_name>, <condition>, <value>] lists which
+        specify the query. For Attributes of Versioning Scheme Counter
+        type (e.g. Team Version, Study Version, etc.) the "Latest"
+        keyword is supported as follows:
+        [<versioning_attribute_name>, "equals", "Latest"]
+      * A BetaQL string
+      * A "free text" query string
+  
+  type : str, optional
+      The type of the DM Object. The specified type can be ANSA type
+      (e.g. ANSA_LOADCASE) or the DM type defined through the Data
+      Model (e.g. Loadcase).
+  
+  free_text_targets : object, optional
+      A list of the targets used in free text search queries 
+      (e.g. ["All"] or ["Simulation_Run", "Report"])
+  
+  Returns
+  -------
+  dict
+      Returns a dictionary with the following keys and values:
+      key = 'error'
+      value = 0(Success), 1(Nothing found), 2(No DM Root was set), 3(No access to DM Root),
+              4(Error in filters)
+      key = 'output'
+      value = A list with the DM objects which satisfy the query.
+  
+  Notes
+  -----
+  When the query is expressed as a list of filters lists, the supported conditions
+  are:
+  * "equals"
+  * "doesn't equal"
+  * "contains"
+  * "doesn't contain"
+  * "starts with"
+  * "doesn't start with"
+  * "ends with"
+  * "doesn't end with"
+  * "is greater than"
+  * "is greater than or equal to"
+  * "is less than"
+  * "is less than or equal to"
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          type = "ANSA_SUBSYSTEM"
+          query = [["Project", "contains", "XX"], ["Representation", "equals", "NVH"]]
+          results = dm.QueryDMObjects(query, type)
+          if results["error"] == 0:
+              for dm_object in results["output"]:
+                  print("DM Object Id : ", dm_object.server_id)
+  
+                  # Equivalent query to the previous one, this time expressed as a BetaQL string
+          query = "Project contains XX and Representation = NVH"
+          results = dm.QueryDMObjects(query, type)
+          if results["error"] == 0:
+              for dm_object in results["output"]:
+                  print("DM Object Id : ", dm_object.server_id)
+  
+                  # Free text query
+          free_text_query = "models with project venza"
+          targets_list = ["All"]
+          results = dm.QueryDMObjects(query=free_text_query, free_text_targets=targets_list)
+          if results["error"] == 0:
+              for dm_object in results["output"]:
+                  print("DM Object Id : ", dm_object.server_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetConnectedUserRole
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetConnectedUserRole() -> str
+DOCSTRING:
+  Get the current role of the user who is connected to SPDRM-based DM root.
+  
+  Returns
+  -------
+  str
+      Returns the User Role.
+      None is returned in case of error (e.g. the user is not connected to DM root).
+  
+  Notes
+  -----
+  This function is valid only for SPDRM-based DM root.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm_root = "http://spdrm:8080/"
+          username = "analyst_01"
+          password = "analyst_01"
+          role = "Analyst"
+          ret = dm.SetRoot(dm_root, username, password, role)
+          print(ret)
+          print("The current role of the connected user is ", dm.GetConnectedUserRole())
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetUserRoles
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetUserRoles(dm_root: str, username: str, password: str) -> list
+DOCSTRING:
+  Get the available roles of a user in an SPDRM-based DM root.
+  
+  Parameters
+  ----------
+  dm_root : str
+      The url of the SPDRM-based DM root.
+  
+  username : str
+      The username of the user.
+  
+  password : str
+      The password of the user.
+  
+  Returns
+  -------
+  list
+      Returns a list with the available user roles.
+      None is returned in case of error.
+  
+  Notes
+  -----
+  This function is valid only for SPDRM-based DM root.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          dm_root = "http://spdrm:40080"
+          username = "user_01"
+          password = "user_01"
+          user_roles = dm.GetUserRoles(dm_root, username, password)
+          if user_roles:
+              print("The available roles are:")
+              for role in user_roles:
+                  print(role)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: RefreshContents
+MODULE: meta.dm
+SIGNATURE: meta.dm.RefreshContents() -> None
+DOCSTRING:
+  Refresh the side panel in DM Browser or KOMVOS,
+  equivalent to the right click action "Refresh".
+  
+  Returns
+  -------
+  None
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+      dm.RefreshContents()
+
+----------------------------------------
+
+FUNCTION: GetDMFilters
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetDMFilters(owned_only: bool=False) -> list
+DOCSTRING:
+  This function queries the DM for either all non-private filters or only those that are created by the user.
+  
+  Parameters
+  ----------
+  owned_only : bool, optional
+      If True, get only the DM Filters that are created by the user.
+  
+  Returns
+  -------
+  list
+      Returns the list of DMFilter items that satisfy the provided expression.
+  
+  See Also
+  --------
+  meta.dm.DMFilter
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def getOwnedOnlyDMFilters():
+          dm_filters_list = dm.GetDMFilters(owned_only=True)
+          for dm_filter in dm_filters_list:
+              print(dm_filter)
+
+----------------------------------------
+
+FUNCTION: CreateTempFolder
+MODULE: meta.dm
+SIGNATURE: meta.dm.CreateTempFolder(folder_name: str) -> str
+DOCSTRING:
+  The function creates a temporary folder in the user temp directory. 
+  The folder is deleted upon program exit.
+  
+  Parameters
+  ----------
+  folder_name : str, optional
+      A secondary folder to be created nested inside the temporary folder.
+  
+  Returns
+  -------
+  str
+      Returns the path to the created folder on success, or None on failure.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          first_temp_folder = dm.CreateTempFolder()
+          second_temp_folder = dm.CreateTempFolder("my_second_test_dir")
+  
+          print("First temp folder is: " + first_temp_folder)
+          print("Second temp folder is: " + second_temp_folder)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetLoginWindowDoNotAskValue
+MODULE: meta.dm
+SIGNATURE: meta.dm.GetLoginWindowDoNotAskValue() -> int
+DOCSTRING:
+  The function fetches the "Do not ask again" value located in the login.xml file of the application Home DM folder.
+  
+  Returns
+  -------
+  int
+      Returns the "Do not ask again value", or 0 if the login.xml file does not exist.
+  
+  See Also
+  --------
+  meta.dm.SetLoginWindowDoNotAskValue
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          do_not_ask_val = dm.GetLoginWindowDoNotAskValue()
+          print(do_not_ask_val)
+
+----------------------------------------
+
+FUNCTION: SetLoginWindowDoNotAskValue
+MODULE: meta.dm
+SIGNATURE: meta.dm.SetLoginWindowDoNotAskValue(do_not_ask_profile: int) -> int
+DOCSTRING:
+  The function sets the "Do not ask again" value located in the login.xml file of the application Home DM folder.
+  
+  Parameters
+  ----------
+  do_not_ask_profile : int
+      The setting that controls whether the Login Window will be shown.
+      If the value is 1, the window is skipped.
+      If the value is 0, the window is shown.
+  
+  Returns
+  -------
+  int
+      Returns 1 if the value was set successfully, 0 otherwise.
+  
+  Raises
+  ------
+  ValueError
+      do_not_ask_again can only be set to 0 and 1
+  
+  See Also
+  --------
+  meta.dm.GetLoginWindowDoNotAskValue
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import dm
+  
+  
+      def main():
+          res = dm.SetLoginWindowDoNotAskValue(0)
+          print(res)
+
+----------------------------------------

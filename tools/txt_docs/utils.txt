@@ -1,0 +1,3686 @@
+MODULE: meta.utils
+========================================================================
+
+FUNCTION: CloseMonitor
+MODULE: meta.utils
+SIGNATURE: meta.utils.CloseMonitor() -> int
+DOCSTRING:
+  This function closes the monitor window.
+  
+  Returns
+  -------
+  int
+      Always returns 1.
+  
+  Notes
+  -----
+  This function does not support named arguments.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          utils.OpenMonitor("Some title")
+          utils.PrintMonitor("Lorem ipsum", 255, 0, 0)
+          utils.PrintMonitor("dolor sit amet", 0, 255, 0)
+          # utils.CloseMonitor()
+          # Run this function with and without commenting the above line
+
+----------------------------------------
+
+FUNCTION: LinesOfMonitor
+MODULE: meta.utils
+SIGNATURE: meta.utils.LinesOfMonitor() -> int
+DOCSTRING:
+  This function returns the lines of text in the monitor window.
+  
+  Returns
+  -------
+  int
+      Returns an integer describing the number of lines in the monitor window.
+  
+  Notes
+  -----
+  This function does not support named arguments.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          utils.OpenMonitor("Some title")
+          utils.PrintMonitor("Lorem ipsum", 255, 0, 0)
+          utils.PrintMonitor("dolor sit amet", 0, 255, 0)
+          l = utils.LinesOfMonitor()
+          print("lines in monitor window:", l)
+
+----------------------------------------
+
+FUNCTION: CreateWindowsLinkFile
+MODULE: meta.utils
+SIGNATURE: meta.utils.CreateWindowsLinkFile(target: str, link_file_path: str, mount_mapping_table: list[MountMapping]) -> bool
+DOCSTRING:
+  This function creates a Windows Link file (Shortcut) pointing to an arbitrary
+  destination. This function is not necessary to be executed in a Windows
+  environment: Windows Link files can be created by a Linux running process, and
+  are usable in the Windows domain.
+  The condition for this interoperability is that the link target is a path that
+  is visible from both Windows / non-Windows environments and paths can be 
+  converted across environments by doing prefix substitutions (see description of
+  mount_mapping_table below).
+  
+  Parameters
+  ----------
+  target : str
+      Destination of the link file, i.e. the path where the created
+      shortcut will point to. This path is expressed in its native form,
+      i.e. it must be a meaningful path in the environment where this
+      python function will be executed.
+  
+  link_file_path : str
+      Path where the Windows Link file will be created. The file name 
+      provided with this path must have a '.lnk' extension.
+  
+  mount_mapping_table : list[MountMapping], optional
+      A sequence of utils.MountMapping objects, which will be used for
+      transforming the link target path from its native form into one that 
+      is usable in the Windows domain.
+      If the function is executed in a non Windows environment, a non empty 
+      Mount Mapping Table must be available, so that the unix paths can
+      be converted into paths that are meaningful in the Windows domain.
+      If the function is executed in a Windows environment, there are no
+      requirements for such a Mount Mapping Table. However, if the
+      generated Link files are to be used in the Unix domain, then an
+      appropriately configured Mount Mapping Table is highly recommended.
+      If no Mount Mapping Table is provided as argument, then the global
+      Mount Mapping Table configured in the ANSA defaults settings is used.
+  
+  Returns
+  -------
+  bool
+      This function returns 'True' if the Link file was succesfully created and 'False'
+      if the creation failed.
+  
+  See Also
+  --------
+  meta.utils.MountMapping
+  
+  Examples
+  --------
+  ::
+  
+      import os
+      import meta
+  
+  
+      def main():
+          mount_mapping_table = []
+          mount_mapping_table.append(utils.MountMapping("/mnt/win_disk_1", r"\\nas\disk1"))
+          mount_mapping_table.append(
+              utils.MountMapping("/mnt/net_scratch", r"\\team_server\scratch")
+          )
+  
+          utils.CreateWindowsLinkFile(
+              "/mnt/win_disk_1/results/report.pdf", "report.pdf.lnk", mount_mapping_table
+          )
+
+----------------------------------------
+
+FUNCTION: GetGlobalMountMappingTable
+MODULE: meta.utils
+SIGNATURE: meta.utils.GetGlobalMountMappingTable() -> list[MountMapping]
+DOCSTRING:
+  This function returns all the Mount Mappings that are currently stored in the
+  global Mount Mapping table.
+  
+  Returns
+  -------
+  list[MountMapping]
+      This function return a list of MountMapping objects
+  
+  See Also
+  --------
+  meta.utils.MountMapping, meta.utils.SetGlobalMountMappingTable
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import utils
+  
+  
+      def printMountMappingTable(mount_mapping_table):
+          for mapping in mount_mapping_table:
+              print(
+                  "Mapping {} <--> {}".format(
+                      mapping.unix_mount_path, mapping.win_server_share
+                  )
+              )
+  
+  
+      def main():
+          table = utils.GetGlobalMountMappingTable()
+  
+          printMountMappingTable(table)
+  
+          # Append entries to global mount mapping table
+          table.append(utils.MountMapping("/mnt1/disk_1", r"\\nas\disk1"))
+          table.append(utils.MountMapping("/mnt2/net_scratch", r"\\team_server\scratch"))
+          utils.SetGlobalMountMappingTable(table)
+  
+          printMountMappingTable(table)
+
+----------------------------------------
+
+FUNCTION: SetGlobalMountMappingTable
+MODULE: meta.utils
+SIGNATURE: meta.utils.SetGlobalMountMappingTable(mount_mapping_table: list[MountMapping]) -> None
+DOCSTRING:
+  This function sets the Global Mount Mapping Table with the sequence of Mount
+  Mappings received as argument.
+  
+  Parameters
+  ----------
+  mount_mapping_table : list[MountMapping]
+      Sequence of MountMapping objects that will be stored
+      in the Global Mount Mapping Table
+  
+  Returns
+  -------
+  None
+      This functions always returns None
+  
+  See Also
+  --------
+  meta.utils.MountMapping, meta.utils.GetGlobalMountMappingTable
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import utils
+  
+  
+      def printMountMappingTable(mount_mapping_table):
+          for mapping in mount_mapping_table:
+              print(
+                  "Mapping {} <--> {}".format(
+                      mapping.unix_mount_path, mapping.win_server_share
+                  )
+              )
+  
+  
+      def main():
+          table = utils.GetGlobalMountMappingTable()
+  
+          printMountMappingTable(table)
+  
+          # Append entries to global mount mapping table
+          table.append(utils.MountMapping("/mnt1/disk_1", r"\\nas\disk1"))
+          table.append(utils.MountMapping("/mnt2/net_scratch", r"\\team_server\scratch"))
+          utils.SetGlobalMountMappingTable(table)
+  
+          printMountMappingTable(table)
+
+----------------------------------------
+
+FUNCTION: LaunchLingeringMLWorker
+MODULE: meta.utils
+SIGNATURE: meta.utils.LaunchLingeringMLWorker(context_dir: str, cmd: list[str], env: str='consolidated', dbg: bool=False) -> bool
+DOCSTRING:
+  This function launches a lingering ML Toolkit worker process. The command 
+  provided by the user will be launched as a process within an ML Toolkit
+  environment and its stdin / stdout channels will be exposed over a TCP socket.
+  By reading the details stored within the context directory, clients are able
+  to connect to this TCP socket and communicate with the worker process.
+  
+  Parameters
+  ----------
+  context_dir : str
+      Path where the context holding directory will be
+      created. The context holding directory will be set
+      as readable only for the user launching the
+      lingering worker, and will hold all information
+      (e.g. port / authentication token) necessary for a
+      client to connect to it.
+  
+  cmd : list[str]
+      A sequence of strings containing the command plus all 
+      arguments describing how the lingering worker is to be
+      launched.
+  
+  env : str, optional
+      Provides the name of the ML Toolkit environment, into
+      which the lingering workers should be launched.
+      Default value: 'consolidated'
+  
+  dbg : bool, optional
+      Describes whether debug mode should be employed. If
+      True, then the context directory will not be deleted 
+      on worker shut down. Also, the log file will include
+      more information, that could assist troubleshooting.
+      Default value: False
+  
+  Returns
+  -------
+  bool
+      Returns True when the launch was successfully initiated.
+  
+  Notes
+  -----
+  This function is building on functionality that is part of the ML Toolkit. For
+  this reason, the ML Toolkit needs to be installed in an accessible location and
+  the environment variable BETAML_TOOLKIT needs to be set with the corresponding
+  path.
+  
+  Note that the successful invocation of this function doesn't mean that the 
+  lingering worker is up and ready for clients to connect. A time delay is
+  involved between the successful return of this function and the context 
+  directory being created and appropriately filled with data.
+  
+  See Also
+  --------
+  meta.utils.LingeringMLInstance, meta.utils.LingeringMLClient
+  
+  Examples
+  --------
+  ::
+  
+      import time
+  
+      import meta
+      from meta import utils
+  
+  
+      def createLingeringMLInstance(dir):
+          try:
+              inst = utils.LingeringMLInstance(dir)
+          except Exception as e:
+              print("Lingering ML Instance failed with exception {}".format(str(e)))
+              inst = None
+          return inst
+  
+  
+      def loopForLingeringInstance(dir, max_attempts):
+          for _ in range(max_attempts):
+              inst = createLingeringMLInstance(dir)
+              if inst:
+                  return inst
+              time.sleep(1)
+          return None
+  
+  
+      def main():
+          context_dir = "/home/main_user/tmp/adapter_context"
+          cmd = ["python", "/home/main_user/ml_scripts/calc_worker.py"]
+          launch_res = utils.LaunchLingeringMLWorker(context_dir, cmd)
+  
+          if not launch_res:
+              return
+          inst = loopForLingeringInstance(context_dir, 10)
+          inst.write("Input: 1, 2, 3, 4\n")
+  
+          try:
+              response = inst.read(10)
+              print("Worker responded with: {}".format(response))
+          except TimeoutError:
+              print("Read timed-out!")
+
+----------------------------------------
+
+FUNCTION: BatchMode
+MODULE: meta.utils
+SIGNATURE: meta.utils.BatchMode() -> int
+DOCSTRING:
+  This function checks whether Meta is running in batch mode.
+  
+  Returns
+  -------
+  int
+      It returns an integer, 1 if META is running in batch mode, or 0 otherwise.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          if utils.BatchMode() == 1:
+              print("Meta is running in batch mode")
+          else:
+              print("Meta is not running in batch mode")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CheckboxStateOfToolbar
+MODULE: meta.utils
+SIGNATURE: meta.utils.CheckboxStateOfToolbar(toolbar_name: str, checkbox_name: str) -> int
+DOCSTRING:
+  This function gets the state (checked or not checked) of a checkbox of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  checkbox_name : str
+      Name of the checkbox.
+  
+  Returns
+  -------
+  int
+      Upon success an integer, 1 if checkbox is checked and 0 if it is not checked.
+      Upon failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          checkbox_name = "Checkbox 1"
+  
+          state = utils.CheckboxStateOfToolbar(toolbar_name, checkbox_name)
+          if state == 1:
+              print("Checked")
+          elif state == 0:
+              print("Not checked")
+          elif state == -1:
+              print("Failure!")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CurrentDirectory
+MODULE: meta.utils
+SIGNATURE: meta.utils.CurrentDirectory() -> str
+DOCSTRING:
+  This function retrieves information about the current directory.
+  
+  Returns
+  -------
+  str
+      It returns a string referring to the current directory.
+      Uppon failure, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          dir = utils.CurrentDirectory()
+          print("current dir = ", dir)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DefaultSessionFileName
+MODULE: meta.utils
+SIGNATURE: meta.utils.DefaultSessionFileName() -> str
+DOCSTRING:
+  This function gets the name of the default session file.
+  
+  Returns
+  -------
+  str
+      It returns a string referring to the name of the default session file.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          filename = utils.DefaultSessionFileName()
+          print(filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: EvalBuiltInFunction
+MODULE: meta.utils
+SIGNATURE: meta.utils.EvalBuiltInFunction(expression: str) -> str
+DOCSTRING:
+  This function evaluates a given built-in function specified by a given string expression.
+  
+  Parameters
+  ----------
+  expression : str
+      A valid Built-In Expression
+  
+  Returns
+  -------
+  str
+      It returns a string with the result of the evaluation of the expression.
+      Upon failure, it returns an empty string.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          expression = "`m0s.subcase`"
+          value = utils.EvalBuiltInFunction(expression)
+          print(value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetSessionFileNames
+MODULE: meta.utils
+SIGNATURE: meta.utils.GetSessionFileNames(session: str, type: str) -> list[str]
+DOCSTRING:
+  This function gets the filenames which are included in a session file.
+  
+  Parameters
+  ----------
+  session : str
+      Session filepath
+  
+  type : str, optional
+      Refers to the type of the paths this function will return. Its possible arguments are:
+      - 'Dir' : Returns the paths including only the directories (default value)
+      - 'File' : Returns the paths including the base filename
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with the strings of the corresponding paths of the filenames of the given session.
+      Each member of the list is a string referring to one specific name of a file of a given session.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          session = "/home/demo/session1.ses"
+          type = "File"
+          all_paths = utils.GetSessionFileNames(session, type)
+          for path in all_paths:
+              print(path)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MetaCommand
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaCommand(command: str) -> list[object]
+DOCSTRING:
+  This function executes a meta command.
+  
+  Parameters
+  ----------
+  command : str
+      Meta command to be executed
+  
+  Returns
+  -------
+  list[object]
+      Returns a list with the created objects, when the command:
+      - Read Geometry
+      - Read/Calculate Results
+      - Read/Create/Calculate Curves
+      - Create Annotations
+      - Create Planes
+      - Create Isofunctions
+      In all other cases returns 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+      from meta import models
+  
+  
+      def main():
+          ent_list = utils.MetaCommand("read geom Nastran test.nas")
+          if ent_list:
+              for ent in ent_list:
+                  print(ent)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MetaCommandOnlyWriteToSession
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaCommandOnlyWriteToSession(command: str) -> int
+DOCSTRING:
+  This function writes the meta command in the session file without executing the command.
+  
+  Parameters
+  ----------
+  command : str
+      Meta command to be written to session file.
+  
+  Returns
+  -------
+  int
+      The return value is always integer 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          utils.MetaCommandOnlyWriteToSession("identify element 100-150")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MetaGetVariable
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaGetVariable(variable_name: str) -> str
+DOCSTRING:
+  This function gets variable_value from variable_name.
+  
+  Parameters
+  ----------
+  variable_name : str
+      Variable name.
+  
+  Returns
+  -------
+  str
+      The return value is a string with the variable_value. An empty string is returned if the variable does not exist.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          utils.MetaSetVariable("var1", "0.123")
+          variable_value = utils.MetaGetVariable("var1")
+          print("Variable value: ", variable_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MetaSetVariable
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaSetVariable(variable_name: str, variable_value: str) -> int
+DOCSTRING:
+  This function sets variable_name to variable_value.
+  
+  Parameters
+  ----------
+  variable_name : str
+      Variable name.
+  
+  variable_value : str
+      Variable value.
+  
+  Returns
+  -------
+  int
+      The return value is always 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          utils.MetaSetVariable("var1", "0.123")
+          variable_value = utils.MetaGetVariable("var1")
+          print("Variable value: ", variable_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: RadioStateOfToolbar
+MODULE: meta.utils
+SIGNATURE: meta.utils.RadioStateOfToolbar(toolbar_name: str, radio_name: str) -> int
+DOCSTRING:
+  This function gets the state (checked or not checked) of a radio button of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  radio_name : str
+      Name of the radio button.
+  
+  Returns
+  -------
+  int
+      It returns an integer, 1 if radio button is checked and 0 if it is not checked.
+      Upon failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          radio_name = "Radiobutton 1"
+          state = utils.RadioStateOfToolbar(toolbar_name, radio_name)
+          if state == 1:
+              print("Enabled")
+          elif state == 0:
+              print("Disabled")
+          elif state == -1:
+              print("Failure!")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: RangeToList
+MODULE: meta.utils
+SIGNATURE: meta.utils.RangeToList(range: str) -> list[int]
+DOCSTRING:
+  This function converts a range used in meta commands to a corresponding list.
+  
+  Parameters
+  ----------
+  range : str
+      A range used in META commands.
+  
+  Returns
+  -------
+  list[int]
+      It returns a list with members referring to the values specified by the given range.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          range = "1-5/6/7,8,9/10-30-5"
+          values = utils.RangeToList(range)
+          for one_value in values:
+              print(one_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReplaceSessionFileNames
+MODULE: meta.utils
+SIGNATURE: meta.utils.ReplaceSessionFileNames(session: str, old_name: str, new_name: str) -> int
+DOCSTRING:
+  This function replaces the filenames which are included in a session file. Session file is specified by its path (session).
+  
+  Parameters
+  ----------
+  session : str
+      Session's filepath.
+  
+  old_name : str
+      Old filename.
+  
+  new_name : str
+      New filename.
+  
+  Returns
+  -------
+  int
+      This function always returns integer 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          session = "/home/demo/session2.ses"
+          old_name = "/home/demo/door.op2"
+          new_name = "/home/demo/new_door.op2"
+          utils.ReplaceSessionFileNames(session, old_name, new_name)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetCurrentDirectory
+MODULE: meta.utils
+SIGNATURE: meta.utils.SetCurrentDirectory(dir: str) -> int
+DOCSTRING:
+  This function sets the current directory.
+  
+  Parameters
+  ----------
+  dir : str
+      Folder path to be used as current directory.
+  
+  Returns
+  -------
+  int
+      It returns an integer, -1 on error and 0 on success
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          dir = utils.CurrentDirectory()
+          print("current dir = ", dir)
+          error = utils.SetCurrentDirectory("/home/user/tmp")
+          print(error)
+          dir = utils.CurrentDirectory()
+          print("current dir = ", dir)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SliderValueOfToolbar
+MODULE: meta.utils
+SIGNATURE: meta.utils.SliderValueOfToolbar(toolbar_name: str, slider_name: str) -> int
+DOCSTRING:
+  This function gets the value of a slider of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  slider_name : str
+      Name of the slider.
+  
+  Returns
+  -------
+  int
+      It returns an integer, referring to the value of the slider of the given toolbar.
+      Upon failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          slider_name = "Slider 1"
+  
+          slider_value = utils.SliderValueOfToolbar(toolbar_name, slider_name)
+          print(slider_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TextboxValueOfToolbar
+MODULE: meta.utils
+SIGNATURE: meta.utils.TextboxValueOfToolbar(toolbar_name: str, textbox_name: str) -> str
+DOCSTRING:
+  This function gets the text of a textbox of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  textbox_name : str
+      Name of the textbox.
+  
+  Returns
+  -------
+  str
+      It returns a string referring to the text of the textbox of the given toolbar.
+      Upon failure, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          textbox_name = "Textbox 1"
+  
+          text = utils.TextboxValueOfToolbar(toolbar_name, textbox_name)
+          print(text)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ListToRange
+MODULE: meta.utils
+SIGNATURE: meta.utils.ListToRange(values: list, type: str) -> str
+DOCSTRING:
+  This function converts a list with given values to a range used in meta commands. 
+  
+  Parameters
+  ----------
+  values : list
+      List that contains the values which will be included in the range.
+  
+  type : str, optional
+      Optional argument 'type' refers to the data type of values that will be included in the range. It must be one of the string values:
+      - 'int': Integer values (default value)
+      - 'float': Floating point values
+  
+  Returns
+  -------
+  str
+      It returns a string representing the range of the corresponding values.
+      Upon failure, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          type = "float"
+          values = list()
+          for i in range(10, 0, -1):
+              values.append(i * 0.23)
+          range_string = utils.ListToRange(values, type)
+          print(range_string)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SessionMode
+MODULE: meta.utils
+SIGNATURE: meta.utils.SessionMode() -> int
+DOCSTRING:
+  This function checks whether META is running a session file.
+  
+  Returns
+  -------
+  int
+      It returns an integer, 1 if META is running a session file, or 0 otherwise
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          if utils.SessionMode() == 1:
+              print("Meta is running a session file")
+          else:
+              print("Meta is not running a session file")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ClearMonitor
+MODULE: meta.utils
+SIGNATURE: meta.utils.ClearMonitor() -> int
+DOCSTRING:
+  This function clears the monitor output.
+  
+  Returns
+  -------
+  int
+      The return value is always 1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          utils.OpenMonitor("Some title")
+          utils.PrintMonitor("Lorem ipsum", 255, 0, 0)
+          utils.PrintMonitor("dolor sit amet", 0, 255, 0)
+          l = utils.LinesOfMonitor()
+          print("lines in monitor window:" + str(l))
+          utils.ClearMonitor()
+          l = utils.LinesOfMonitor()
+          print("lines in monitor window:" + str(l))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: OpenMonitor
+MODULE: meta.utils
+SIGNATURE: meta.utils.OpenMonitor(title: str) -> int
+DOCSTRING:
+  This function opens a monitor window. It can be used to redirect output of a script, ie to create log of a job. The window that opens features a text editor where a script can print and then comments can be added and its contents can be saved.
+  
+  Parameters
+  ----------
+  title : str, optional
+      The title of the monitor window.
+  
+  Returns
+  -------
+  int
+      The function always returns 1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          title = "Some title"
+          utils.OpenMonitor(title)
+  
+          txt = "Lorem ipsum"
+          r_int = 255
+          g_int = 0
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+  
+          txt = "dolor sit amet"
+          r_int = 0
+          g_int = 255
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+  
+          l = utils.LinesOfMonitor()
+          print("lines in monitor window:" + str(l))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: OpenMonitorNoEdit
+MODULE: meta.utils
+SIGNATURE: meta.utils.OpenMonitorNoEdit(title: str) -> int
+DOCSTRING:
+  This function opens a monitor window in read-only (non-editable) mode. It can be used to redirect output of a script, ie to create log of a job. The window that opens features a text editor where a script can print and its contents can be saved. Text contents cannot be edited manually.
+  
+  Parameters
+  ----------
+  title : str, optional
+      The title of the monitor window.
+  
+  Returns
+  -------
+  int
+      The function always returns 1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          title = "Some title"
+          utils.OpenMonitorNoEdit(title)
+  
+          txt = "Lorem ipsum"
+          r_int = 255
+          g_int = 0
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+  
+          txt = "dolor sit amet"
+          r_int = 0
+          g_int = 255
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PrintMonitor
+MODULE: meta.utils
+SIGNATURE: meta.utils.PrintMonitor(txt: str, r_int: int, g_int: int, b_int: int) -> int
+DOCSTRING:
+  This is an output function for script monitoring. It is almost identical to the 'print' function with the addition of the three color arguments.
+  
+  Parameters
+  ----------
+  txt : str
+      The text to print.
+  
+  r_int : int
+      Red color integer.
+  
+  g_int : int
+      Green color integer.
+  
+  b_int : int
+      Blue color integer.
+  
+  Returns
+  -------
+  int
+      The return value is always 1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          title = "Some title"
+          utils.OpenMonitor(title)
+  
+          txt = "Lorem ipsum"
+          r_int = 255
+          g_int = 0
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+  
+          txt = "dolor sit amet"
+          r_int = 0
+          g_int = 255
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+          l = utils.LinesOfMonitor()
+          print("lines in monitor window:" + str(l))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReadMonitor
+MODULE: meta.utils
+SIGNATURE: meta.utils.ReadMonitor(line_int: int) -> str
+DOCSTRING:
+  This function reads a specific line from monitor window. The line is described by its index, the first line having index 0.
+  
+  Parameters
+  ----------
+  line_int : int
+      the line number
+  
+  Returns
+  -------
+  str
+      Returns the contents of 'line' or empty string if the index is less than 0,
+      or greater than the number of lines.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          title = "Some title"
+          utils.OpenMonitor(title)
+  
+          txt = "Lorem ipsum"
+          r_int = 255
+          g_int = 0
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+  
+          txt = "dolor sit amet"
+          r_int = 0
+          g_int = 255
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+  
+          lines = utils.LinesOfMonitor()
+          print("Total lines: ", lines)
+          for i in range(lines):
+              txt = utils.ReadMonitor(i)
+              print("line:" + str(i) + ", text:" + txt)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SaveMonitor
+MODULE: meta.utils
+SIGNATURE: meta.utils.SaveMonitor(filename: str) -> int
+DOCSTRING:
+  This function saves the contents of the monitor window in html format.
+  
+  Parameters
+  ----------
+  filename : str
+      The filename of the file to be saved.
+  
+  Returns
+  -------
+  int
+      The return value is 1 on success and 0 on failure.
+  
+  See Also
+  --------
+  meta.utils.SaveMonitorToTxt
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          title = "Some title"
+          utils.OpenMonitor(title)
+  
+          txt = "Lorem ipsum"
+          r_int = 255
+          g_int = 0
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+  
+          txt = "dolor sit amet"
+          r_int = 0
+          g_int = 255
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+  
+          lines = utils.LinesOfMonitor()
+          for i in range(lines):
+              txt = utils.ReadMonitor(i)
+              print("line:" + str(i) + ", text:" + txt)
+          utils.SaveMonitor("/home/user/file.txt")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectOpenDir
+MODULE: meta.utils
+SIGNATURE: meta.utils.SelectOpenDir(startin: str) -> str
+DOCSTRING:
+  This function allows the user to select a directory for input.
+  
+  Parameters
+  ----------
+  startin : str
+      Path of the starting directory.
+  
+  Returns
+  -------
+  str
+      It returns the selected directory upon success, otherwise an empty string.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          startin = "/home/user/"
+          dir = utils.SelectOpenDir(startin)
+          Print("selected dir: " + dir)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectOpenFile
+MODULE: meta.utils
+SIGNATURE: meta.utils.SelectOpenFile(flag: int, filters: str) -> list[str]
+DOCSTRING:
+  This function opens file manager and lets the user select one or more files.
+  
+  Parameters
+  ----------
+  flag : int
+      0 - only single file selection is permitted.
+      1 - a multi file selection is permitted.
+  
+  filters : str, optional
+      Extension filter for files.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list containing the file name(s) selected. On error or if ESCAPE is pressed the list length is 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          flag = 0
+          filter_1 = "Text files (*.txt)"
+          filter_2 = "PDF files (*.pdf)"
+          m = utils.SelectOpenFile(flag, filter_1, filter_2)
+          if len(m) > 0:
+              print(m[0])
+          else:
+              print("No file selected")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectOpenFileIn
+MODULE: meta.utils
+SIGNATURE: meta.utils.SelectOpenFileIn(initdir: str, flag: int, filters: str) -> list[str]
+DOCSTRING:
+  This function opens file manager and lets the user select one or more files. The starting directory can be provided also.
+  
+  Parameters
+  ----------
+  initdir : str
+      Starting directory. In case of an empty string ('') or 0 the argument is ignored and the last accessed directory is used instead.
+  
+  flag : int
+      0 - only single file selection is permitted.
+      1 - a multi file selection is permitted.
+  
+  filters : str, optional
+      Extension filter for files.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list containing the file name(s) selected. On error or if ESCAPE was pressed the list length is 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          initdir = "/home/userdir/"
+          flag = 0
+          filter_1 = "Text files (*.txt)"
+          filter_2 = "PDF files (*.pdf)"
+          m = utils.SelectOpenFileIn(initdir, flag, filter_1, filter_2)
+          if len(m) > 0:
+              print(m[0])
+          else:
+              print("No file selected")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectSaveDir
+MODULE: meta.utils
+SIGNATURE: meta.utils.SelectSaveDir(startin: str) -> str
+DOCSTRING:
+  This function allows the user to select a directory for output.
+  
+  Parameters
+  ----------
+  startin : str
+      Path of the starting directory.
+  
+  Returns
+  -------
+  str
+      It returns the selected directory upon success, otherwise an empty string.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          startin = "/home/user/"
+          dir = utils.SelectSaveDir(startin)
+          Print("selected dir: " + dir)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectSaveFile
+MODULE: meta.utils
+SIGNATURE: meta.utils.SelectSaveFile(filter: str) -> list[str]
+DOCSTRING:
+  This function opens file manager and lets the user select a file name to save.
+  
+  Parameters
+  ----------
+  filter : str, optional
+      Extension filter for files.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list containing the file name selected. On error or if ESCAPE is pressed the list length is 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          m = utils.SelectSaveFile()
+          # or
+          # filter = 'Text files (*.txt)'
+          # m = utils.SelectSaveFile(filter)
+          if len(m) > 0:
+              print(m[0])
+          else:
+              print("No file selected")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectSaveFileIn
+MODULE: meta.utils
+SIGNATURE: meta.utils.SelectSaveFileIn(init_dir: str, filter: str) -> list[str]
+DOCSTRING:
+  This function opens file manager and lets the user select a file name to save.
+  
+  Parameters
+  ----------
+  init_dir : str
+      Path of the starting directory, in which the file manager will open. An empty string ('') or a 0 can be passed to open file manager in the last accepted directory.
+  
+  filter : str, optional
+      Extension filter for files.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list containing the file name selected. On error or if ESCAPE was pressed the list length is 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          init_dir = "/home/user/"
+          filter = "Text files (*.txt)"
+          m = utils.SelectSaveFileIn(init_dir, filter)
+          if len(m) > 0:
+              print(m[0])
+          else:
+              print("No file selected")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PrintMonitorHtml
+MODULE: meta.utils
+SIGNATURE: meta.utils.PrintMonitorHtml(txt: str, r_int: int, g_int: int, b_int: int) -> int
+DOCSTRING:
+  This is an output function for script monitoring. It prints html code in monitor window with the addition of the three color arguments.
+  
+  Parameters
+  ----------
+  txt : str
+      The HTML code to print.
+  
+  r_int : int
+      Red color integer.
+  
+  g_int : int
+      Green color integer.
+  
+  b_int : int
+      Blue color integer.
+  
+  Returns
+  -------
+  int
+      The return value is always 1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          title = "Some title"
+          utils.OpenMonitor(title)
+          txt = "Lorem ipsum"
+          r_int = 255
+          g_int = 0
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+          txt = "dolor sit amet"
+          r_int = 0
+          g_int = 255
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+          txt = "<b>some text</b>"
+          r_int = 255
+          g_int = 0
+          b_int = 0
+          utils.PrintMonitorHtml(txt, r_int, g_int, b_int)
+          l = utils.LinesOfMonitor()
+          print("lines in monitor window:" + str(l))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MetaCommandList
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaCommandList(command_list: list[str]) -> int
+DOCSTRING:
+  This function executes a series of META commands.
+  
+  Parameters
+  ----------
+  command_list : list[str]
+      A list with the commands.
+  
+  Returns
+  -------
+  int
+      Upon success, the return value is 1. Upon failure, the return value is 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          utils.MetaCommandList(
+              ["read geom Nastran test1.nas", "read geom Nastran test2.nas"]
+          )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TogglebuttonStateOfToolbar
+MODULE: meta.utils
+SIGNATURE: meta.utils.TogglebuttonStateOfToolbar(toolbar_name: str, togglebutton_name: str) -> int
+DOCSTRING:
+  This function gets the state (pushed or not pushed) of a togglebutton of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  togglebutton_name : str
+      Name of the togglebutton.
+  
+  Returns
+  -------
+  int
+      Upon success an integer, 1 if checkbox is checked and 0 if it is not checked.
+      Upon failure, it returns -1.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          togglebutton_name = "Togglebutton 1"
+  
+          state = utils.TogglebuttonStateOfToolbar(toolbar_name, togglebutton_name)
+          if state == 1:
+              print("Pushed")
+          elif state == 0:
+              print("Not pushed")
+          elif state == -1:
+              print("Failure!")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ShowLog
+MODULE: meta.utils
+SIGNATURE: meta.utils.ShowLog()
+DOCSTRING:
+  (no docstring)
+
+----------------------------------------
+
+FUNCTION: TranslatorLogFile
+MODULE: meta.utils
+SIGNATURE: meta.utils.TranslatorLogFile()
+DOCSTRING:
+  (no docstring)
+
+----------------------------------------
+
+FUNCTION: MetaGetVariablesByName
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaGetVariablesByName(variable_name: str) -> list[list]
+DOCSTRING:
+  This function gets a list of META variables whose names match a string expression.
+  
+  Parameters
+  ----------
+  variable_name : str
+      A string search expression where wildcards can be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  list[list]
+      It returns a list with the META variables which match a specific name.
+      Each member of the list is another list with 2 members.
+      In position 0, internal lists contain a string referring to the variable name.
+      In position 1, internal lists contain a string referring to the variable value.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          variable_name = "myvar*"
+          variables = utils.MetaGetVariablesByName(variable_name)
+          for one_var in variables:
+              var_name = one_var[0]
+              var_value = one_var[1]
+              print(var_name)
+              print(var_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SaveMonitorToTxt
+MODULE: meta.utils
+SIGNATURE: meta.utils.SaveMonitorToTxt(filename: str) -> int
+DOCSTRING:
+  This function saves the contents of the monitor window in plain text format.
+  
+  Parameters
+  ----------
+  filename : str
+      The filename of the file to be saved.
+  
+  Returns
+  -------
+  int
+      The return value is 1 on success and 0 on failure.
+  
+  See Also
+  --------
+  meta.utils.SaveMonitor
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          title = "Some title"
+          utils.OpenMonitor(title)
+          txt = "Lorem ipsum"
+          r_int = 255
+          g_int = 0
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+          txt = "dolor sit amet"
+          r_int = 0
+          g_int = 255
+          b_int = 0
+          utils.PrintMonitor(txt, r_int, g_int, b_int)
+          lines = utils.LinesOfMonitor()
+          for i in range(lines):
+              txt = utils.ReadMonitor(i)
+              print("line:" + str(i) + ", text:" + txt)
+          utils.SaveMonitorToTxt("/home/user/file.txt")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetRenderingMaterials
+MODULE: meta.utils
+SIGNATURE: meta.utils.GetRenderingMaterials() -> list[str]
+DOCSTRING:
+  This function collects the rendering materials from all the available material databases.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list where each member of the list is a string referring to the name of the rendering material and the material database where it belongs.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # This is an example of getting all the available rendering materials
+      # and applying a different material on each part of the model.
+      # PYTHON script
+      import meta
+      from meta import utils
+      from meta import parts
+  
+  
+      def main():
+          utils.MetaCommand("options session controldraw disable")
+  
+          l_materials = utils.GetRenderingMaterials()
+          for mat in l_materials:
+              print(mat)
+          model_id = 0
+          window_name = "MetaPost"
+          all_parts = parts.VisibleParts(model_id, window_name)
+          j = 0
+          for p in all_parts:
+              if j >= len(l_materials):
+                  j = 0
+              utils.MetaCommand("render setmaterial pid " + l_materials[j] + " " + str(p.id))
+              j += 1
+          utils.MetaCommand("options session controldraw enable")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: RenderingMaterialOfPart
+MODULE: meta.utils
+DEPRECATED: Deprecated since version 20.1.0.Use meta.parts.Part.get_rendering_materials instead.
+SIGNATURE: meta.utils.RenderingMaterialOfPart(model_id: int, part_type: int, part_id: int, window_name: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.parts.Part.get_rendering_materials` instead.
+  
+  This function finds the rendering materials of a part of a model with a given id and type.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  part_type : int
+      Type of the part (META constant).
+  
+  part_id : int
+      Id of the part.
+  
+  window_name : str, optional
+      Name of the window of the part. If it is absent then this function will return the rendering material of the part for the first enabled window of the model of the part.
+  
+  Returns
+  -------
+  str
+      It returns a string with the name of the rendering material of the corresponding part of the  given model for the specified window.
+      Upon failure, an empty string is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.utils.SetRenderingMaterialOfPart
+  
+  Examples
+  --------
+  ::
+  
+      # This is an example of getting the rendering material of each part
+      # and writing to a csv file.
+      # PYTHON script
+      import os
+      import meta
+      from meta import parts
+      from meta import utils
+  
+  
+      def main():
+          model_id = 0
+          window_name = "MetaPost"
+          filter = "CSV files (*.csv)"
+          l_files = utils.SelectSaveFile(filter)
+          csv_file = ""
+          if len(l_files) > 0:
+              csv_file = l_files[0]
+          else:
+              print("No file selected")
+              return
+          all_parts = parts.Parts(model_id)
+  
+          with open(csv_file, "w") as f:
+              f.write("# Id, Rendering Material\n")
+              for p in all_parts:
+                  rendering_material = utils.RenderingMaterialOfPart(
+                      model_id, p.type, p.id, window_name
+                  )
+                  if rendering_material:
+                      line_str = str(p.id) + "," + rendering_material
+                      f.write(line_str + "\n")
+              f.close()
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetRenderingMaterialOfPart
+MODULE: meta.utils
+DEPRECATED: Deprecated since version 20.1.0.Use meta.parts.Part.set_rendering_material instead.
+SIGNATURE: meta.utils.SetRenderingMaterialOfPart(model_id: int, part_type: int, part_id: int, rendering_material: str, window_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.parts.Part.set_rendering_material` instead.
+  
+  This function sets the defined rendering materials on the part of the model with the given id and type.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  part_type : int
+      Type of the part (META constant).
+  
+  part_id : int
+      Id of the part.
+  
+  rendering_material : str
+      Name of rendering material
+  
+  window_name : str, optional
+      Name of the window of the model. If it is absent then this function will set the rendering material of the part of the model for the first enabled window.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.utils.RenderingMaterialOfPart
+  
+  Examples
+  --------
+  ::
+  
+      # This is an example of setting the rendering materials on parts
+      # by reading them from the csv file saved by the utils.RenderingMaterialOfPart
+      # python example.
+      # PYTHON script
+      import os
+      import meta
+      from meta import parts
+      from meta import utils
+  
+  
+      def main():
+          model_id = 0
+          window_name = "MetaPost"
+          flag = 0
+          filters = "CSV files (*.csv)"
+          l_files = utils.SelectOpenFile(flag, filters)
+          csv_file = ""
+          if len(l_files) > 0:
+              csv_file = l_files[0]
+          else:
+              print("No file selected")
+              return
+          dict_pid_vs_rendermat = dict()
+          with open(csv_file, "r") as f:
+              for line in f:
+                  line = line.rstrip()
+                  if line.startswith("#"):
+                      continue
+                  l_tokens = line.split(",")
+                  pid = int(l_tokens[0])
+                  rendering_mat = l_tokens[1]
+                  dict_pid_vs_rendermat[pid] = rendering_mat
+              f.close()
+          all_parts = parts.Parts(model_id)
+  
+          utils.MetaCommand("options session controldraw disable")
+  
+          for p in all_parts:
+              rendering_material = dict_pid_vs_rendermat[p.id]
+              if rendering_material:
+                  utils.SetRenderingMaterialOfPart(
+                      model_id, p.type, p.id, rendering_material, window_name
+                  )
+          utils.MetaCommand("options session controldraw enable")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetRenderingMaterialsOfMaterialDatabase
+MODULE: meta.utils
+SIGNATURE: meta.utils.GetRenderingMaterialsOfMaterialDatabase(database_name: str) -> list[str]
+DOCSTRING:
+  This function collects the rendering materials from the specified material database.
+  
+  Parameters
+  ----------
+  database_name : str
+      The name of the database.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list where each member of the list is a string referring to the name of the rendering material and the material database where it belongs.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          database_name = "Default Materials"
+          l_materials = utils.GetRenderingMaterialsOfMaterialDatabase(database_name)
+          for mat in l_materials:
+              print(mat)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Flc
+MODULE: meta.utils
+SIGNATURE: meta.utils.Flc(n: float, K: float, r0: float, r45: float, r90: float)
+DOCSTRING:
+  The function calculates the forming limit curve according to the M-K method.
+  
+  Parameters
+  ----------
+  n : float
+      Strain hardening exponent according to Hollomon's Hardening Law
+  
+  K : float
+      Strength coefficient according to Hollomon's Hardening Law
+  
+  r0 : float
+      Lankford planar anisotropy coefficients with angle 0 degrees from the rolling direction of the sheet metal respectively.
+  
+  r45 : float
+      Lankford planar anisotropy coefficients with angle 45 degrees from the rolling direction of the sheet metal respectively.
+  
+  r90 : float
+      Lankford planar anisotropy coefficients with angle 90 degrees from the rolling direction of the sheet metal respectively.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          n = 1.0
+          K = 2.0
+          r0 = 3.0
+          r45 = 4.0
+          r90 = 5.0
+          flc = utils.Flc(n, K, r0, r45, r90)
+          print(flc)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesListToDict
+MODULE: meta.utils
+SIGNATURE: meta.utils.AttributesListToDict(attributes: list) -> dict
+DOCSTRING:
+  This function constructs a dictionary from a given list attributes
+  
+  Parameters
+  ----------
+  attributes : list
+      List of attributes
+  
+  Returns
+  -------
+  dict
+      It returns a dictionary whose keys are the names of the attributes and values the corresponding values.
+      Upon failure, an empty dictionary is returned.
+  
+  Notes
+  -----
+  If attributes with the same name exists in the given list, then only the first one will be saved in the dictionary.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          res = all_resultsets[1]
+  
+          all_attributes = results.AttributesOfResultset(res)
+          dict = utils.AttributesListToDict(all_attributes)
+          for id, p in dict.items():
+              print(id + ": " + p)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MetaClearVariable
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaClearVariable(variable_name: str) -> int
+DOCSTRING:
+  This function deletes the variable with name variable_name.
+  
+  Parameters
+  ----------
+  variable_name : str
+      Variable name.
+  
+  Returns
+  -------
+  int
+      Return 1, if the variable existed, and deleted, zero otherwise.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          var_name = "var1"
+          utils.MetaSetVariable(var_name, "0.123")
+          variable_value = utils.MetaGetVariable("var1")
+          print("Variable value: ", variable_value)
+  
+          utils.MetaClearVariable(var_name)
+          variable_value = utils.MetaGetVariable(var_name)
+          print("Variable value, after delete: ", variable_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MetaClearVariablesByName
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaClearVariablesByName(variable_name: str) -> int
+DOCSTRING:
+  This function deletes the META variables whose names match a string expression.
+  
+  Parameters
+  ----------
+  variable_name : str
+      A string search expression where wildcards can be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  int
+      Returns the number of succesfully deleted META variables
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          var_1 = "var1"
+          var_2 = "var2"
+          utils.MetaSetVariable(var_1, "0.123")
+          utils.MetaSetVariable(var_2, "0.456")
+          value_1 = utils.MetaGetVariable(var_1)
+          value_2 = utils.MetaGetVariable(var_2)
+          print("Variable1 value: ", value_1)
+          print("Variable2 value: ", value_2)
+  
+          utils.MetaClearVariablesByName("var")
+          value_1 = utils.MetaGetVariable(var_1)
+          value_2 = utils.MetaGetVariable(var_2)
+          print("Deleted Variable1 value: ", value_1)
+          print("Deleted Variable2 value: ", value_2)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetMetaWorkspaceWidth
+MODULE: meta.utils
+SIGNATURE: meta.utils.GetMetaWorkspaceWidth() -> float
+DOCSTRING:
+  Returns
+  -------
+  float
+      Returns the width of the workspace in pixels.
+  
+  See Also
+  --------
+  meta.utils.GetMetaWorkspaceHeight
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          width = utils.GetMetaWorkspaceWidth()
+          height = utils.GetMetaWorkspaceHeight()
+          print("workspace width:\t" + str(width))
+          print("workspace height:\t" + str(height))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetMetaWorkspaceHeight
+MODULE: meta.utils
+SIGNATURE: meta.utils.GetMetaWorkspaceHeight() -> float
+DOCSTRING:
+  Returns
+  -------
+  float
+      Returns the height of the workspace in pixels.
+  
+  See Also
+  --------
+  meta.utils.GetMetaWorkspaceWidth
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          width = utils.GetMetaWorkspaceWidth()
+          height = utils.GetMetaWorkspaceHeight()
+          print("workspace width:\t" + str(width))
+          print("workspace height:\t" + str(height))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: get_models
+MODULE: meta.utils
+SIGNATURE: meta.utils.get_models(specifier: str, id: int, name: str, label: str) -> list[models.Model]
+DOCSTRING:
+  This function gets the models.
+  
+  Parameters
+  ----------
+  specifier : str, optional
+      The specifier of the method. Its possible values are:
+      - 'all' : gets all models.
+      - 'active' : gets active models.
+      The default value is 'all'.
+  
+  id : int, optional
+      Id of the model. If set, the method will return the model with id equal to the given id. This argument is used when the specifier is 'all'.
+  
+  name : str, optional
+      Name of the model. If set, the method will return the models that have name that matches the given pattern. This argument is used when the specifier is 'all'.
+  
+  label : str, optional
+      Label of the model. If set, the method will return the models that have label that matches the given pattern. This argument is used when the specifier is 'all'.
+  
+  Returns
+  -------
+  list[models.Model]
+      Upon success, it returns a list where each member of the list is an object of class Model referring to one specific model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          models = utils.get_models()
+          print(models)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: get_pages
+MODULE: meta.utils
+SIGNATURE: meta.utils.get_pages(specifier: str, id: int, name: str) -> list[pages.Page]
+DOCSTRING:
+  This function gets pages.
+  
+  Parameters
+  ----------
+  specifier : str, optional
+      The specifier of the method. Its possible values are:
+      - 'all' : gets all pages.
+      - 'active' : gets active page.
+      The default value is 'all'.
+  
+  id : int, optional
+      Id of the page. If set, the method will return the page with id equal to the given id. This argument is used when the specifier is 'all'.
+  
+  name : str, optional
+      Name of the page. If set, the method will return the pages that have name that matches the given pattern. This argument is used when the specifier is 'all'.
+  
+  Returns
+  -------
+  list[pages.Page]
+      It returns a list where each member of the list is an object of class Page referring to the corresponding page.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          pgs = utils.get_pages()
+          print(pgs)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: get_overlay_runs
+MODULE: meta.utils
+SIGNATURE: meta.utils.get_overlay_runs(overlay_type: str, id: int, name: str, filename: str) -> list[overlay.Overlay]
+DOCSTRING:
+  This function gets the overlay runs.
+  
+  Parameters
+  ----------
+  overlay_type : str
+      Overlay run type. Possible string values:
+      - 'session'
+      - 'project'.
+  
+  id : int
+      Id of the overlay run.
+  
+  name : str
+      Search string for the name of the overlay run. Wildcards can also be used ("*", "?", "[...]").
+  
+  filename : str
+      Search string for the filename of the overlay run. Wildcards can also be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  list[overlay.Overlay]
+      It returns a list where each member of the list is an object of class Overlay referring to one specific overlay run.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          ovrs = utils.get_overlay_runs()
+          print(ovrs)
+  
+          # Or
+          overlay_type = "session"
+          id = 1
+          name = "*Test"
+          filname = "*Test_Filename"
+          ovrs = utils.get_overlay_runs(overlay_type, id, name, filname)
+          print(ovrs)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: get_planes
+MODULE: meta.utils
+SIGNATURE: meta.utils.get_planes(specifier: str, window: windows.Window) -> list[planes.Plane]
+DOCSTRING:
+  This functions gets the cut planes.
+  
+  Parameters
+  ----------
+  specifier : str
+      The specifier of the method. Its possible values are:
+      - 'all' : get all the planes.
+      - 'visible' : get the visible planes for the window specified in the window argument.
+      - identified' : get the identified planes.
+  
+  window : windows.Window
+      An object of class Window. It is required when the specifier is 'visible'.
+  
+  Returns
+  -------
+  list[planes.Plane]
+      It returns a list where each member of the list is an object of class Plane referring to one specific plane.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+      from meta import windows
+  
+  
+      def main():
+          specifier = "all"
+          planes = utils.get_planes(specifier)
+          print(planes)
+          # OR
+          specifier = "visible"
+          window = windows.Window("MetaPost", page_id=0)
+          planes = utils.get_planes(specifier, window)
+          print(planes)
+          # OR
+          specifier = "identified"
+          window = windows.Window("MetaPost", page_id=0)
+          planes = utils.get_planes(specifier, window)
+          print(planes)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: get_plot_models
+MODULE: meta.utils
+SIGNATURE: meta.utils.get_plot_models(id: int, deck: str) -> list[plot2d.PlotModel]
+DOCSTRING:
+  Returns the PlotModel objects given the ID of the the plot model
+  
+  Parameters
+  ----------
+  id : int
+      Id of the plot model.
+  
+  deck : str
+      Deck of the plot model.
+  
+  Returns
+  -------
+  list[plot2d.PlotModel]
+      It returns a list where each member of the list is an object of class PlotModel referring to one specific plot_model. 
+      Upon failure, an empty list is returned
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          plot_models = utils.get_plot_models()
+          print(plot_models)
+          # OR
+          id = 0
+          deck = "NASTRAN"
+          plot_models = utils.get_plot_models(id, deck)
+          print(plot_models)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: pick_models
+MODULE: meta.utils
+SIGNATURE: meta.utils.pick_models(message: str) -> list[models.Model]
+DOCSTRING:
+  This function allows the user to pick models from the existing windows. The execution of the script will stop and it will restart when the middle mouse button or Enter is pressed.
+  
+  Parameters
+  ----------
+  message : str
+      Message displayed to the user which will be shown to the user when the function is called.
+  
+  Returns
+  -------
+  list[models.Model]
+      It returns a list with Model objects where each member of the list is refers to one specific picked model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          message = "Select Models and press Enter when you are ready"
+          models = utils.pick_models(message)
+          print(models)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: pick_models_from_list
+MODULE: meta.utils
+SIGNATURE: meta.utils.pick_models_from_list(message: str) -> list
+DOCSTRING:
+  This function allows the user to select models from a given list. The execution of the script will stop and it will restart after the selection of the models from the list.
+  
+  Parameters
+  ----------
+  message : str
+      Message displayed to the user.
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is an object of class Model referring to one specific selected model.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          message = "Select Models and press Enter when you are ready"
+          models = utils.pick_models_from_list(message)
+          print(models)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: show_planes
+MODULE: meta.utils
+SIGNATURE: meta.utils.show_planes(planes: list[planes.Plane], window: windows.Window) -> bool
+DOCSTRING:
+  This function allows the user to show some specific planes.
+  
+  Parameters
+  ----------
+  planes : list[planes.Plane]
+      A list with objects of class Plane.
+  
+  window : windows.Window
+      An object of class window.
+  
+  Returns
+  -------
+  bool
+      Upon success, it returns True.
+      Upon failure, it returns False.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+      from meta import windows
+  
+  
+      def main():
+          specifier = "all"
+          planes = utils.get_planes(specifier)
+          win = windows.Window("MetaPost", 0)
+          ret = utils.show_planes(planes, win)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: hide_planes
+MODULE: meta.utils
+SIGNATURE: meta.utils.hide_planes(planes: list[planes.Plane], window: windows.Window) -> bool
+DOCSTRING:
+  This function allows the user to hide some planes.
+  
+  Parameters
+  ----------
+  planes : list[planes.Plane]
+      A list of objects of class Plane.
+  
+  window : windows.Window
+      An object of class Window.
+  
+  Returns
+  -------
+  bool
+      Upon success, it returns True.
+      Upon failure, it returns False.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+      from meta import windows
+  
+  
+      def main():
+          specifier = "all"
+          planes = utils.get_planes(specifier)
+          win = windows.Window("MetaPost", 0)
+          ret = utils.hide_planes(planes, win)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: identify_planes
+MODULE: meta.utils
+SIGNATURE: meta.utils.identify_planes(planes: list[planes.Plane], window: planes.Plane) -> bool
+DOCSTRING:
+  This function allows the user to identify some planes.
+  
+  Parameters
+  ----------
+  planes : list[planes.Plane]
+      A list of objects of class Plane.
+  
+  window : planes.Plane
+      An object of class Plane.
+  
+  Returns
+  -------
+  bool
+      Upon success, it returns True.
+      Upon failure, it returns False.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+      from meta import windows
+  
+  
+      def main():
+          specifier = "all"
+          planes = utils.get_planes(specifier)
+          win = windows.Window("MetaPost", 0)
+          ret = utils.identify_planes(planes, win)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: reset_identify_planes
+MODULE: meta.utils
+SIGNATURE: meta.utils.reset_identify_planes(planes: list[planes.Plane], window: windows.Window) -> bool
+DOCSTRING:
+  This function allows the user to reset the identification of planes.
+  
+  Parameters
+  ----------
+  planes : list[planes.Plane]
+      A list with objects of class Plane.
+  
+  window : windows.Window
+      An object of class Window.
+  
+  Returns
+  -------
+  bool
+      Upon success, it returns True.
+      Upon failure, it returns False.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+      from meta import windows
+  
+  
+      def main():
+          specifier = "all"
+          planes = utils.get_planes(specifier)
+          win = windows.Window("MetaPost", 0)
+          ok = utils.reset_identify_planes(planes, win)
+          print(ok)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: set_planes_settings
+MODULE: meta.utils
+SIGNATURE: meta.utils.set_planes_settings(settings: dict) -> bool
+DOCSTRING:
+  This function control settings of all planes.
+  
+  Parameters
+  ----------
+  settings : dict
+      Settings (key-value) of the planes.
+      A dictionary with string keys and string values:
+      - 'toggleopts_auto': Auto Cut Geometry (0,1)
+      - 'toggleopts_clip': Clip Geometry by Plane (0,1)
+      - 'toggleopts_deform': Section deform (0,1)
+      - 'toggleopts_hidden': Hidden section visibility (0,1)
+      - 'toggleopts_pcolor': Get Part color (0,1)  
+      - 'toggleopts_pcolor': Project Section on Plane (0,1)
+      - 'toggleopts_sectionclip': Clip Geometry by Section (0,1)
+      - 'toggleopts_showmesh': Show Mesh (0,1)
+      - 'toggleopts_slice': Cut Slice (0,1)
+      - 'toggleopts_stateauto': Auto Cut Geometry when load state changes (0,1)
+      - 'toggleopts_thickshells': Follow thich shells style (0,1)
+      - 'toggleopts_transp': Plane Transparency (0,1)
+      - 'toggleopts_undeformcut': Cut undeformed Geometry (0,1)
+      - 'options_cut': Cut ('all', 'autovisible', 'visible')
+      - 'options_draw2plane': Section drawn in Plane (0,1)
+      - 'options_follow': Plane Follow Node ('normal', 'orig', 'perpendicular')
+      - 'options_fringe': Fringe Options ('enable', 'disable', 'lock', 'unlock', 'cplot', 'nplot', 'vplot', 'elemdata', 'onelement', 'onnode', 'unode', 'vnode', 'wnode', 'dnode', 'follow')
+      - 'options_grid': Grid Options (0,1)
+      - 'options_lock2vis': Cut only visible Parts (0,1)
+      - 'options_offset': Plane Offset Value (float value)
+      - 'options_onlysection': Draw only Section (0,1)
+      - 'options_scale': Plane Scale factor (float value)
+      - 'options_sectioncolor': Set section color ('auto', 'plane', 'pid', 'mid', 'model')
+      - 'options_slicewidth': Plane Slice Width (float value)
+      - 'options_solid': Solid Cut Options ('both', 'inside', 'skin')
+      - 'options_style': Plane Line Style ('cont', 'dashdotline', 'dashline', 'dotline')
+      - 'options_undeformstyle': Plane Undeform Line Style ('cont', 'dashdotline', 'dashline', 'dotline')
+      - 'options_width': Plane Line Width (float value)
+  
+  Returns
+  -------
+  bool
+      Upon success, it returns True.
+      Upon failure, it returns False.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          settings = {"toggleopts_auto": "enable"}
+          ret = utils.set_planes_settings(settings)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetLinearCombineAddedModes
+MODULE: meta.utils
+SIGNATURE: meta.utils.GetLinearCombineAddedModes(filename: str) -> list[dict]
+DOCSTRING:
+  Given a specific filename, returns the states that have been added for a linear combination, which belong to that file.
+  
+  Parameters
+  ----------
+  filename : str
+      The name of the file that contains the added states.
+  
+  Returns
+  -------
+  list[dict]
+      Upon success returns a list of dictionaries, one for each state.
+      Upon failure returns an empty list.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+      from meta import models
+  
+  
+      def main():
+          m = models.Model(0)
+          filename = m.name
+          # Get one dictionary for each state
+          states = utils.GetLinearCombineAddedModes(filename)
+  
+          for state in states:
+              # For each state, these are it's possible keys ( only the ones found will be in the dictionary )
+              possibleKeys = {
+                  "Name",
+                  "Subcase",
+                  "State",
+                  "Step",
+                  "Loadstep",
+                  "Time",
+                  "Frequency",
+                  "Mode",
+                  "Eigenvalue",
+                  "Cycle",
+              }
+  
+              for possibleKey in possibleKeys:
+                  # If the key is found, print it
+                  value = state.get(possibleKey)
+                  if value:
+                      print(possibleKey + " : " + str(value) + "\n")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SnapShotWindow
+MODULE: meta.utils
+SIGNATURE: meta.utils.SnapShotWindow(filename: str, image_format: str, window_title: str) -> int
+DOCSTRING:
+  The SnapShotWindow function takes a snapshot of a window and saves it as an image in the specified file.
+  
+  Parameters
+  ----------
+  filename : str
+      The filename to be saved. This argument is mandatory.
+      If filename exists, it will be overwritten.
+  
+  image_format : str, optional
+      One of: ['POSTSCRIPT' | 'RGB' | 'TIFF' | 'JPEG' | 'PNG' | 'BMP'].
+  
+  window_title : str, optional
+      The window title.
+  
+  Returns
+  -------
+  int
+      Returns 1 on success and 0 on failure.
+  
+  Notes
+  -----
+  This function does not work in batch mode.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from os.path import expanduser
+      from meta import guitk
+      from meta import utils
+  
+  
+      def main():
+          home = expanduser("~")
+          filename = os.path.join(home, "window.png")
+          image_format = "PNG"
+          window_title = "Example toolbar"
+          ret = utils.SnapShotWindow(filename, image_format, window_title)
+          if ret == 1:
+              print("Image saved in " + filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SliderMinValueOfToolbar
+MODULE: meta.utils
+DEPRECATED: Deprecated.Use meta.toolbars.SliderGetMinValue instead.
+SIGNATURE: meta.utils.SliderMinValueOfToolbar(toolbar_name: str, slider_name: str) -> int
+DOCSTRING:
+  .. deprecated::
+      Use :py:func:`meta.toolbars.SliderGetMinValue` instead.
+  
+  This function gets the min value of a slider of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  slider_name : str
+      Name of the slider.
+  
+  Returns
+  -------
+  int
+      It returns an integer, referring to the min value of the slider of the given 
+      toolbar. Upon failure, it returns -1.
+  
+  Notes
+  -----
+  This function has been replaced by the toolbars.SliderGetMinValue function.
+  
+  See Also
+  --------
+  meta.toolbars.SliderGetMinValue
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          slider_name = "Slider 1"
+  
+          slider_value = utils.SliderMinValueOfToolbar(toolbar_name, slider_name)
+          print(slider_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SliderMaxValueOfToolbar
+MODULE: meta.utils
+DEPRECATED: Deprecated.Use meta.toolbars.SliderGetMaxValue instead.
+SIGNATURE: meta.utils.SliderMaxValueOfToolbar(toolbar_name: str, slider_name: str) -> int
+DOCSTRING:
+  .. deprecated::
+      Use :py:func:`meta.toolbars.SliderGetMaxValue` instead.
+  
+  This function gets the max value of a slider of a given toolbar.
+  
+  Parameters
+  ----------
+  toolbar_name : str
+      Name of the toolbar.
+  
+  slider_name : str
+      Name of the slider.
+  
+  Returns
+  -------
+  int
+      It returns an integer, referring to the max value of the slider of the given 
+      toolbar. Upon failure, it returns -1.
+  
+  Notes
+  -----
+  This function has been replaced by the toolbars.SliderGetMaxValue function.
+  
+  See Also
+  --------
+  meta.toolbars.SliderGetMaxValue
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          toolbar_name = "Toolbar 1"
+          slider_name = "Slider 1"
+  
+          slider_value = utils.SliderMaxValueOfToolbar(toolbar_name, slider_name)
+          print(slider_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetControlDrawStatus
+MODULE: meta.utils
+SIGNATURE: meta.utils.GetControlDrawStatus() -> bool
+DOCSTRING:
+  Returns whether drawing in META is enabled or not. The value can be set using utils.SetControlDrawStatus(status).
+  
+  Returns
+  -------
+  bool
+      True if controldraw is enabled and False otherwise.
+  
+  See Also
+  --------
+  meta.utils.SetControlDrawStatus
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          controldraw = utils.GetControlDrawStatus()
+          print("controldraw status: " + str(controldraw))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetControlDrawStatus
+MODULE: meta.utils
+SIGNATURE: meta.utils.SetControlDrawStatus(status: bool) -> bool
+DOCSTRING:
+  Sets the drawing status in META. It has the same functionality as session command "options session controldraw enable/disable". The value can be read back using utils.GetControlDrawStatus().
+  
+  Parameters
+  ----------
+  status : bool
+      True will enable controldraw and False will disable it.
+  
+  Returns
+  -------
+  bool
+      The new controldraw status. If the operation succeeded this will be the same as the provided argument. The value is True if controldraw is enabled and False otherwise.
+  
+  See Also
+  --------
+  meta.utils.GetControlDrawStatus
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          status = False
+          controldraw = utils.SetControlDrawStatus(status)
+          print("controldraw status: " + str(controldraw))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SaveGUISettings
+MODULE: meta.utils
+SIGNATURE: meta.utils.SaveGUISettings(filename: str) -> None
+DOCSTRING:
+  This function saves the current GUI settings to a file.
+  
+  Parameters
+  ----------
+  filename : str, optional
+      The filename of the XML were the settings will be saved.
+  
+  Returns
+  -------
+  None
+      The function returns None.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          filename = "/home/MyGUI.xml"
+          utils.SaveGUISettings(filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsMetaDatabaseFile
+MODULE: meta.utils
+SIGNATURE: meta.utils.IsMetaDatabaseFile(filename: str) -> bool
+DOCSTRING:
+  Checks if given file is a META database.
+  
+  Parameters
+  ----------
+  filename : str
+      A filepath.
+  
+  Returns
+  -------
+  bool
+      Returns True if the given file is a META database, and False otherwise.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          filename = "home/geom.metadb"
+          ret = utils.IsMetaDatabaseFile(filename)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsProjectFile
+MODULE: meta.utils
+SIGNATURE: meta.utils.IsProjectFile(filename: str) -> bool
+DOCSTRING:
+  Checks if given file is a META project.
+  
+  Parameters
+  ----------
+  filename : str
+      A filepath.
+  
+  Returns
+  -------
+  bool
+      Returns True if the given file is a META project file, and False otherwise.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          filename = "home/a_project.metadb"
+          ret = utils.IsProjectFile(filename)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MetaCommandMulti
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaCommandMulti(commands: str) -> None
+DOCSTRING:
+  This function executes multiple meta commands in a Multi Line string.
+  
+  Parameters
+  ----------
+  commands : str
+      A Multi Line string that contains a command in each line.
+  
+  Returns
+  -------
+  None
+      This function returns None.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          commands = read geom Nastran test.nas
+      	read onlyfun Nastran test.op2 all Stresses,MajorPrincipal,MaxofTopBottom
+      	0:options state variable "serial=1"
+      	grstyle scalarfringe enable
+          utils.MetaCommandMulti(commands)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MetaCommandMultiOnlyWriteToSession
+MODULE: meta.utils
+SIGNATURE: meta.utils.MetaCommandMultiOnlyWriteToSession(commands: str) -> None
+DOCSTRING:
+  This function writes the meta commands in the session file without executing the commands.
+  
+  Parameters
+  ----------
+  commands : str
+      A Multi Line string that contains a command in each line.
+  
+  Returns
+  -------
+  None
+      This function returns None.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          commands = read geom Nastran test.nas
+      	read onlyfun Nastran test.op2 all Stresses,MajorPrincipal,MaxofTopBottom
+      	0:options state variable "serial=1"
+      	grstyle scalarfringe enable
+          utils.MetaCommandMultiOnlyWriteToSession(commands)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SelectOpenDirectories
+MODULE: meta.utils
+SIGNATURE: meta.utils.SelectOpenDirectories(path: str) -> list[str]
+DOCSTRING:
+  This function allows the user to select directories for input.
+  
+  Parameters
+  ----------
+  path : str
+      Path of the starting directory.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list with the selected directories upon success, otherwise an empty list.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          path = "/home/user/"
+          dirs = utils.SelectOpenDirectories(path)
+          print(dirs)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PushScriptProgressToPeer
+MODULE: meta.utils
+SIGNATURE: meta.utils.PushScriptProgressToPeer(progress_percentage: int, summary: str, details: str, current_step: int, total_steps: int) -> None
+DOCSTRING:
+  Sends a Script Progress update to the remote peer that requested a remote script execution
+  
+  Parameters
+  ----------
+  progress_percentage : int
+      The overall progress percentage. Expected value in range [0,100]
+  
+  summary : str
+      Brief summary of Script Progress update
+  
+  details : str, optional
+      More details regarding the current execution
+  
+  current_step : int, optional
+      Indicates the current execution stage of the running script
+  
+  total_steps : int, optional
+      Indicates the total number of execution stages of the running script
+  
+  Returns
+  -------
+  None
+  
+  Notes
+  -----
+  Calling this function has no effect when the running script is not remotely executed from a connected peer
+
+----------------------------------------
+
+FUNCTION: GetProcessSystemMetrics
+MODULE: meta.utils
+SIGNATURE: meta.utils.GetProcessSystemMetrics(measurement_type: str, measurement_units: str='MB', memory_heap_measurement: bool=False) -> dict
+DOCSTRING:
+  Returns metrics (memory) about the process and system.
+  
+  Parameters
+  ----------
+  measurement_type : str
+      Specify the measurement type.
+      Supported values: "memory"
+  
+  measurement_units : str, optional
+      Specify the measurement units for memory measurements.
+      Supported values: "bytes", "KB", "MB", "GB".
+  
+  memory_heap_measurement : bool, optional
+      Set to True in order to enable measurement of the heap memory usage. Might add delay when called too frequently.
+  
+  Returns
+  -------
+  dict
+      Returns a dict with the required measurements. On failure an empty dict is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          dict_metrics = utils.GetProcessSystemMetrics("memory")
+          # or dict_metrics = utils.GetProcessSystemMetrics("memory", "KB")
+          # or dict_metrics = utils.GetProcessSystemMetrics("memory", "bytes", True)
+          for item in dict_metrics.items():
+              print(item)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: select_planes
+MODULE: meta.utils
+SIGNATURE: meta.utils.select_planes() -> list[planes.Plane]
+DOCSTRING:
+  This function allows the user to select planes from a given list. The execution of the script will stop and it will restart after the selection of the planes from the list.
+  
+  Returns
+  -------
+  list[planes.Plane]
+      It returns a list where each member of the list is an object of class Plane referring to one specific selected plane.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          sel_planes = utils.select_planes()
+          print(sel_planes)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ScanGeometryFile
+MODULE: meta.utils
+SIGNATURE: meta.utils.ScanGeometryFile(filename: str, deck: str) -> dict
+DOCSTRING:
+  This functions scans the geometry file and returns the contents.
+  
+  Parameters
+  ----------
+  filename : str
+      Name of the file.
+  
+  deck : str
+      Deck name of the model (e.g. 'AUTO', 'NASTRAN', 'DYNA', 'ABAQUS', 'PAMCRASH', 'ANSYS', 'RADIOSS', etc.). The names can be found in betameta_structs.META_KEYWORDS
+  
+  Returns
+  -------
+  dict
+      Returns a dictionary with the contents of the file. The dictionary has as keys the types of the contents (e.g. 'PShells, PSolids, PLines, Groups, Ansa Comments, Includes, FATXML), and value a list of all entities of that type.
+  
+  See Also
+  --------
+  meta.models.LoadModel
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON
+      import pprint
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          filename = "input.key"
+          deck = "dyna"
+  
+          contents = utils.ScanGeometryFile(filename, deck)
+          pprint.pprint(contents)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ScanProject
+MODULE: meta.utils
+SIGNATURE: meta.utils.ScanProject(filename: str) -> dict
+DOCSTRING:
+  This functions scans a project or a metadb file and returns the contents.
+  
+  Parameters
+  ----------
+  filename : str
+      Name of the file.
+  
+  Returns
+  -------
+  dict
+      Returns a dictionary with the contents of the file. The dictionary structure is explained below.
+      If the file contains Models, they will be under the 'Models' key in a dictionary. In that dictionary the key, will be the Model, and the data its contents. The contents will be a dictionary, with the contents of that model. The key will be the type (e.g. PShells, PSolids, Deformations, Scalars, Vectors) and the data will be a list of the contents of that type.
+      The same applies for the Pages. Each page would have a dictionary as data that can have the key: 'Windows'. These data is a dictionary that have as key the Window, and as data a dictionary, that can have the following keys: 'Annotations', 'Isofunctions', 'Curves' and data a list of those entities.
+      The initial dictionary can have as key 'Cut Planes' as well. Its data is a list of the cut planes.
+  
+  See Also
+  --------
+  meta.utils.ReadProject
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON
+      import pprint
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          filename = "my_project.metadb"
+  
+          contents = utils.ScanProject(filename)
+          pprint.pprint(contents)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReadProject
+MODULE: meta.utils
+SIGNATURE: meta.utils.ReadProject(filename: str, contents: dict) -> None
+DOCSTRING:
+  This functions reads the scanned contents of a project file or metadb.
+  
+  Parameters
+  ----------
+  filename : str
+      Name of the file.
+  
+  contents : dict, optional
+      A dictionary of the contents of the file that are going to be read. The format of the dictionary should be the same as the returned dictionary of the utils.ScanProject. If absent, the whole file will be read.
+  
+  Returns
+  -------
+  None
+      Returns None.
+  
+  See Also
+  --------
+  meta.utils.ScanProject
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON
+      import pprint
+      import meta
+      from meta import utils
+  
+  
+      def main():
+          filename = "my.metadb"
+          contents = utils.ScanProject(filename)
+          pprint.pprint(contents)
+          # remove entries from contents to exclude them from reading
+          utils.ReadProject(filename, contents)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

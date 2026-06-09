@@ -1,0 +1,1807 @@
+MODULE: meta.isofunctions
+========================================================================
+
+FUNCTION: AreaOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_area instead.
+SIGNATURE: meta.isofunctions.AreaOfIsofunction(window_name: str, model_id: int, iso_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_area` instead.
+  
+  This function calculates the area of a closed upper or closed lower isofunction of a given model for a specific window. The area is calculated for the current resultset of the model in the given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  model_id : int
+      Id of the model.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  Returns
+  -------
+  float
+      Upon success, it returns as a float the area of the closed isofunction.
+      Else, an invalid value of -1000 is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          model_id = 0
+          iso_name = "closed_upper"
+  
+          area = isofunctions.AreaOfIsofunction(window_name, model_id, iso_name)
+          print(area)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ChangeValueOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.set_value instead.
+SIGNATURE: meta.isofunctions.ChangeValueOfIsofunction(window_name: str, iso_name: str, new_value: float) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.set_value` instead.
+  
+  This function changes the value of an isofunction of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  new_value : float
+      New value of the isofunction.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "isofun1"
+          new_value = 2.6
+  
+          ret = isofunctions.ChangeValueOfIsofunction(window_name, iso_name, new_value)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewIsofunctionsEnd
+MODULE: meta.isofunctions
+SIGNATURE: meta.isofunctions.CollectNewIsofunctionsEnd() -> list[IsoFunction]
+DOCSTRING:
+  This function ends recording the creation of new isofunctions. This function should be preceded by a corresponding call to script function isofunctions.CollectNewIsofunctionsStart().
+  
+  Returns
+  -------
+  list[IsoFunction]
+      It returns a list where each member of the list is an object of class Isofunction referring to one specific newly created isofunction.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import utils
+  
+  
+      def main():
+          isofunctions.CollectNewIsofunctionsStart()
+  
+          # create new isofunctions
+          utils.MetaCommand('isofun new window "MetaPost" function "fun0.25" 0.25')
+          utils.MetaCommand('isofun new window "MetaPost" function "fun0.31" 0.31')
+  
+          new_isofunctions = isofunctions.CollectNewIsofunctionsEnd()
+          for iso in new_isofunctions:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewIsofunctionsStart
+MODULE: meta.isofunctions
+SIGNATURE: meta.isofunctions.CollectNewIsofunctionsStart() -> int
+DOCSTRING:
+  This function starts recording the creation of new isofunctions. This function should be followed by a corresponding call to script function isofunctions.CollectNewIsofunctionsEnd().
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import utils
+  
+  
+      def main():
+          isofunctions.CollectNewIsofunctionsStart()
+  
+          # create new isofunctions
+          utils.MetaCommand('isofun new window "MetaPost" function "fun0.25" 0.25')
+          utils.MetaCommand('isofun new window "MetaPost" function "fun0.31" 0.31')
+  
+          new_isofunctions = isofunctions.CollectNewIsofunctionsEnd()
+          for iso in new_isofunctions:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateClosedLowerIsofunction
+MODULE: meta.isofunctions
+SIGNATURE: meta.isofunctions.CreateClosedLowerIsofunction(window_name: str, iso_name: str, iso_type: str, iso_value: float) -> IsoFunction
+DOCSTRING:
+  This function creates a closed lower isofunction on an existing window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_name : str
+      Name of the new isofunction.
+  
+  iso_type : str
+      Type of the isofunction. Possible values are:
+      - 'function' : Function
+      - 'xdeform' : X Deformation
+      - 'ydeform' : Y Deformation
+      - 'zdeform' : Z Deformation
+      - 'tdeform' : Total Deformation.
+  
+  iso_value : float
+      Value of the isofunction.
+  
+  Returns
+  -------
+  IsoFunction
+      Upon success, it returns an object of class Isofunction referring to the newly created isofunction.
+      Else, None is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If there is an isofunction with the given name then this function will fail.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "closed_lower"
+          iso_type = "function"
+          iso_value = 0.22
+  
+          iso = isofunctions.CreateClosedLowerIsofunction(
+              window_name, iso_name, iso_type, iso_value
+          )
+          if iso:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateClosedUpperIsofunction
+MODULE: meta.isofunctions
+SIGNATURE: meta.isofunctions.CreateClosedUpperIsofunction(window_name: str, iso_name: str, iso_type: str, iso_value: float) -> IsoFunction
+DOCSTRING:
+  This function creates a closed upper isofunction.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_name : str
+      Name of the new isofunction.
+  
+  iso_type : str
+      Type of the isofunction. Possible values are:
+      - 'function' : Function
+      - 'xdeform' : X Deformation
+      - 'ydeform' : Y Deformation
+      - 'zdeform' : Z Deformation
+      - 'tdeform' : Total Deformation.
+  
+  iso_value : float
+      Value of the new isofunction.
+  
+  Returns
+  -------
+  IsoFunction
+      Upon success, it returns an object of class Isofunction referring to the newly created isofunction.
+      Else, None is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If there is an isofunction with the given name then this function will fail.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "closed_upper"
+          iso_type = "function"
+          iso_value = 0.32
+  
+          iso = isofunctions.CreateClosedUpperIsofunction(
+              window_name, iso_name, iso_type, iso_value
+          )
+          if iso:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateDefaultIsofunction
+MODULE: meta.isofunctions
+SIGNATURE: meta.isofunctions.CreateDefaultIsofunction(window_name: str, iso_name: str, iso_type: str, iso_value: float) -> IsoFunction
+DOCSTRING:
+  This function creates a default isofunction on an existing window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_name : str
+      Name of the new isofunction.
+  
+  iso_type : str
+      Type of the isofunction. Possible values are:
+      - 'function' : Function
+      - 'xdeform' : X Deformation
+      - 'ydeform' : Y Deformation
+      - 'zdeform' : Z Deformation
+      - 'tdeform' : Total Deformation.
+  
+  iso_value : float
+      Value of the new isofunction.
+  
+  Returns
+  -------
+  IsoFunction
+      Upon success, it returns an object of class Isofunction referring to the newly created isofunction.
+      Else, None is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  If there is an isofunction with the given name then this function will fail.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "new_isofun"
+          iso_type = "function"
+          iso_value = 5.4
+  
+          iso = isofunctions.CreateDefaultIsofunction(
+              window_name, iso_name, iso_type, iso_value
+          )
+          if iso:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.delete instead.
+SIGNATURE: meta.isofunctions.DeleteIsofunction(window_name: str, iso_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.delete` instead.
+  
+  This function deletes the isofunction of a window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "dnode0.05"
+  
+          ret = isofunctions.DeleteIsofunction(window_name, iso_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HideIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.hide instead.
+SIGNATURE: meta.isofunctions.HideIsofunction(window_name: str, iso_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.hide` instead.
+  
+  This function hides the isofunction of a window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "dnode0.23"
+  
+          ret = isofunctions.HideIsofunction(window_name, iso_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsIsofunction
+MODULE: meta.isofunctions
+SIGNATURE: meta.isofunctions.IsIsofunction(isofunction: Any) -> bool
+DOCSTRING:
+  This function checks whether an object is of class Isofunction.
+  
+  Parameters
+  ----------
+  isofunction : Any
+      Any given object.
+  
+  Returns
+  -------
+  bool
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import utils
+      from meta import models
+  
+  
+      def main():
+          models.CollectNewEntitiesStart()
+          # create new entities
+          utils.MetaCommand('isofun new window "MetaPost" function "fun0.25" 0.25')
+          utils.MetaCommand('isofun new window "MetaPost" function "fun0.31" 0.31')
+  
+          all_entities = models.CollectNewEntitiesEnd()
+          for ent in all_entities:
+              if isofunctions.IsIsofunction(ent):
+                  iso = ent
+                  print("This is an object of class Isofunction")
+                  print(
+                      iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Isofunctions
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_isofunctions instead.
+SIGNATURE: meta.isofunctions.Isofunctions() -> list[IsoFunction]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_isofunctions` instead.
+  
+  This function collects all isofunctions of all windows.
+  
+  Returns
+  -------
+  list[IsoFunction]
+      It returns a list where each member of the list is an object of class Isofunction referring to one specific isofunction of an existing window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          all_isos = isofunctions.Isofunctions()
+          for iso in all_isos:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsofunctionsByName
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_isofunctions instead.
+SIGNATURE: meta.isofunctions.IsofunctionsByName(window_name: str, iso_name: str) -> list[IsoFunction]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_isofunctions` instead.
+  
+  This function finds isofunctions of a window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_name : str
+      Argument "iso_name" is a string expression representing the name of the isofunction, where wildcards can be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  list[IsoFunction]
+      It returns a list where each member of the list is an object of class Isofunction referring to one specific isofunction of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "fun*"
+          name_isos = isofunctions.IsofunctionsByName(window_name, iso_name)
+          for iso in name_isos:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsofunctionsListToDict
+MODULE: meta.isofunctions
+SIGNATURE: meta.isofunctions.IsofunctionsListToDict(list_isos: list[IsoFunction]) -> dict
+DOCSTRING:
+  This function constructs a dictionary from a given list with objects of class Isofunction. Key of the dictionary is the isofunction name and value is the corresponding object of type isofunction.
+  
+  Parameters
+  ----------
+  list_isos : list[IsoFunction]
+      List with objects of class Isofunction.
+  
+  Returns
+  -------
+  dict
+      It returns a dictionary whose key is the name of the isofunction and value the corresponding isofunction object.
+      Upon failure, an empty dictionary is returned.
+  
+  Notes
+  -----
+  If isofunctions with the same name exist in the given list, then only the first isofunction will be saved in the dictionary.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          all_isos = isofunctions.IsofunctionsOfWindow(window_name)
+  
+          map_isos = isofunctions.IsofunctionsListToDict(all_isos)
+          for iso_name, iso in map_isos.items():
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsofunctionsOfOverlayRun
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.overlay.Overlay.get_isofunctions instead.
+SIGNATURE: meta.isofunctions.IsofunctionsOfOverlayRun(overlay_run_type: str, overlay_run_id: int) -> list[IsoFunction]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.overlay.Overlay.get_isofunctions` instead.
+  
+  This function searches for the isofunctions of an overlay run with a given type and a given id.
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Type of the overlay run. Possible values are:
+      - 'session'
+      - 'project'
+  
+  overlay_run_id : int
+      Id of the overlay run.
+  
+  Returns
+  -------
+  list[IsoFunction]
+      Upon success, it returns a list where each member of the list is an object of class Isofunction referring to one isofunction of the given overlay run.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          overlay_run_type = "session"
+          overlay_run_id = 1
+  
+          overlay_run_isofunctions = isofunctions.IsofunctionsOfOverlayRun(
+              overlay_run_type, overlay_run_id
+          )
+          for iso in overlay_run_isofunctions:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsofunctionsOfWindow
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_isofunctions instead.
+SIGNATURE: meta.isofunctions.IsofunctionsOfWindow(window_name: str) -> list[IsoFunction]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_isofunctions` instead.
+  
+  This function collects all isofunctions of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list[IsoFunction]
+      It returns a list where each member of the list is an object of class Isofunction referring to one specific isofunction of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          window_isos = isofunctions.IsofunctionsOfWindow(window_name)
+          for iso in window_isos:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PickIsofunctions
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.pick_isofunctions instead.
+SIGNATURE: meta.isofunctions.PickIsofunctions(window_name: str, message: str) -> list[IsoFunction]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.pick_isofunctions` instead.
+  
+  This function allows the user to pick isofunctions from a window specified by its name. The execution of the script will stop and it will restart when the middle button mouse or Enter is pressed.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  message : str
+      Message displayed to the user when the function is called.
+  
+  Returns
+  -------
+  list[IsoFunction]
+      It returns a list where each member of the list is an object of class Isofunction referring to one specific picked isofunction of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          message = "Select Isofunctions and press Enter when you are ready"
+          picked_isos = isofunctions.PickIsofunctions(window_name, message)
+          for iso in picked_isos:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReportNewIsofunctions
+MODULE: meta.isofunctions
+SIGNATURE: meta.isofunctions.ReportNewIsofunctions() -> list[IsoFunction]
+DOCSTRING:
+  This function collects the newly created isofunctions from the last call of script function isofunctions.CollectNewIsofunctionsStart(). This function should be preceded by a corresponding call to script function isofunctions.CollectNewIsofunctionsStart() and should be followed by a corresponding call to script function isofunctions.CollectNewIsofunctionsEnd().
+  
+  Returns
+  -------
+  list[IsoFunction]
+      It returns a list where each member of the list is an object of class Isofunction referring to one specific newly created isofunction.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import utils
+  
+  
+      def main():
+          isofunctions.CollectNewIsofunctionsStart()
+  
+          # create new isofunctions
+          utils.MetaCommand('isofun new window "MetaPost" function "fun0.25" 0.25')
+          utils.MetaCommand('isofun new window "MetaPost" function "fun0.31" 0.31')
+  
+          new_isofunctions = isofunctions.ReportNewIsofunctions()
+          for iso in new_isofunctions:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+          isofunctions.CollectNewIsofunctionsEnd()
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSettingsOfAllIsofunctions
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_isofunctions_settings instead.
+SIGNATURE: meta.isofunctions.SetSettingsOfAllIsofunctions(window_name: str, iso_settings: list[str]) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_isofunctions_settings` instead.
+  
+  This function controls settings of all isofunctions for a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_settings : list[str]
+      Argument "iso_settings" is a list which contains strings as elements with the name and value of each setting separated by comma (e.g. 'options_width,6').
+      A list of settings and possible values is:
+      - 'options_follow': Auto Cut Geometry (0,1)
+      - 'options_fringe': Iso Fringe Options ('enable', 'disable', 'lock', 'unlock')
+      - 'options_linewidth': Iso Line Width (float value)
+      - 'options_solid': Solid cut options ('both', 'inside')
+      - 'options_value': Show/Hide Iso Value (1, 0)
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_settings = ["options_follow,1", "options_linewidth,5"]
+          ret = isofunctions.SetSettingsOfAllIsofunctions(window_name, iso_settings)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetSettingsOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.set_settings instead.
+SIGNATURE: meta.isofunctions.SetSettingsOfIsofunction(window_name: str, iso_name: str, iso_settings: list[str]) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.set_settings` instead.
+  
+  This function controls settings of a given isofunction.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  iso_settings : list[str]
+      Argument 'iso_settings' is a list which contains strings as elements with the name and value of each setting separated by comma (e.g. 'options_width,6').
+      A list of settings and possible values is:
+      - 'options_follow': Auto Cut Geometry (0,1)
+      - 'options_fringe': Iso Fringe Options ('enable', 'disable', 'lock', 'unlock')
+      - 'options_linewidth': Iso Line Width (float value)
+      - 'options_solid': Solid cut options ('both', 'inside')
+      - 'options_value': Show/Hide Iso Value (1, 0)
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "closed_upper"
+          iso_settings = ["options_follow,1", "options_linewidth,1"]
+          ret = isofunctions.SetSettingsOfIsofunction(window_name, iso_name, iso_settings)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ShowIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.show instead.
+SIGNATURE: meta.isofunctions.ShowIsofunction(window_name: str, iso_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.show` instead.
+  
+  This function makes visible the isofunction of a window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "fun0.31"
+  
+          ret = isofunctions.ShowIsofunction(window_name, iso_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UpdateIsofunction
+MODULE: meta.isofunctions
+SIGNATURE: meta.isofunctions.UpdateIsofunction(isofunction: IsoFunction) -> IsoFunction
+DOCSTRING:
+  This function updates the data of the given isofunction object. Update is based in the fields "name" and "window_name" of the given isofunction object.
+  
+  Parameters
+  ----------
+  isofunction : IsoFunction
+      The isofunction to be updated.
+  
+  Returns
+  -------
+  IsoFunction
+      Upon success, it returns the new updated object of class Isofunction.
+      Else, None is returned.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import utils
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "fun"
+  
+          collected_isos = isofunctions.IsofunctionsByName(window_name, iso_name)
+          if len(collected_isos) > 0:
+              iso = collected_isos[0]
+  
+              # commands which alter the data of the isofunction struct
+              utils.MetaCommand(
+                  "isofun edit value window " + window_name + " " + iso_name + " 0.05"
+              )
+  
+              iso = isofunctions.UpdateIsofunction(iso)
+              if iso:  # Update OK
+                  print(
+                      iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id
+                  )
+              else:  # Update FAILED
+                  print("This is not a valid isofunction object")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VisibleIsofunctions
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_isofunctions instead.
+SIGNATURE: meta.isofunctions.VisibleIsofunctions() -> list[IsoFunction]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_isofunctions` instead.
+  
+  This function collects visible isofunctions of all windows.
+  
+  Returns
+  -------
+  list[IsoFunction]
+      It returns a list where each member of the list is an object of class Isofunction referring to one specific visible isofunction of an existing window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          visible_isos = isofunctions.VisibleIsofunctions()
+          for iso in visible_isos:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VisibleIsofunctionsOfWindow
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_isofunctions instead.
+SIGNATURE: meta.isofunctions.VisibleIsofunctionsOfWindow(window_name: str) -> list[IsoFunction]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_isofunctions` instead.
+  
+  This function collects visible isofunctions of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list[IsoFunction]
+      It returns a list where each member of the list is an object of class Isofunction referring to one specific visible isofunction of the given window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.isofunctions.IsoFunction
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          visible_isos = isofunctions.VisibleIsofunctionsOfWindow(window_name)
+          for iso in visible_isos:
+              print(iso.name, iso.window_name, iso.type, iso.value, iso.visible, iso.page_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VolumeOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_volume instead.
+SIGNATURE: meta.isofunctions.VolumeOfIsofunction(window_name: str, model_id: int, iso_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_volume` instead.
+  
+  This function calculates the volume of a closed upper or closed lower isofunction of a given model for a specific window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  model_id : int
+      Id of the model.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  Returns
+  -------
+  float
+      Upon success, it returns as a float the volume of the closed isofunction.
+      Else, an invalid value of -1000 is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          model_id = 0
+          iso_name = "closed_upper"
+  
+          volume = isofunctions.VolumeOfIsofunction(window_name, model_id, iso_name)
+          print(volume)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VectorUniformityIndexOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_uniformity_index instead.
+SIGNATURE: meta.isofunctions.VectorUniformityIndexOfIsofunction(result: results.Result, iso_name: str, window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_uniformity_index` instead.
+  
+  This function calculates the vector uniformity index of an isofunction with specific name.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a resultset of the model.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  window_name : str, optional
+      Name of the window. If optional argument "window_name" is absent then the result will be calculated for the active windowName of the group.
+  
+  Returns
+  -------
+  float
+      It returns a float value as the result of the calculated vector uniformity index of the isofunction.
+      Upon failure, 0 will be returned.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          iso_name = "MyIso"
+  
+          index = isofunctions.VectorUniformityIndexOfIsofunction(all_resultsets[1], iso_name)
+          print(index)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AreaIntegralOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_area_integral instead.
+SIGNATURE: meta.isofunctions.AreaIntegralOfIsofunction(result: results.Result, iso_name: str, window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_area_integral` instead.
+  
+  This function calculates the area integral of an isofunction with specific name.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  iso_name : str
+      Name of the plane.
+  
+  window_name : str, optional
+      Name of the window. If optional argument "window_name" is absent then the result will be calculated for the active window
+  
+  Returns
+  -------
+  float
+      It returns a float value referring to the area integral of the specified plane.
+      Upon failure, 0 will be returned.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          if len(all_resultsets):
+              iso_name = "MyIso"
+              window_name = "MetaPost"
+              area = isofunctions.AreaIntegralOfIsofunction(
+                  all_resultsets[1], iso_name, window_name
+              )
+              print(area)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AreaWeightedAverageOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_area_weighted_average instead.
+SIGNATURE: meta.isofunctions.AreaWeightedAverageOfIsofunction(result: results.Result, iso_name: str, window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_area_weighted_average` instead.
+  
+  This function calculates the area integral of an isofunction with specific name.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  window_name : str, optional
+      Name of the window. If optional argument "window_name" is absent then the result will be calculated for the active window
+  
+  Returns
+  -------
+  float
+      It returns a float value referring to the area integral of the specified isofunction.
+      Upon failure, 0 will be returned.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          if all_resultsets:
+              iso_name = "MyIso"
+              window_name = "MetaPost"
+              area = isofunctions.AreaWeightedAverageOfIsofunction(
+                  all_resultsets[1], iso_name, window_name
+              )
+              print(area)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: VolumetricFlowOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_volumetric_flow instead.
+SIGNATURE: meta.isofunctions.VolumetricFlowOfIsofunction(result: results.Result, iso_name: str, window_name: Callable) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_volumetric_flow` instead.
+  
+  This function calculates the volumetric flow rate of an isofunction with specific name.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  window_name : Callable, optional
+      Name of the window. If optional argument "window_name" is absent then the result will be calculated for the active window
+  
+  Returns
+  -------
+  float
+      It returns a float value referring to the volumetric flow rate of the specified isofunction.
+      Upon failure, 0 will be returned.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          if len(all_resultsets):
+              iso_name = "MyIso"
+              window_name = "MetaPost"
+              rate = isofunctions.VolumetricFlowOfIsofunction(
+                  all_resultsets[1], iso_name, window_name
+              )
+              print(rate)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MassFlowOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_mass_flow instead.
+SIGNATURE: meta.isofunctions.MassFlowOfIsofunction(result: results.Result, iso_name: str, window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_mass_flow` instead.
+  
+  This function calculates the mass flow rate of an isofunction with specific name.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  window_name : str, optional
+      Name of the window. If optional argument "window_name" is absent then the result will be calculated for the active window
+  
+  Returns
+  -------
+  float
+      It returns a float value referring to the mass flow rate of the specified isofunction.
+      Upon failure, 0 will be returned.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          iso_name = "MyIso"
+  
+          rate = isofunctions.MassFlowOfIsofunction(all_resultsets[1], iso_name)
+          print(rate)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MassWeightedAverageOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_mass_weighted_average instead.
+SIGNATURE: meta.isofunctions.MassWeightedAverageOfIsofunction(result: results.Result, iso_name: str, window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_mass_weighted_average` instead.
+  
+  This function calculates the mass weighted average of an isofunction with specific name.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  window_name : str, optional
+      Name of the window. If optional argument "window_name" is absent then the result will be calculated for the active window
+  
+  Returns
+  -------
+  float
+      It returns a float value referring to the weighted average masss flow rate of the specified isofunction.
+      Upon failure, 0 will be returned.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          iso_name = "MyIso"
+  
+          av = isofunctions.MassWeightedAverageOfIsofunction(all_resultsets[1], iso_name)
+          print(an)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UniformityIndexOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_uniformity_index instead.
+SIGNATURE: meta.isofunctions.UniformityIndexOfIsofunction(result: results.Result, iso_name: str, window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_uniformity_index` instead.
+  
+  This function calculates the uniformity index of an isofunction with specific name.
+  
+  Parameters
+  ----------
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  iso_name : str
+      Name of the isofunction.
+  
+  window_name : str, optional
+      Name of the window. If optional argument "window_name" is absent then the result will be calculated for the active window
+  
+  Returns
+  -------
+  float
+      It returns a float value as the result of the calculated uniformity index of the isofunction.
+      Upon failure, 0 will be returned.
+  
+  See Also
+  --------
+  meta.results.Result
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+      from meta import results
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          iso_name = "MyIso"
+  
+          index = isofunctions.UniformityIndexOfIsofunction(all_resultsets[1], iso_name)
+          print(index)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_attributes instead.
+SIGNATURE: meta.isofunctions.AttributesOfIsofunction(window_name: str, iso_name: str) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_attributes` instead.
+  
+  This function collects all attributes of a given isofunction
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window
+  
+  iso_name : str
+      Name of the isofunction
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "test"
+          all_attributes = isofunctions.AttributesOfIsofunction(window_name, iso_name)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributeOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.get_attributes instead.
+SIGNATURE: meta.isofunctions.AttributeOfIsofunction(window_name: str, iso_name: str, attribute_name: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.get_attributes` instead.
+  
+  This function returns the value of a specific attribute.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  iso_name : str
+      The name of the isofunction
+  
+  attribute_name : str
+      The name of the attributes
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string with the value of the given argument.
+      Else, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "test"
+          name = "Value"
+  
+          value = isofunctions.AttributeOfIsofunction(window_name, iso_name, name)
+          print("Name: " + name + "\tValue: " + value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfIsofunction
+MODULE: meta.isofunctions
+DEPRECATED: Deprecated since version 20.1.0.Use meta.isofunctions.IsoFunction.set_attribute instead.
+SIGNATURE: meta.isofunctions.SetAttributeOfIsofunction(window_name: str, iso_name: str, attribute_name: str, attribute_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.isofunctions.IsoFunction.set_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given isofunction. If the given attribute does not exist it is automatically created and its value is set.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window.
+  
+  iso_name : str
+      The name of the isofunction.
+  
+  attribute_name : str
+      The name of the attribute.
+  
+  attribute_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import isofunctions
+  
+  
+      def main():
+          window_name = "MetaPost"
+          iso_name = "test"
+  
+          name = "iso_attr"
+          val = "val"
+          value = isofunctions.SetAttributeOfIsofunction(window_name, iso_name, name, val)
+          print(value)
+          # or
+          name = "iso_num_attr"
+          val = 123
+          attribute_type = "numerical"
+          value = isofunctions.SetAttributeOfIsofunction(
+              window_name, iso_name, name, val, attribute_type
+          )
+          print(value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

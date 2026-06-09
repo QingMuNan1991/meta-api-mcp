@@ -1,0 +1,4214 @@
+MODULE: meta.windows
+========================================================================
+
+FUNCTION: ActivateFringe
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.activate_fringe instead.
+SIGNATURE: meta.windows.ActivateFringe(window_name: str, fringe_name: str, fringe_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.activate_fringe` instead.
+  
+  This function makes active a fringe bar with a given name on a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  fringe_name : str
+      Name of the fringe bar.
+  
+  fringe_type : str, optional
+      Type of the fringe bar. Its possible values are:
+      - 'scalar' (default value)
+      - 'vector'.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          fringe_name = "AnimationBar"
+          fringe_type = "scalar"
+          windows.ActivateFringe(window_name, fringe_name, fringe_type)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ActivateWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.activate instead.
+SIGNATURE: meta.windows.ActivateWindow(window_name: str) -> Window
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.activate` instead.
+  
+  This function makes active an existing window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  Window
+      Upon success, it returns a python object of class Window referring to the corresponding active window.
+      Else, None is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "Window1"
+          w = windows.ActivateWindow(window_name)
+          if w:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ActiveWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_windows instead.
+SIGNATURE: meta.windows.ActiveWindow() -> Window
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_windows` instead.
+  
+  This function searches for the active window.
+  
+  Returns
+  -------
+  Window
+      Upon success, it returns an object of class Window referring to the corresponding active window.
+      Else, None is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          w = windows.ActiveWindow()
+          if w:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ApplyView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.apply_view instead.
+SIGNATURE: meta.windows.ApplyView(window_name: str, view_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.apply_view` instead.
+  
+  This function applies a view with a given name on a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "DEFAULT_VIEW_:_+Y+Z_(F4)"
+          ret = windows.ApplyView(window_name, view_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewWindowsEnd
+MODULE: meta.windows
+SIGNATURE: meta.windows.CollectNewWindowsEnd() -> list[Window]
+DOCSTRING:
+  This function ends recording the creation of new windows. This function should be preceded by a corresponding call to script function meta.windows.CollectNewWindowsStart().
+  
+  Returns
+  -------
+  list[Window]
+      It returns a list wwhere each object of the list is an object of class Window referring to one specific newly created window.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+      from meta import utils
+  
+  
+      def main():
+          # start collecting new windows
+          windows.CollectNewWindowsStart()
+  
+          # create new windows
+          utils.MetaCommand("window create Window1")
+          utils.MetaCommand("xyplot create Window2")
+  
+          # end collecting new windows and return them
+          new_windows = windows.CollectNewWindowsEnd()
+  
+          for w in new_windows:
+              print(w.name)
+              print(w.page_id)
+              print(w.active)
+              print(w.height)
+              print(w.width)
+              print(w.plot2d)
+              print(w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewWindowsStart
+MODULE: meta.windows
+SIGNATURE: meta.windows.CollectNewWindowsStart() -> int
+DOCSTRING:
+  This function starts recording the creation of new windows. This function should be followed by a corresponding call to script function meta.windows.CollectNewWindowsEnd().
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+      from meta import utils
+  
+  
+      def main():
+          # start collecting new windows
+          windows.CollectNewWindowsStart()
+  
+          # create new windows
+          utils.MetaCommand("window create Window1")
+          utils.MetaCommand("xyplot create Window2")
+  
+          # end collecting new windows and return them
+          new_windows = windows.CollectNewWindowsEnd()
+  
+          for w in new_windows:
+              print(w.name)
+              print(w.page_id)
+              print(w.active)
+              print(w.height)
+              print(w.width)
+              print(w.plot2d)
+              print(w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectWindowEntities
+MODULE: meta.windows
+SIGNATURE: meta.windows.CollectWindowEntities(window_name: str, entity_type: str) -> list
+DOCSTRING:
+  This function collects entities of the window specified by the given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  entity_type : str
+      The type of the entities to be collected. It's possible values are:
+      - 'curves': Collect curves
+      - 'annotations': Collect annotations
+      - 'images': Collect images
+      - 'videos': Collect videos
+      - 'isofunctions': Collect isofunctions
+  
+  Returns
+  -------
+  list
+      For the given window, it returns a list with python objects of a class depending on the entity type.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "Window1"
+          entity_type = "curves"
+          collected_entities = windows.CollectWindowEntities(window_name, entity_type)
+          for c in collected_entities:
+              print(
+                  c.id,
+                  c.name,
+                  c.plot_id,
+                  c.visible,
+                  c.selected,
+                  c.window_name,
+                  c.page_id,
+                  c.command,
+                  c.entity_id,
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ColorOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_color instead.
+SIGNATURE: meta.windows.ColorOfWindow(window_name: str) -> Color
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_color` instead.
+  
+  This function finds background color of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  Color
+      Upon success, it returns a python object of class Color with the color of the corresponding window.
+      Else, None is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Color
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          color = windows.ColorOfWindow(window_name)
+          if color:
+              print(color.name, color.r, color.g, color.b, color.a)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ColorsOfFringe
+MODULE: meta.windows
+SIGNATURE: meta.windows.ColorsOfFringe(fringe_name: str) -> list[Color]
+DOCSTRING:
+  This function collects all colors of a given fringe bar.
+  
+  Parameters
+  ----------
+  fringe_name : str
+      Name of the fringebar.
+  
+  Returns
+  -------
+  list[Color]
+      It returns a list with python objects of class Color of the corresponding colors of the given fringe bar.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.windows.Color
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          fringe_name = "AnimationBar"
+          fringe_colors = windows.ColorsOfFringe(fringe_name)
+          for color in fringe_colors:
+              print(color.name, color.r, color.g, color.b, color.a)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Create2DPlotWindow
+MODULE: meta.windows
+SIGNATURE: meta.windows.Create2DPlotWindow(window_name: str) -> Window
+DOCSTRING:
+  This function creates a new 2D plot window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  Window
+      Upon success, it returns a python object of class Window referring to the newly created 2D plot window.
+      Upon failure, None is returned.
+  
+  Notes
+  -----
+  This function works for active page.
+   If a window with the given name already exists, this function will not create a new one.
+   The new 2D plot window becomes the currently active window.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "Win2D"
+          w = windows.Create2DPlotWindow(window_name)
+          if w:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Create3DWindow
+MODULE: meta.windows
+SIGNATURE: meta.windows.Create3DWindow(window_name: str) -> Window
+DOCSTRING:
+  This function creates a new 3D drawing window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  Window
+      Upon success, it returns a python object of class Window referring to the newly created 3D window.
+      Upon failure, None is returned.
+  
+  Notes
+  -----
+  This function works for active page.
+  If a window with the given name already exists, this function will not create a new one.
+  The new 3D window becomes the currently active window.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "Win3D"
+          w = windows.Create3DWindow(window_name)
+          if w:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.delete_view instead.
+SIGNATURE: meta.windows.DeleteView(window_name: str, view_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.delete_view` instead.
+  
+  This function deletes a view with a given name of a window specified by its name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          ret = windows.DeleteView(window_name, view_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.delete instead.
+SIGNATURE: meta.windows.DeleteWindow(window_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.delete` instead.
+  
+  This function deletes an existing window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "Win2D"
+          ret = windows.DeleteWindow(window_name)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DisableWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.disable instead.
+SIGNATURE: meta.windows.DisableWindow(window_name: str, active: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.disable` instead.
+  
+  This function disables an existing window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  active : int, optional
+      If optional argument "active" is equal to 1 then the current active window option will be deactivated.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  This function is able to change the active window.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          active = 1
+          ret = windows.DisableWindow(window_name, active)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: EnableWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.enable instead.
+SIGNATURE: meta.windows.EnableWindow(window_name: str, active: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.enable` instead.
+  
+  This function enables an existing window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  active : int, optional
+      If optional argument "active" is equal to 1 then the current active window option will be activated.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  This function is able to change the active window.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          active = 1
+          ret = windows.EnableWindow(window_name, active)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: EnabledWindows
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_windows instead.
+SIGNATURE: meta.windows.EnabledWindows() -> list[Window]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_windows` instead.
+  
+  This function collects all the current existing enabled windows.
+  
+  Returns
+  -------
+  list[Window]
+      It returns a list with objects of class type Window for each of the current existing enabled windows.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          enabled_windows = windows.EnabledWindows()
+          for w in enabled_windows:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ExportView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.export_view instead.
+SIGNATURE: meta.windows.ExportView(window_name: str, view_name: str, filename: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.export_view` instead.
+  
+  This function exports to a file an existing view of a window specified by its name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  filename : str
+      Name of the file.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          meta.utils.MetaCommand('view save "' + view_name + '"')
+          filename = "/home/user/views_file.view"
+          ret = windows.ExportView(window_name, view_name, filename)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: HtmlDescriptionOfColor
+MODULE: meta.windows
+SIGNATURE: meta.windows.HtmlDescriptionOfColor(red: int, green: int, blue: int) -> str
+DOCSTRING:
+  This function finds the html description of an existing color with the given RGB values.
+  
+  Parameters
+  ----------
+  red : int
+      Red value.
+  
+  green : int
+      Green value.
+  
+  blue : int
+      Blue value.
+  
+  Returns
+  -------
+  str
+      It returns a string with the html descripiton of the existing color with the given RGB values.
+      Upon failure, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          red = 255
+          green = 0
+          blue = 255
+          html_color = windows.HtmlDescriptionOfColor(red, green, blue)
+          print(html_color)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ImportView
+MODULE: meta.windows
+SIGNATURE: meta.windows.ImportView(filename: str, window_name: str) -> int
+DOCSTRING:
+  This function imports a view from a file on a window specified by its name.
+  
+  Parameters
+  ----------
+  filename : str
+      Name of the file containing the view.
+  
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          filename = "/home/user/views_file1.view"
+          windows.ImportView(window_name, filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsColor
+MODULE: meta.windows
+SIGNATURE: meta.windows.IsColor(color: Any) -> int
+DOCSTRING:
+  This function checks whether a class is of type Color.
+  
+  Parameters
+  ----------
+  color : Any
+      Any given object.
+  
+  Returns
+  -------
+  int
+      It returns 1 if object is Color clasee, or 0 if not.
+  
+  See Also
+  --------
+  meta.windows.Color
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          ent = windows.ColorOfWindow(window_name)
+          if windows.IsColor(ent):
+              col = ent
+              print("This is a Color class.")
+              print(col.name, col.r, col.g, col.b, col.a)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsWindow
+MODULE: meta.windows
+SIGNATURE: meta.windows.IsWindow(window: Any) -> int
+DOCSTRING:
+  This function checks whether an object is of class type Window.
+  
+  Parameters
+  ----------
+  window : Any
+      Any given object.
+  
+  Returns
+  -------
+  int
+      It returns 1 if object is class of type Window, or 0 if not.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          enabled_windows = windows.EnabledWindows()
+          for win in enabled_windows:
+              if windows.IsWindow(win):
+                  print("This is a Window class.")
+                  print(
+                      win.name,
+                      win.page_id,
+                      win.active,
+                      win.height,
+                      win.width,
+                      win.plot2d,
+                      win.enabled,
+                  )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NameOfActiveFringe
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_fringe_names instead.
+SIGNATURE: meta.windows.NameOfActiveFringe(window_name: str, fringe_type: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_fringe_names` instead.
+  
+  This function finds the name of the active fringe bar of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  fringe_type : str
+      Type of fringebar. Its possible values are:
+      - 'scalar': Scalar fringe (default value)
+      - 'vector': Vector fringe
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string referring to the name of the active fringe bar of the specified window.
+      Upon failure an empty string is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          fringe_type = "scalar"
+          fringe_name = windows.NameOfActiveFringe(window_name, fringe_type)
+          print(fringe_name)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NamedColorFromRgb
+MODULE: meta.windows
+SIGNATURE: meta.windows.NamedColorFromRgb(red: int, green: int, blue: int, alpha: int) -> str
+DOCSTRING:
+  This function finds the name of an existing color with the given RGB and Alpha channel values.
+  
+  Parameters
+  ----------
+  red : int
+      Red value.
+  
+  green : int
+      Green value.
+  
+  blue : int
+      Blue value.
+  
+  alpha : int
+      Alpha channel.
+  
+  Returns
+  -------
+  str
+      It returns a string with the name of the existing color with the given RGB and Alpha channel values.
+      Upon failure, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          red = 255
+          green = 0
+          blue = 255
+          alpha = 255
+          named_color = windows.NamedColorFromRgb(red, green, blue, alpha)
+          print(named_color)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NamesOfAllFringes
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_fringe_names instead.
+SIGNATURE: meta.windows.NamesOfAllFringes() -> list[str]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_fringe_names` instead.
+  
+  This function finds the names of all existing fringe bars of a given window.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list where each item of the list is a string referring to the name of an existing fringe bar.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          all_fringes_names = windows.NamesOfAllFringes()
+          for fringe_name in all_fringes_names:
+              print(fringe_name)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NamesOfAllViews
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_names instead.
+SIGNATURE: meta.windows.NamesOfAllViews(window_name: str) -> list[str]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_names` instead.
+  
+  This function gets names of all existing views of a window specified by its name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list where each item of the list is a string referring to the name of an existing view of the specified window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          all_views_names = windows.NamesOfAllViews(window_name)
+          for view_name in all_views_names:
+              print(view_name)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReportNewWindows
+MODULE: meta.windows
+SIGNATURE: meta.windows.ReportNewWindows() -> list[Window]
+DOCSTRING:
+  This function collects the newly created windows from the last call of script function CollectNewWindowsStart(). This function should be preceded by a corresponding call to script function CollectNewWindowsStart() and should be followed by a corresponding call to script function CollectNewWindowsEnd().
+  
+  Returns
+  -------
+  list[Window]
+      It returns a list with objects of class Window of the corresponding newly created windows.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+      from meta import utils
+  
+  
+      def main():
+          windows.CollectNewWindowsStart()
+  
+          # create new windows
+          utils.MetaCommand("window create Window10")
+          utils.MetaCommand("xyplot create Window11")
+  
+          new_windows = windows.ReportNewWindows()
+          for w in new_windows:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+          windows.CollectNewWindowsEnd()
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: RgbFromNamedColor
+MODULE: meta.windows
+SIGNATURE: meta.windows.RgbFromNamedColor(named_color: str) -> list
+DOCSTRING:
+  This function finds RGB values and Alpha channel of an existing named color.
+  
+  Parameters
+  ----------
+  named_color : str
+      Name of the color.
+  
+  Returns
+  -------
+  list
+      It returns a list with the RGB and Alpha channel values [0-255] of the corresponding color with the given name.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          named_color = "Yellow"
+          rgb_values = windows.RgbFromNamedColor(named_color)
+          if rgb_values:
+              print("Red value: ", rgb_values[0])  # R value
+              print("Greeb value: ", rgb_values[1])  # G value
+              print("Blue value: ", rgb_values[2])  # B value
+              print("Alpha channel value: ", rgb_values[3])  # Alpha channel
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: RotateView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.rotate_view instead.
+SIGNATURE: meta.windows.RotateView(window_name: str, view_name: str, xrot: float, yrot: float, zrot: float) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.rotate_view` instead.
+  
+  This function rotates a given view of a window specified by its name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  xrot : float
+      Angle of rotation around X axis.
+  
+  yrot : float
+      Angle of rotation around Y axis.
+  
+  zrot : float
+      Angle of rotation around Z axis.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "DEFAULT_VIEW_:_+Y+Z_(F4)"
+          xrot = 10.5
+          yrot = 21.54
+          zrot = 113.2
+          windows.RotateView(window_name, view_name, xrot, yrot, zrot)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SaveView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.save_view instead.
+SIGNATURE: meta.windows.SaveView(window_name: str, view_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.save_view` instead.
+  
+  This function saves the current view of a window specified by its name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name under which the view will be saved.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "my_view"
+          windows.SaveView(window_name, view_name)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetColorOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_color instead.
+SIGNATURE: meta.windows.SetColorOfWindow(window_name: str, red: int, green: int, blue: int, alpha: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_color` instead.
+  
+  This function sets color of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  red : int
+      Red component value.
+  
+  green : int
+      Green component value.
+  
+  blue : int
+      Blue component value.
+  
+  alpha : int
+      Alpha channel value.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          red = 100
+          green = 100
+          blue = 100
+          alpha = 255
+          ret = windows.SetColorOfWindow(window_name, red, green, blue, alpha)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TranslateView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.translate_view instead.
+SIGNATURE: meta.windows.TranslateView(window_name: str, view_name: str, xtrans: float, ytrans: float, ztrans: float) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.translate_view` instead.
+  
+  This function translates a given view of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  xtrans : float
+      X coordinate of the translation vector.
+  
+  ytrans : float
+      Y coordinate of the translation vector.
+  
+  ztrans : float
+      Z coordinate of the translation vector.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "DEFAULT_VIEW_:_+Y+Z_(F4)"
+          xtrans = 10.5
+          ytrans = 21.54
+          ztrans = 113.2
+          ret = windows.TranslateView(window_name, view_name, xtrans, ytrans, ztrans)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UpdateWindow
+MODULE: meta.windows
+SIGNATURE: meta.windows.UpdateWindow(window: Window) -> Window
+DOCSTRING:
+  This function updates the attributes of a given object of type Window class. Update is based in the fields "name" and "page_id" of the given window object.
+  
+  Parameters
+  ----------
+  window : Window
+      Object of class Window.
+  
+  Returns
+  -------
+  Window
+      Upon success, it returns the new updated window object.
+      Else, None is returned.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+      from meta import utils
+  
+  
+      def main():
+          window_name = "MetaPost"
+          w = windows.WindowByName(window_name)
+          if w:
+              # commands which alter the data of the window struct
+              utils.MetaCommand("window size 500,500")
+              w = windows.UpdateWindow(w)
+              if w:
+                  print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+              else:
+                  print("This is not a valid window struct")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: WindowByName
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_windows instead.
+SIGNATURE: meta.windows.WindowByName(window_name: str) -> Window
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_windows` instead.
+  
+  This function searches for the window with the given name. The full name of the window is required.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  Window
+      Upon success, it returns an object of type Window with the given name.
+      Else, None is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          w = windows.WindowByName(window_name)
+          if w:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Windows
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_windows instead.
+SIGNATURE: meta.windows.Windows() -> list[Window]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_windows` instead.
+  
+  This function collects all the current existing windows.
+  
+  Returns
+  -------
+  list[Window]
+      It returns a list where each item of the list is an oject of type Window referring to the corresponding window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          all_windows = windows.Windows()
+          for w in all_windows:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: WindowsByName
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_windows instead.
+SIGNATURE: meta.windows.WindowsByName(window_name: str) -> list[Window]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_windows` instead.
+  
+  This function searches for the windows with the given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window. Wildcards can also be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  list[Window]
+      It returns a list where each item of the list is an oject of type Window referring to the corresponding window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "Win*"
+          collected_windows = windows.WindowsByName(window_name)
+          for w in collected_windows:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: WindowsOfModel
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.models.Model.get_windows instead.
+SIGNATURE: meta.windows.WindowsOfModel(model_id: int) -> list[Window]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.models.Model.get_windows` instead.
+  
+  This function finds the windows in which the model specified by the given id is loaded.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[Window]
+      It returns a list where each item of the list is an oject of type Window referring to the corresponding window.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          model_id = 0
+          windows_of_model = windows.WindowsOfModel(model_id)
+          for w in windows_of_model:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AspectRatioOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_aspect_ratio instead.
+SIGNATURE: meta.windows.AspectRatioOfView(window_name: str, view_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_aspect_ratio` instead.
+  
+  This function gets the aspect ratio of a view with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  float
+      It returns a float referring to the aspect ratio of a view with a given name. 
+      Upon failure, it returns 0.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          meta.utils.MetaCommand('view save "' + view_name + '"')
+          aspect_ratio = windows.AspectRatioOfView(window_name, view_name)
+          print(aspect_ratio)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: BackClippingDistanceOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_back_clipping_distance instead.
+SIGNATURE: meta.windows.BackClippingDistanceOfView(window_name: str, view_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_back_clipping_distance` instead.
+  
+  This function gets the back clipping distance of a view.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  float
+      It returns a float referring to the back clipping distance of a view with a given name.
+      Upon failure, it returns 0.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          meta.utils.MetaCommand('view save "' + view_name + '"')
+          back_clipping_distance = windows.BackClippingDistanceOfView(window_name, view_name)
+          print(back_clipping_distance)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CameraPositionOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_camera_position instead.
+SIGNATURE: meta.windows.CameraPositionOfView(window_name: str, view_name: str) -> list[float]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_camera_position` instead.
+  
+  This function gets the camera position (X,Y,Z) of a view of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  list[float]
+      It returns a list where each member of the list is a float referring to the X, Y and Z coordinates of the camera position of the given view..
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          meta.utils.MetaCommand('view save "' + view_name + '"')
+  
+          camera_position = windows.CameraPositionOfView(window_name, view_name)
+          if camera_position:
+              xpos = camera_position[0]
+              print(xpos)  # X camera position of view
+              ypos = camera_position[1]
+              print(ypos)  # Y camera position of view
+              zpos = camera_position[2]
+              print(zpos)  # Z camera position of view
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: FollowModeOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_follow_mode instead.
+SIGNATURE: meta.windows.FollowModeOfView(window_name: str, view_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_follow_mode` instead.
+  
+  This function gets the follow mode of a view of a window with a given name (view_name).
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  int
+      It returns 1 if follow mode of the view with the given name is active, 
+      or 0 otherwise.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+  
+          view_name1 = "View1"
+          meta.utils.MetaCommand("view camera position foff")
+          meta.utils.MetaCommand("view camera reference foff")
+          meta.utils.MetaCommand('view save "' + view_name1 + '"')
+  
+          view_name2 = "View2"
+          meta.utils.MetaCommand("view camera position fon")
+          meta.utils.MetaCommand("view camera reference fon")
+          meta.utils.MetaCommand('view save "' + view_name2 + '"')
+  
+          follow_mode1 = windows.FollowModeOfView(window_name, view_name1)
+          print("Follow mode for View1: ", follow_mode1)
+          follow_mode2 = windows.FollowModeOfView(window_name, view_name2)
+          print("Follow mode for View2: ", follow_mode2)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: FrontClippingDistanceOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_front_clipping_distance instead.
+SIGNATURE: meta.windows.FrontClippingDistanceOfView(window_name: str, view_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_front_clipping_distance` instead.
+  
+  This function gets the front clipping distance of a view.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  float
+      It returns a float referring to the front clipping distance of a view with a given name. 
+      Upon failure, it returns 0.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          meta.utils.MetaCommand('view save "' + view_name + '"')
+          front_clipping_distance = windows.FrontClippingDistanceOfView(
+              window_name, view_name
+          )
+          print(front_clipping_distance)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: LockNodeIdsOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_lock_node_ids instead.
+SIGNATURE: meta.windows.LockNodeIdsOfView(window_name: str, view_name: str) -> list[int]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_lock_node_ids` instead.
+  
+  This function gets the lock node ids of a view of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  list[int]
+      It returns a list where each member of the list is an integer referring to the lock node ids of the view.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View3"
+  
+          lock_node_ids = windows.LockNodeIdsOfView(window_name, view_name)
+          if lock_node_ids:
+              nid1 = lock_node_ids[0]
+              print(nid1)  # 1st node
+              nid2 = lock_node_ids[1]
+              print(nid2)  # 2nd node
+              nid3 = lock_node_ids[2]
+              print(nid3)  # 3rd node
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MultiLockCameraDisplacementsOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_multi_lock_camera_displacements instead.
+SIGNATURE: meta.windows.MultiLockCameraDisplacementsOfView(window_name: str, view_name: str) -> list[float]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_multi_lock_camera_displacements` instead.
+  
+  This function gets the multi lock camera displacements of a view of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  list[float]
+      It returns a list where each member of the list is a float referring to the multi lock camera displacements of a view of a window with a given name.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+  
+          multi_lock = windows.MultiLockCameraDisplacementsOfView(window_name, view_name)
+          if multi_lock:
+              multi_lock1 = multi_lock[0]
+              print(multi_lock1)
+              multi_lock2 = multi_lock[1]
+              print(multi_lock2)
+              multi_lock3 = multi_lock[2]
+              print(multi_lock3)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MultiLockCameraHeadRotationsOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_multi_lock_camera_head_rotations instead.
+SIGNATURE: meta.windows.MultiLockCameraHeadRotationsOfView(window_name: str, view_name: str) -> list[float, float, float]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_multi_lock_camera_head_rotations` instead.
+  
+  This function gets the multi lock camera head rotations of a view of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  list[float,float,float]
+      It returns a list with three members, where each member of the list is a float referring to the multi lock camera head rotations of the given view.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+  
+          multi_rot = windows.MultiLockCameraHeadRotationsOfView(window_name, view_name)
+          if multi_rot:
+              multi_rot1 = multi_rot[0]
+              print(multi_rot1)
+              multi_rot2 = multi_rot[1]
+              print(multi_rot2)
+              multi_rot3 = multi_rot[2]
+              print(multi_rot3)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MultiLockOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_multi_locks instead.
+SIGNATURE: meta.windows.MultiLockOfView(window_name: str, view_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_multi_locks` instead.
+  
+  This function gets the multi lock of a view of a window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  int
+      It returns 1 if multi lock of the view with the given name is active, 
+      or 0 otherwise.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          multi_lock = windows.MultiLockOfView(window_name, view_name)
+          print(multi_lock)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NodeLocksOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_lock_node_ids instead.
+SIGNATURE: meta.windows.NodeLocksOfView(window_name: str, view_name: str) -> list[int]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_lock_node_ids` instead.
+  
+  This function gets the node locks of a view of a window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  list[int]
+      It returns a list where each member of the list is an integer referring to node locks of the view.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "view0"
+  
+          node_locks = windows.NodeLocksOfView(window_name, view_name)
+          if node_locks:
+              nid1 = node_locks[0]
+              print(nid1)
+              nid2 = node_locks[1]
+              print(nid2)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PerspectiveModeOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_perspective_mode instead.
+SIGNATURE: meta.windows.PerspectiveModeOfView(window_name: str, view_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_perspective_mode` instead.
+  
+  This function gets the perspective mode of a view of a window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  int
+      It returns 1 if perspective mode of the view with the given name is active, 
+      or 0 otherwise.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          meta.utils.MetaCommand('view save "' + view_name + '"')
+          perspective_mode = windows.PerspectiveModeOfView(window_name, view_name)
+          print(perspective_mode)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReferencePositionOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_reference_position instead.
+SIGNATURE: meta.windows.ReferencePositionOfView(window_name: str, view_name: str) -> list[float, float, float]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_reference_position` instead.
+  
+  This function gets the reference position (X,Y,Z) of a view of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  list[float,float,float]
+      It returns a list with three members, where each member of the list is a float referring to the X, Y and Z coordinates of the reference position of the view.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+  
+          reference_position = windows.ReferencePositionOfView(window_name, view_name)
+          if reference_position:
+              xpos = reference_position[0]
+              print(xpos)  # X reference position of view
+              ypos = reference_position[1]
+              print(ypos)  # Y reference position of view
+              zpos = reference_position[2]
+              print(zpos)  # Z reference position of view
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UpVectorOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_view_up_vector instead.
+SIGNATURE: meta.windows.UpVectorOfView() -> list[float, float, float]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_view_up_vector` instead.
+  
+  This function gets the up vector (X,Y,Z) of a view of a window.
+  
+  Returns
+  -------
+  list[float,float,float]
+      It returns a list with three members, where each member of the list is a float referring to the X, Y and Z coordinates of the view.
+      Upon failure, an empty list is returned.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          meta.utils.MetaCommand('view save "' + view_name + '"')
+          up_vector = windows.UpVectorOfView(window_name, view_name)
+          if up_vector:
+              xvec = up_vector[0]
+              print(xvec)
+              yvec = up_vector[1]
+              print(yvec)
+              zvec = up_vector[2]
+              print(zvec)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ViewingAngleOfView
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_viewing_angle instead.
+SIGNATURE: meta.windows.ViewingAngleOfView(window_name: str, view_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_viewing_angle` instead.
+  
+  This function gets the viewing angle of a view.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  view_name : str
+      Name of the view.
+  
+  Returns
+  -------
+  float
+      It returns a float referring to the viewing angle of a view with a given name. 
+      Upon failure, it returns 0.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          view_name = "View1"
+          viewing_angle = windows.ViewingAngleOfView(window_name, view_name)
+          print(viewing_angle)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ParamPointFromId
+MODULE: meta.windows
+SIGNATURE: meta.windows.ParamPointFromId(window_name: str, param_point_id: int, result: results.Result) -> ParamPoint
+DOCSTRING:
+  This function finds a parametric point with a given id at a specific window. Function takes a Resultset as an argument to define from which label the values are taken from.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  param_point_id : int
+      Id of the parametric point.
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  Returns
+  -------
+  ParamPoint
+      Returns an object of class ParamPoint that matches the parametric point with the given id at the specified window.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  See Also
+  --------
+  meta.windows.ParamPoint
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import results
+      from meta import windows
+  
+  
+      def main():
+          model_id = 0
+          param_point_id = 1
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+          window_name = "MetaPost"
+          pnt = windows.ParamPointFromId(window_name, param_point_id, result)
+  
+          print("Id:", pnt.id)
+          print(
+              "Elem : id:",
+              pnt.elem_id,
+              " Type :",
+              pnt.elem_type,
+              " Subtype :",
+              pnt.elem_subtype,
+              " Seq Id :",
+              pnt.elem_seqid,
+              " Model :",
+              pnt.elem_model,
+          )
+          print("Pos X,Y,Z :", pnt.x, ",", pnt.y, ",", pnt.z)
+          print("Disp X,Y,Z,Tot :", pnt.dx, ",", pnt.dy, ",", pnt.dz, ",", pnt.dt)
+          print("Scalar top,bottom :", pnt.stop, ",", pnt.sbot)
+          print("Vector top,bottom :", pnt.vtop, ",", pnt.vbot)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PointsOfParamPath
+MODULE: meta.windows
+SIGNATURE: meta.windows.PointsOfParamPath(param_path_name: str, window_name: str, result: results.Result) -> list[ParamPoint]
+DOCSTRING:
+  This function returns a matrix with the parametric points and their values that belong to a given path  at a given window.
+  
+  Parameters
+  ----------
+  param_path_name : str
+      Name of the Parametric Point Path.
+  
+  window_name : str
+      Name of the window.
+  
+  result : results.Result
+      An object of class Resultset.
+  
+  Returns
+  -------
+  list[ParamPoint]
+      Returns a matrix with objects of class ParamPoint that match the parametric points that belong to the given path at the given window.
+  
+  See Also
+  --------
+  meta.windows.ParamPoint
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import results
+      from meta import windows
+  
+  
+      def main():
+          model_id = 0
+          all_resultsets = results.Resultsets(model_id)
+          result = all_resultsets[1]
+          window_name = "MetaPost"
+          param_path_name = "LINE_PATH_1"
+          all_points = windows.PointsOfParamPath(param_path_name, window_name, result)
+          for pnt in all_points:
+              print("Id:", pnt.id)
+              print(
+                  "Elem : id:",
+                  pnt.elem_id,
+                  " Type :",
+                  pnt.elem_type,
+                  " Subtype :",
+                  pnt.elem_subtype,
+                  " Seq Id :",
+                  pnt.elem_seqid,
+                  " Model :",
+                  pnt.elem_model,
+              )
+              print("Pos X,Y,Z :", pnt.x, ",", pnt.y, ",", pnt.z)
+              print("Disp X,Y,Z,Tot :", pnt.dx, ",", pnt.dy, ",", pnt.dz, ",", pnt.dt)
+              print("Scalar top,bottom :", pnt.stop, ",", pnt.sbot)
+              print("Vector top,bottom :", pnt.vtop, ",", pnt.vbot)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinScalarLimitOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_scalar_limit instead.
+SIGNATURE: meta.windows.MinScalarLimitOfWindow(window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_scalar_limit` instead.
+  
+  This function gets the minimum limit of the scalar fringe of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  float
+      It returns a float referring to the minimum limit of the scalar fringe of the given window. 
+      Upon failure, it returns 0.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          min_scalar_limit = windows.MinScalarLimitOfWindow(window_name)
+          print(min_scalar_limit)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MaxScalarLimitOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_scalar_limit instead.
+SIGNATURE: meta.windows.MaxScalarLimitOfWindow(window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_scalar_limit` instead.
+  
+  This function gets the maximum limit of the scalar fringe of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  float
+      It returns a float referring to the maximum limit of the scalar fringe of the given window. 
+      Upon failure, it returns 0.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          max_scalar_limit = windows.MaxScalarLimitOfWindow(window_name)
+          print(max_scalar_limit)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MinVectorLimitOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_vector_limit instead.
+SIGNATURE: meta.windows.MinVectorLimitOfWindow(window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_vector_limit` instead.
+  
+  This function gets the minimum limit of the vector fringe of a given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  float
+      It returns a float referring to the minimum limit of the vector fringe of the given window. 
+      Upon failure, it returns 0.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          min_vector_limit = windows.MinVectorLimitOfWindow(window_name)
+          print(min_vector_limit)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: MaxVectorLimitOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_vector_limit instead.
+SIGNATURE: meta.windows.MaxVectorLimitOfWindow(window_name: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_vector_limit` instead.
+  
+  This function gets the maximum limit of the vector fringe of a given window. This function works for the active page.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  float
+      It returns a float referring to the maximum limit of the scalar fringe of the given window. 
+      Upon failure, it returns 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          max_vector_limit = windows.MaxVectorLimitOfWindow(window_name)
+          print(max_vector_limit)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetScalarLimitsOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_scalar_limits instead.
+SIGNATURE: meta.windows.SetScalarLimitsOfWindow(window_name: str, min_scalar_limit: float, max_scalar_limit: float) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_scalar_limits` instead.
+  
+  This function sets the limits of the scalar fringe of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  min_scalar_limit : float
+      Minimum limit of scalar fringe.
+  
+  max_scalar_limit : float
+      Maximum limit of scalar fringe.
+  
+  Returns
+  -------
+  int
+      It returns an integer, 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          min_scalar_limit = 20
+          max_scalar_limit = 80
+          ret = windows.SetScalarLimitsOfWindow(
+              window_name, min_scalar_limit, max_scalar_limit
+          )
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetVectorLimitsOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_vector_limits instead.
+SIGNATURE: meta.windows.SetVectorLimitsOfWindow(window_name: str, min_vector_limit: float, max_vector_limit: float) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_vector_limits` instead.
+  
+  This function sets the limits of the vector fringe of a window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  min_vector_limit : float
+      Minimum limit of vector fringe.
+  
+  max_vector_limit : float
+      Maximum limit of vector fringe.
+  
+  Returns
+  -------
+  int
+      It returns an integer, 1 upon success and 0 upon failure.
+  
+  Notes
+  -----
+  This function works for the active page.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          min_vector_limit = 15.2
+          max_vector_limit = 20.9
+          ret = windows.SetVectorLimitsOfWindow(
+              window_name, min_vector_limit, max_vector_limit
+          )
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Locks
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_locks instead.
+SIGNATURE: meta.windows.Locks() -> list[str]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_locks` instead.
+  
+  This function gets names of all locked views of the Lock Manager.
+  
+  Returns
+  -------
+  list[str]
+      It returns a list where each entry is a string referring to the name of an existing locked view of the Lock Manager.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          all_locks = windows.Locks()
+          for lock in all_locks:
+              print(lock)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_attributes instead.
+SIGNATURE: meta.windows.AttributesOfWindow(window_name: str) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_attributes` instead.
+  
+  It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+  In position 0, internal lists contain a string referring to the name of the attribute.
+  In position 1, internal lists contain a string referring to the value of the attributes.
+  Upon failure, an empty list is returned.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          all_attributes = windows.AttributesOfWindow(window_name)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_attribute instead.
+SIGNATURE: meta.windows.SetAttributeOfWindow(window_name: str, attrib_name: str, attrib_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given model. If the given attribute does not exist it is automatically created and its value is set.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window.
+  
+  attrib_name : str
+      Name of the attribute.
+  
+  attrib_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+  
+          name = "name"
+          value = "value"
+          value = windows.SetAttributeOfWindow(window_name, name, value)
+          print(value)
+          # or
+          name = "num_name"
+          value = 123
+          attribute_type = "numerical"
+          value = windows.SetAttributeOfWindow(window_name, name, value, attribute_type)
+          print(value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributeOfWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_attributes instead.
+SIGNATURE: meta.windows.AttributeOfWindow(window_name: str, attrib_name: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_attributes` instead.
+  
+  Upon success, it returns a string with the value of the given argument.
+  Else, an empty string is returned
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  attrib_name : str
+      The name of the attribute
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string with the value of the given argument.
+      Else, an empty string is returned
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          name = "Plot_2D"
+          value = windows.AttributeOfWindow(window_name, name)
+          print("Value: " + value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributeOfParamPath
+MODULE: meta.windows
+SIGNATURE: meta.windows.AttributeOfParamPath(window_name: str, ppath_name: str, attrib_name: str) -> str
+DOCSTRING:
+  This function returns the value of a specific attribute.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  ppath_name : str
+      The name of the parametric point path
+  
+  attrib_name : str
+      The name of the attribute
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string with the value of the given argument.
+      Else, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          path_name = "LINE_PATH_1"
+          name = "Type"
+          value = windows.AttributeOfParamPath(window_name, path_name, name)
+          print("Value " + value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfParamPath
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.ParametricPointPath.set_attribute instead.
+SIGNATURE: meta.windows.SetAttributeOfParamPath(window_name: str, ppath_name: str, attrib_name: str, attrib_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.ParametricPointPath.set_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given parametric point path. If the given attribute does not exist it is automatically created and its value is set.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  ppath_name : str
+      The name of the parametric point path
+  
+  attrib_name : str
+      Name of the attribute
+  
+  attrib_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          path_name = "LINE_PATH_1"
+          name = "name"
+          val = "val"
+          value = windows.SetAttributeOfParamPath(window_name, path_name, name, val)
+          print(value)
+  
+          name = "n_name"
+          val = 123
+          attribute_type = "numerical"
+          value = windows.SetAttributeOfParamPath(
+              window_name, path_name, name, val, attribute_type
+          )
+          print(value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfParamPath
+MODULE: meta.windows
+SIGNATURE: meta.windows.AttributesOfParamPath(window_name: str, ppath_name: str) -> list
+DOCSTRING:
+  It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+  In position 0, internal lists contain a string referring to the name of the attribute.
+  In position 1, internal lists contain a string referring to the value of the attributes.
+  Upon failure, an empty list is returned.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  ppath_name : str
+      Name of the parametric point path.
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          path_name = "LINE_PATH_1"
+          all_attributes = windows.AttributesOfParamPath(window_name, path_name)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributeOfAngle
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_angle_attributes instead.
+SIGNATURE: meta.windows.AttributeOfAngle(window_name: str, angle_id: int, attrib_name: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_angle_attributes` instead.
+  
+  This function returns the value of a specific attribute.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  angle_id : int
+      The id of the angle
+  
+  attrib_name : str
+      The name of the attribute
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string with the value of the given argument.
+      Else, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          angle_id = 1
+          name = "Info"
+          value = windows.AttributeOfAngle(window_name, angle_id, name)
+          print("Value " + value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributeOfDistance
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_distance_attributes instead.
+SIGNATURE: meta.windows.AttributeOfDistance(window_name: str, distance_id: int, attrib_name: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_distance_attributes` instead.
+  
+  This function returns the value of a specific attribute.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  distance_id : int
+  
+  attrib_name : str
+      The name of the attribute
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string with the value of the given argument.
+      Else, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          distance_id = 1
+          name = "Info"
+          value = windows.AttributeOfDistance(window_name, distance_id, name)
+          print("Value " + value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributeOfParametricPoint
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.ParamPoint.get_attributes instead.
+SIGNATURE: meta.windows.AttributeOfParametricPoint(window_name: str, ppoint_id: int, attrib_name: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.ParamPoint.get_attributes` instead.
+  
+  This function returns the value of a specific attribute.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  ppoint_id : int
+      The id of the parametric point
+  
+  attrib_name : str
+      The name of the attribute
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string with the value of the given argument.
+      Else, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          ppoint_id = 1
+          name = "Type"
+          value = windows.AttributeOfParametricPoint(window_name, ppoint_id, name)
+          print("Value " + value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfParametricPoint
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.ParamPoint.set_attribute instead.
+SIGNATURE: meta.windows.SetAttributeOfParametricPoint(window_name: str, ppoint_id: int, attribute_name: str, attribute_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.ParamPoint.set_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given parametric point. If the given attribute does not exist it is automatically created and its value is set.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window.
+  
+  ppoint_id : int
+      The id of the parametric point.
+  
+  attribute_name : str
+      Name of the attribute.
+  
+  attribute_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          ppoint_id = 14
+          name = "attr"
+          val = "val"
+          value = windows.SetAttributeOfParametricPoint(window_name, ppoint_id, name, val)
+          print(value)
+          # or
+          name = "n_attr"
+          val = 123
+          attribute_type = "numerical"
+          value = windows.SetAttributeOfParametricPoint(
+              window_name, ppoint_id, name, val, attribute_type
+          )
+          print(value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfDistance
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_distance_attribute instead.
+SIGNATURE: meta.windows.SetAttributeOfDistance(window_name: str, distance_id: int, attribute_name: str, attribute_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_distance_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given distance. If the given attribute does not exist it is automatically created and its value is set.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window.
+  
+  distance_id : int
+      The id of the distance.
+  
+  attribute_name : str
+      Name of the attribute.
+  
+  attribute_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          distance_id = 1
+          name = "attr"
+          val = "val"
+          value = windows.SetAttributeOfDistance(window_name, distance_id, name, val)
+          print(value)
+          # or
+          name = "attr"
+          val = 12.3
+          attribute_type = "numerical"
+          value = windows.SetAttributeOfDistance(
+              window_name, distance_id, name, val, attribute_type
+          )
+          print(value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfAngle
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_angle_attribute instead.
+SIGNATURE: meta.windows.SetAttributeOfAngle(window_name: str, angle_id: int, attrib_name: str, attrib_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_angle_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given angle. If the given attribute does not exist it is automatically created and its value is set.
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window.
+  
+  angle_id : int
+      The id of the angle.
+  
+  attrib_name : str
+      Name of the attribute.
+  
+  attrib_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          angle_id = 1
+          name = "attr"
+          val = "val"
+          value = windows.SetAttributeOfAngle(window_name, angle_id, name, val)
+          print(value)
+          # or
+          name = "n_attr"
+          val = 12.2
+          attribute_type = "numerical"
+          value = windows.SetAttributeOfAngle(
+              window_name, angle_id, name, val, attribute_type
+          )
+          print(value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfParametricPoint
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.ParamPoint.get_attributes instead.
+SIGNATURE: meta.windows.AttributesOfParametricPoint(window_name: str, ppoint_id: int) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.ParamPoint.get_attributes` instead.
+  
+  This function collects all attributes of a given parametric point
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  ppoint_id : int
+      The id of the parametric point
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          ppoint_id = 14
+  
+          all_attributes = windows.AttributesOfParametricPoint(window_name, ppoint_id)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfDistance
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_distance_attributes instead.
+SIGNATURE: meta.windows.AttributesOfDistance(window_name: str, distance_id: int) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_distance_attributes` instead.
+  
+  This function collects all attributes of a given distance
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  distance_id : int
+      The id of the distance
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          distance_id = 15
+          all_attributes = windows.AttributesOfDistance(window_name, distance_id)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfAngle
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_angle_attributes instead.
+SIGNATURE: meta.windows.AttributesOfAngle(window_name: str, angle_id: int) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_angle_attributes` instead.
+  
+  This function collects all attributes of a given angle
+  
+  Parameters
+  ----------
+  window_name : str
+      The name of the window
+  
+  angle_id : int
+      The id of the angle
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          angle_id = 1
+          all_attributes = windows.AttributesOfAngle(window_name, angle_id)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PickRegion
+MODULE: meta.windows
+SIGNATURE: meta.windows.PickRegion(mode: str) -> list[float]
+DOCSTRING:
+  This function enters pick mode and waits for the user to select a region in an OpenGL window. Once a selection is made, the function returns a list that contains the coordinates of the selected box.
+  
+  Parameters
+  ----------
+  mode : str
+      Its possible values are:
+        - "absolute" : the values of the selected box correspond to the pixels on the screen.
+        - "normalized" : the values of the selected box are normalized as to the width and the height of the window.
+      The default value is "absolute" and, in both cases, the origin of the coordinate system is the top-left corner of the window.
+  
+  Returns
+  -------
+  list[float]
+      It returns a list of floating numbers that correspond to the coordinates of the selected box.
+        -The first element of the list is the left (x) coordinate.
+        -The second element of the lsit is the top (y) coordinate.
+        -The third element of the list is the width of the selected box.
+        -The fourth element of the list is the height of the selected box.
+  
+      If mode is "normalized", all values are between 0 and 1.
+      If the user exits pick mode without selecting a region, width and height will be equal to -1.
+      In single pick, width and height will be 0.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          mode = "normalized"
+          coords = windows.PickRegion(mode)
+          if coords:
+              print(
+                  "Left x:",
+                  coords[0],
+                  " Top y:",
+                  coords[1],
+                  "Width:",
+                  coords[2],
+                  "Height:",
+                  coords[3],
+              )
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetScalarFringeSettings
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_fringe_settings instead.
+SIGNATURE: meta.windows.GetScalarFringeSettings(window_name: str) -> dict
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_fringe_settings` instead.
+  
+  This function displays the settings of the scalar fringe in the given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  dict
+      It returns a dictionary with the settings of the scalar fringe. Each pair of key and value of the dictionary contains one setting. The key will always be a string.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          settings = windows.GetScalarFringeSettings(window_name)
+          for k in settings:
+              print("{:>30}".format(k), ":", settings[k])
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetVectorFringeSettings
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.get_fringe_settings instead.
+SIGNATURE: meta.windows.GetVectorFringeSettings(window_name: str) -> dict
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.get_fringe_settings` instead.
+  
+  This function displays the settings of the vector fringe in the given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  dict
+      It returns a dictionary with the settings of the scalar fringe. Each pair of key and value of the dictionary contains one setting. The key will always be a string.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          settings = windows.GetVectorFringeSettings(window_name)
+          for k in settings:
+              print("{:>30}".format(k), ":", settings[k])
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetScalarFringeSettings
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_fringe_settings instead.
+SIGNATURE: meta.windows.SetScalarFringeSettings(window_name: str, settings: dict) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_fringe_settings` instead.
+  
+  This function adjusts the settings of the scalar fringe in the given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  settings : dict
+      Argument 'settings' is a dictionary which contains strings as members with the name and value of each setting separated by comma (e.g. 'format, auto'). The names of the scalar fringe settings and their possible values are:
+      - 'format' : Precision type ('auto', 'fixed', 'scientific')
+      - 'digits' : Number of digits (integer value)
+      - 'color_background' : Background color (string value)
+      - 'color_description' : Color of the description (string value)
+      - 'color_footer' : Color of the footer (string value)
+      - 'color_outline' : Color of the outline (string value)
+      - 'color_fringeoutline' : Color of the fringe outline (string value)
+      - 'color_title' : Color of the title (string value)
+      - 'color_values' : Color of the values (string value)
+      - 'expand' : Expand fringebar colors ('on', 'off')
+      - 'font_description' : Description font (string value)
+      - 'font_footer' : Footer font (string value)
+      - 'font_title' : Title font (string value)
+      - 'font_values' : Values font (string value)
+      - 'footer_function' : Set footer function ('all', 'visible')
+      - 'footer_minmaxids' : Show min-max entity ids ('on', 'off')
+      - 'footer_tdeform' : Show T Deform function in footer ('on', 'off')
+      - 'footer_xdeform' : Show X Deform function in footer ('on', 'off')
+      - 'footer_ydeform' : Show Y Deform function in footer ('on', 'off')
+      - 'footer_zdeform' : Show Z Deform function in footer ('on', 'off')
+      - 'horizontal' : Set horizontal orientation ('on', 'off')
+      - 'invert' : Invert color order ('on', 'off')
+      - 'mode_novaluecolor' : Display No Value elements with no value color ('on', off')
+      - 'position_x' : Set fringe position in X axis (value from 0 to 1)
+      - 'position_y' : Set fringe position in Y axis (value from 0 to 1)
+      - 'rangebehaviour : Set fringe range behaviour ('enable', 'disable')
+      - 'text_description' : Set description text (string value)
+      - 'text_novalue' : Set No Value Color text (string value)
+      - 'type_title': Set Title type ('user', 'currentlabel')
+      - 'text_title' : Set Title text (string value)
+      - 'height' : Set fringe height (value from 0 to 1)
+      - 'width' : Set fringe width (value from 0 to 1)
+      - 'spacing' : Set spacing between fringe parts (number of pixels)
+      - 'textalign_colors' : Set position of values relative to fringe ('left', 'right')
+      - 'textalign_description' : Set description text alignment ('center', 'left', right')
+      - 'textalign_footer' : Set footer text alignment ('center', 'left', right')
+      - 'textalign_title' : Set title text alignment ('center', 'left', right')
+      - 'textalign_values' : Set values text alignment ('center', 'left', right')
+      - 'textposition_description' : Set description text position ('top', 'bottom')
+      - 'textposition_title' : Set title text position ('top', 'bottom')
+      - 'textposition_values_center' : Set values in center for non linear fringe ('on', off')
+      - 'visibility_background' : Show background color ('on', off')
+      - 'visibility_colors' : Show color bar ('on', off')
+      - 'visibility_comparecharvisible' : Show '<' and '>' on color bar ('on', off')
+      - 'visibility_description' : Show description ('on', off')
+      - 'visibility_footer' : Show footer min-max function ('on', off')
+      - 'visibility_fringeoutline' : Show color bar outline ('on', off')
+      - 'visibility_novaluecolor' : Show no value color indication ('on', off')
+      - 'visibility_outline' : Show outline ('on', off')
+      - 'visibility_title' : Show title ('on', off')
+      - 'visibility_values' : Show values ('on', off')
+      - 'color_fringebar_scalarset' : Set current Scalar fringe (fringe name)
+      - 'srange_set' : Set min max range ('min_value, max_value')
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          settings = {"format": "auto"}
+          ret = windows.SetScalarFringeSettings(window_name, settings)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetVectorFringeSettings
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.set_fringe_settings instead.
+SIGNATURE: meta.windows.SetVectorFringeSettings(window_name: str, settings: dict) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.set_fringe_settings` instead.
+  
+  This function adjusts the settings of the vector fringe in the given window.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  settings : dict
+      Argument 'settings' is a dictionary which contains strings as members with the name and value of each setting separated by comma (e.g. 'format, auto'). The names of the scalar fringe settings and their possible values are:
+      - 'format' : Precision type ('auto', 'fixed', 'scientific')
+      - 'digits' : Number of digits (integer value)
+      - 'color_background' : Background color (string value)
+      - 'color_description' : Color of the description (string value)
+      - 'color_footer' : Color of the footer (string value)
+      - 'color_outline' : Color of the outline (string value)
+      - 'color_fringeoutline' : Color of the fringe outline (string value)
+      - 'color_title' : Color of the title (string value)
+      - 'color_values' : Color of the values (string value)
+      - 'expand' : Expand fringebar colors ('on', 'off')
+      - 'font_description' : Description font (string value)
+      - 'font_footer' : Footer font (string value)
+      - 'font_title' : Title font (string value)
+      - 'font_values' : Values font (string value)
+      - 'footer_function' : Set footer function ('all', 'visible')
+      - 'footer_minmaxids' : Show min-max entity ids ('on', 'off')
+      - 'footer_tdeform' : Show T Deform function in footer ('on', 'off')
+      - 'footer_xdeform' : Show X Deform function in footer ('on', 'off')
+      - 'footer_ydeform' : Show Y Deform function in footer ('on', 'off')
+      - 'footer_zdeform' : Show Z Deform function in footer ('on', 'off')
+      - 'horizontal' : Set horizontal orientation ('on', 'off')
+      - 'invert' : Invert color order ('on', 'off')
+      - 'position_x' : Set fringe position in X axis (value from 0 to 1)
+      - 'position_y' : Set fringe position in Y axis (value from 0 to 1)
+      - 'text_description' : Set description text (string value)
+      - 'type_title': Set Title type ('user', 'currentlabel')
+      - 'text_title' : Set Title text (string value)
+      - 'height' : Set fringe height (value from 0 to 1)
+      - 'width' : Set fringe width (value from 0 to 1)
+      - 'spacing' : Set spacing between fringe parts (number of pixels)
+      - 'textalign_colors' : Set position of values relative to fringe ('left', 'right')
+      - 'textalign_description' : Set description text alignment ('center', 'left', right')
+      - 'textalign_footer' : Set footer text alignment ('center', 'left', right')
+      - 'textalign_title' : Set title text alignment ('center', 'left', right')
+      - 'textalign_values' : Set values text alignment ('center', 'left', right')
+      - 'textposition_description' : Set description text position ('top', 'bottom')
+      - 'textposition_title' : Set title text position ('top', 'bottom')
+      - 'textposition_values_center' : Set values in center for non linear fringe ('on', off')
+      - 'visibility_background' : Show background color ('on', off')
+      - 'visibility_colors' : Show color bar ('on', off')
+      - 'visibility_comparecharvisible' : Show '<' and '>' on color bar ('on', off')
+      - 'visibility_description' : Show description ('on', off')
+      - 'visibility_footer' : Show footer min-max function ('on', off')
+      - 'visibility_fringeoutline' : Show color bar outline ('on', off')
+      - 'visibility_outline' : Show outline ('on', off')
+      - 'visibility_title' : Show title ('on', off')
+      - 'visibility_values' : Show values ('on', off')
+      - 'color_fringebar_vectorset' : Set current Scalar fringe (fringe name)
+      - 'vrange_set' : Set min max range ('min_value, max_value')
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "MetaPost"
+          settings = {"format": "auto"}
+          ret = windows.SetVectorFringeSettings(window_name, settings)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CopyWindow
+MODULE: meta.windows
+DEPRECATED: Deprecated since version 20.1.0.Use meta.windows.Window.copy instead.
+SIGNATURE: meta.windows.CopyWindow(source_page_id: int, source_window_name: int, target_page_id: int, target_window_names: list[str]) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.windows.Window.copy` instead.
+  
+  This function copy-pastes a given existing window.
+  
+  Parameters
+  ----------
+  source_page_id : int
+      This function copy-pastes a given existing window.
+  
+  source_window_name : int
+      Name of the source window.
+  
+  target_page_id : int
+      Id of the target page.
+  
+  target_window_names : list[str]
+      List with the target window names.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          source_page_id = 0
+          source_window_name = "MetaPost"
+          target_page_id = 0
+          target_window_names = ["Window1", "Window2"]
+          ret = windows.CopyWindow(
+              source_page_id, source_window_name, target_page_id, target_window_names
+          )
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateTextWindow
+MODULE: meta.windows
+SIGNATURE: meta.windows.CreateTextWindow(window_name: str) -> Window
+DOCSTRING:
+  This function creates a new text window with a given name.
+  
+  Parameters
+  ----------
+  window_name : str
+      Name of the window.
+  
+  Returns
+  -------
+  Window
+      Upon success, it returns a python object of class Window referring to the newly created text window.
+      Upon failure, None is returned.
+  
+  Notes
+  -----
+  This function works for active page.
+   If a window with the given name already exists, this function will not create a new one.
+   The new text window becomes the currently active window.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          window_name = "Text"
+          w = windows.CreateTextWindow(window_name)
+          if w:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: get_plot_layout
+MODULE: meta.windows
+SIGNATURE: meta.windows.get_plot_layout(specifier: str) -> str
+DOCSTRING:
+  The function returns the 2d window plot layout
+  
+  Parameters
+  ----------
+  specifier : str
+      "id" returns the layout id
+      "name" returns the layout name
+  
+  Returns
+  -------
+  str
+      Name or id of the layout
+  
+  Examples
+  --------
+  ::
+  
+      import meta
+      from meta import windows
+  
+  
+      def main():
+          win = windows.Window(name="Window1", page_id=0)
+          specifier = "name"
+          layout_name = win.get_plot_layout(specifier)
+          print(layout_name)
+  
+          layout_id = win.get_plot_layout()
+          print(layout_id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

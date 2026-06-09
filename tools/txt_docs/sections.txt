@@ -1,0 +1,781 @@
+MODULE: meta.sections
+========================================================================
+
+FUNCTION: Sections
+MODULE: meta.sections
+SIGNATURE: meta.sections.Sections(model_id: int) -> list[Section]
+DOCSTRING:
+  This function collects all sections of the model specified by the given id.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  Returns
+  -------
+  list[Section]
+      It returns a list where each member of the list is an object of class Section referring to one specific section of the model.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          all_sections = sections.Sections(model_id)
+  
+          for se in all_sections:
+              print(se)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetSectionByName
+MODULE: meta.sections
+SIGNATURE: meta.sections.GetSectionByName(model_id: int, sec_name: str) -> Section
+DOCSTRING:
+  This function finds the section of a model with a given name.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : str
+      Section name
+  
+  Returns
+  -------
+  Section
+      It returns an object of class Section.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+  
+          name = "section_name"
+          section = sections.GetSectionByName(model_id, name)
+          print(section)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ElementsOfSection
+MODULE: meta.sections
+DEPRECATED: Deprecated since version 20.1.0.Use meta.sections.Section.get_elements instead.
+SIGNATURE: meta.sections.ElementsOfSection(model_id: int, sec_name: str) -> list[elements.Element]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.sections.Section.get_elements` instead.
+  
+  This function collects all elements of a given section belonging to the specified model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : str
+      Section name.
+  
+  Returns
+  -------
+  list[elements.Element]
+      It returns a list where each member is an object of class Element referring to one specific element.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          all_sections = sections.Sections(model_id)
+  
+          for se in all_sections:
+              print(se.name)
+  
+              elem_list = sections.ElementsOfSection(model_id, se.name)
+              for e in elem_list:
+                  print(e)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NodesOfSection
+MODULE: meta.sections
+DEPRECATED: Deprecated since version 20.1.0.Use meta.sections.Section.get_nodes instead.
+SIGNATURE: meta.sections.NodesOfSection(model_id: int, sec_name: str) -> list[nodes.Node]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.sections.Section.get_nodes` instead.
+  
+  This function collects all nodes of a given section belonging to the specified model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : str
+      Section name.
+  
+  Returns
+  -------
+  list[nodes.Node]
+      It returns a list where each member is an object of class Node referring to one specific node.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          all_sections = sections.Sections(model_id)
+  
+          for se in all_sections:
+              print(se.name)
+  
+              node_list = sections.NodesOfSection(model_id, se.name)
+              for n in node_list:
+                  print(n)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ResultsetsOfSection
+MODULE: meta.sections
+DEPRECATED: Deprecated since version 20.1.0.Use meta.sections.Section.get_resultsets instead.
+SIGNATURE: meta.sections.ResultsetsOfSection(model_id: int, sec_name: str) -> list[results.Result]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.sections.Section.get_resultsets` instead.
+  
+  This function collects all the resultsets of a given section belonging to the specified model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : str
+      Section name.
+  
+  Returns
+  -------
+  list[results.Result]
+      It returns a list where each member is an object of class Resultset referring to one specific resultset.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          all_sections = sections.Sections(model_id)
+  
+          for se in all_sections:
+              print(se.name)
+  
+              res_list = sections.ResultsetsOfSection(model_id, se.name)
+              for r in res_list:
+                  print(r)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetForceMomentOfSection
+MODULE: meta.sections
+DEPRECATED: Deprecated since version 20.1.0.Use meta.sections.Section.get_force_moment instead.
+SIGNATURE: meta.sections.GetForceMomentOfSection(model_id: int, sec_name: str, result: results.Result, view_mode: str, summation_mode: str) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.sections.Section.get_force_moment` instead.
+  
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : str
+      Section name.
+  
+  result : results.Result
+      An object of class Result that refers to a Resultset of the model.
+  
+  view_mode : str
+      Accepted values:
+      total, current, node
+  
+  summation_mode : str
+      Accepted values: 
+      freebody, internal, paminternal, external, applied, contact, contanormal, contafrictional, reaction, mixed, mpc.
+  
+  Returns
+  -------
+  list
+      When view_mode is total or node returns a list, that has as first element a list with the forces and as a second, a list with the moments.
+      When view_mode is current, the function returns a list that contains the forces and moments of every node. Every Element of this list, is a list, that has as first element the node id, as second a list with the forces in this node, and as third a list with the moments in this node
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          all_sections = sections.Sections(model_id)
+  
+          for se in all_sections:
+              print(se.name)
+  
+              res_list = sections.ResultsetsOfSection(model_id, se.name)
+              for r in res_list:
+                  print(r)
+                  force_list = sections.GetForceMomentOfSection(
+                      model_id, se.name, r, "total", "external"
+                  )
+                  print(force_list)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetIdOfWatchNode
+MODULE: meta.sections
+DEPRECATED: Deprecated since version 20.1.0.Use meta.sections.Section.get_watch_node instead.
+SIGNATURE: meta.sections.GetIdOfWatchNode(model_id: int, sec_name: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.sections.Section.get_watch_node` instead.
+  
+  This returns the id of the watch node.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : str
+      Section name.
+  
+  Returns
+  -------
+  int
+      Returns the id of the watch node.
+      Upon failure, returns -1
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          all_sections = sections.Sections(model_id)
+  
+          for se in all_sections:
+              print(se.name)
+              id = sections.GetIdOfWatchNode(model_id, se.name)
+              print(id)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PlaneOfSection
+MODULE: meta.sections
+DEPRECATED: Deprecated since version 20.1.0.Use meta.sections.Section.get_plane instead.
+SIGNATURE: meta.sections.PlaneOfSection(model_id: int, sec_name: int) -> planes.Plane
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.sections.Section.get_plane` instead.
+  
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : int
+      Section name.
+  
+  Returns
+  -------
+  planes.Plane
+      Upon success, it returns a plane object with the plane that created this section
+      Else, a non valid plane object is returned.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          all_sections = sections.Sections(model_id)
+  
+          for se in all_sections:
+              print(se.name)
+              plane = sections.PlaneOfSection(model_id, se.name)
+              print(plane)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReadResultsOfSection
+MODULE: meta.sections
+SIGNATURE: meta.sections.ReadResultsOfSection(model_id: int, deck: str, file: str, states: str) -> list[results.Result]
+DOCSTRING:
+  Read Results for section forces for a specific model from specified model.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  deck : str
+      Name of the deck.
+  
+  file : str
+      The file with the results
+  
+  states : str
+      Range of states that will be read.
+  
+  Returns
+  -------
+  list[results.Result]
+      Returns a list with all resultsets of sections for the given model
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          file = "dyna_section_results_file"
+          deck = "Dyna3d"
+          states = "all"
+          read = sections.ReadResultsOfSection(model_id, deck, file, states)
+  
+          if len(read) > 0:
+              for re in read:
+                  print(re)
+          else:
+              print(read)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateSectionFromVisible
+MODULE: meta.sections
+SIGNATURE: meta.sections.CreateSectionFromVisible(model_id: int, sec_name: str) -> Section
+DOCSTRING:
+  Creates a section from the visible entities
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : str
+      Section Name
+  
+  Returns
+  -------
+  Section
+      It returns an object of class Section, if creation was successful, otherwise None.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          sec_name = "from_vis"
+          se = sections.CreateSectionFromVisible(model_id, sec_name)
+          print(se)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateSectionFromIdentified
+MODULE: meta.sections
+SIGNATURE: meta.sections.CreateSectionFromIdentified(model_id: int, sec_name: str) -> Section
+DOCSTRING:
+  Creates a section from the identified entities
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : str
+      Section Name
+  
+  Returns
+  -------
+  Section
+      It returns an object of class Section, if creation was successful, otherwise None.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          sec_name = "from_ide"
+          se = sections.CreateSectionFromIdentified(model_id, sec_name)
+          print(se)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateSectionFromPart
+MODULE: meta.sections
+DEPRECATED: Deprecated since version 20.1.0.Use meta.parts.Part.create_section instead.
+SIGNATURE: meta.sections.CreateSectionFromPart(model_id: int, part_id: int) -> Section
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.parts.Part.create_section` instead.
+  
+  Creates a section from the specified part
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  part_id : int
+      Id of the part.
+  
+  Returns
+  -------
+  Section
+      It returns an object of class Section, if creation was successful, otherwise None.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          part_id = 30
+          se = sections.CreateSectionFromPart(model_id, part_id)
+          print(se)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateSectionFromGroup
+MODULE: meta.sections
+DEPRECATED: Deprecated since version 20.1.0.Use meta.groups.Group.create_section instead.
+SIGNATURE: meta.sections.CreateSectionFromGroup(model_id: int, group_name: str) -> Section
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.groups.Group.create_section` instead.
+  
+  Creates a section from the specified group
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  group_name : str
+      Name of the group.
+  
+  Returns
+  -------
+  Section
+      It returns an object of class Section, if creation was successful, otherwise None.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          group_name = "my_group"
+          se = sections.CreateSectionFromGroup(model_id, group_name)
+          print(se)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateSectionFromPlane
+MODULE: meta.sections
+DEPRECATED: Deprecated since version 20.1.0.Use meta.planes.Plane.create_section instead.
+SIGNATURE: meta.sections.CreateSectionFromPlane(model_id: str, plane_name: str) -> Section
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.planes.Plane.create_section` instead.
+  
+  Creates a section from the specified plane
+  
+  Parameters
+  ----------
+  model_id : str
+      Id of the model.
+  
+  plane_name : str
+      Name of the group.
+  
+  Returns
+  -------
+  Section
+      It returns an object of class Section, if creation was successful, otherwise None.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          plane_name = "my_plane"
+          se = sections.CreateSectionFromPlane(model_id, plane_name)
+          print(se)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AdvFiltersOnCreateSection
+MODULE: meta.sections
+SIGNATURE: meta.sections.AdvFiltersOnCreateSection(model_id: int, sec_name: str, filter_entities: str, adv_filters: list[str]) -> Section
+DOCSTRING:
+  This function allows the user to collect entities of a model specified by its id through some advanced filters and create a section with these entities.
+  
+  Parameters
+  ----------
+  model_id : int
+      Id of the model.
+  
+  sec_name : str
+      Section Name.
+  
+  filter_entities : str
+      Argument 'filter_entities' is a string which refers to the type of the entities. Its possible values are:
+      - 'elements'
+      - 'nodes'
+  
+  adv_filters : list[str]
+      Contains the advanced filters as a list of string expressions. Their syntax is the same with the commands referring to advanced filters.
+  
+  Returns
+  -------
+  Section
+      It returns an object of class Section, if creation was successful, otherwise None.
+  
+  See Also
+  --------
+  meta.sections.Section
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import sections
+  
+  
+      def main():
+          model_id = 0
+          sec_name = "elem_sec"
+          filter_entities = "elements"
+          adv_filters = [
+              "add:Elements:all::Keep All",
+              "intersect:Elements:id.range:20000-20500:Keep All",
+          ]
+  
+          se = sections.AdvFiltersOnCreateSection(
+              model_id, sec_name, filter_entities, adv_filters
+          )
+          print(se)
+  
+          sec_name = "node_sec"
+          filter_entities = "nodes"
+          adv_filters = ["add:Nodes:id.range:23000-23500:Keep All"]
+  
+          se = sections.AdvFiltersOnCreateSection(
+              model_id, sec_name, filter_entities, adv_filters
+          )
+          print(se)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

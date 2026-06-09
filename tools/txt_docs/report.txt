@@ -1,0 +1,699 @@
+MODULE: meta.report
+========================================================================
+
+FUNCTION: HeightOfSlide
+MODULE: meta.report
+DEPRECATED: Deprecated since version 20.1.0.Use meta.report.Report.get_slide_size instead.
+SIGNATURE: meta.report.HeightOfSlide(unit: float) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.report.Report.get_slide_size` instead.
+  
+  This function returns the height of the report slide.
+  
+  Parameters
+  ----------
+  unit : float
+      Refers to the unit of measurement of the height. Its possible values are:
+      - 'mm' : Millimeters
+      - 'pixel' : Pixels.
+  
+  Returns
+  -------
+  float
+      This function returns as float the height of the report slide in the given unit of measurement.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          h_mm = report.HeightOfSlide("mm")  # The height of the report slide in millimeter
+          h_px = report.HeightOfSlide("pixel")  # The height of the report slide in pixels
+          print("The height of the slide is " + str(h_mm) + " mm or " + str(h_px) + "px.")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NamesOfAllSlides
+MODULE: meta.report
+SIGNATURE: meta.report.NamesOfAllSlides() -> Iterable[str]
+DOCSTRING:
+  This function get names of all existing slides of the report.
+  
+  Returns
+  -------
+  Iterable[str]
+      It returns a list where each member of the list is a string referring to the name of an existing slide of the report.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          all_slides = report.NamesOfAllSlides()
+          for slide_name in all_slides:
+              print(slide_name)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: TextOfReportTextbox
+MODULE: meta.report
+DEPRECATED: Deprecated since version 20.1.0.Use meta.report.Textbox.get_text instead.
+SIGNATURE: meta.report.TextOfReportTextbox(slide_name: str, textbox_name: str, text_type: int) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.report.Textbox.get_text` instead.
+  
+  This function gets the text of a textbox of a given toolbar.
+  
+  Parameters
+  ----------
+  slide_name : str
+      Name of the slide
+  
+  textbox_name : str
+      Name of the textbox
+  
+  text_type : int
+      If value of argument "text_type" is 0 then the text after the quantification of any variables is returned, else the original text is returned.
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string referring to the text of the textbox of the given slide.
+      Upon failure, it returns an empty string.
+  
+  Notes
+  -----
+  This functions works for the active report composer.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          slide_name = "Slide 1"
+          textbox_name = "Textbox 1"
+          text_type = 1
+  
+          text = report.TextOfReportTextbox(slide_name, textbox_name, text_type)
+          print(text)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: WidthOfSlide
+MODULE: meta.report
+DEPRECATED: Deprecated since version 20.1.0.Use meta.report.Report.get_slide_size instead.
+SIGNATURE: meta.report.WidthOfSlide(unit: str) -> float
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.report.Report.get_slide_size` instead.
+  
+  This function returns the width of the report slide.
+  
+  Parameters
+  ----------
+  unit : str
+      Refers to the unit of measurement of the width. Its possible values are:
+      - "mm" : Millimeters
+      - "pixel" : Pixels.
+  
+  Returns
+  -------
+  float
+      This function returns as float the width of the report slide in the given unit of measurement.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          w_mm = report.WidthOfSlide("mm")  # The width of the report slide in millimeter
+          w_px = report.WidthOfSlide("pixel")  # The width of the report slide in pixels
+          print("The width of the slide is " + str(w_mm) + " mm or " + str(w_px) + "px.")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: RectOfSlideElement
+MODULE: meta.report
+SIGNATURE: meta.report.RectOfSlideElement(slide: str, element: str, unit: str) -> float
+DOCSTRING:
+  This function returns the rectangle of a shape in a slide.
+  
+  Parameters
+  ----------
+  slide : str
+      The name of the slide.
+  
+  element : str
+      The name of the element.
+  
+  unit : str
+      The units of measurement. The possible values are:
+      -'mm': Millimeters
+      -'norm': Normalized values 
+      -'pixel': Pixels.
+      If unit does not match one of the valid values, then the function will return the rectangle in pixels.
+  
+  Returns
+  -------
+  float
+      This function returns the rectangle of the shape in the given unit of measurement.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          # Normalized values
+          slide = "Slide 1"
+          element = "Image 1"
+          unit = "norm"
+          rect = report.RectOfSlideElement(slide, element, unit)
+          print('Rect of "Image 1" in normalized values')
+          print("===================")
+          print("X: ", rect[0])
+          print("Y: ", rect[1])
+          print("Width: ", rect[2])
+          print("Height: ", rect[3])
+  
+          # Values in millimeters
+          unit = "mm"
+          rect = report.RectOfSlideElement(slide, element, unit)
+          print('\nRect of "Image 1" in millimeters')
+          print("===================")
+          print("X: ", rect[0])
+          print("Y: ", rect[1])
+          print("Width: ", rect[2])
+          print("Height: ", rect[3])
+  
+          # if unit is not set to one of the above values, then the size in pixels will be returned
+          # unit can also be explicitly set to 'pixel'
+          unit = "pixel"
+          rect = report.RectOfSlideElement(slide, element, unit)
+          print('\nRect of "Image 1" in pixels')
+          print("===================")
+          print("X: ", rect[0])
+          print("Y: ", rect[1])
+          print("Width: ", rect[2])
+          print("Height: ", rect[3])
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: WidthOfSpreadsheetColumns
+MODULE: meta.report
+SIGNATURE: meta.report.WidthOfSpreadsheetColumns(slide_name: str, table_name: str, sheet_name: str, columns: Iterable[int], unit: str) -> Iterable[float]
+DOCSTRING:
+  This function returns the width of the specified columns for a given Excel table in the specified unit.
+  
+  Parameters
+  ----------
+  slide_name : str
+      Name of the slide.
+  
+  table_name : str
+      Name of the table.
+  
+  sheet_name : str
+      Name of the sheet.
+  
+  columns : Iterable[int]
+      A list with the numbers of the columns of interest (Numbering starts from 0).
+  
+  unit : str
+      The unit of interest:
+      -pt
+      -mm
+      -pixel
+  
+  Returns
+  -------
+  Iterable[float]
+      The function returns a list that contains columns' width.
+  
+  Notes
+  -----
+  The function works for the active Report Composer.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          slide_name = "Slide 1"
+          table_name = "Table 1"
+          sheet_name = "Sheet1"
+          columns = [0, 1, 3]
+          unit = "pt"
+  
+          columns_width = report.WidthOfSpreadsheetColumns(
+              slide_name, table_name, sheet_name, columns, unit
+          )
+          print(columns_width)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: NamesOfAllShapes
+MODULE: meta.report
+SIGNATURE: meta.report.NamesOfAllShapes(slide_name: str) -> dict
+DOCSTRING:
+  This function returns a map containing the names of the shapes in the given slide, grouped by shape type.
+  
+  Parameters
+  ----------
+  slide_name : str
+      Name of the slide
+  
+  Returns
+  -------
+  dict
+      It returns a dictionary which contains, the shape types as keys, and lists of shape names as values.
+      Upon failure, an empty dictionary is returned.
+  
+  Notes
+  -----
+  This functions works for the active report composer.
+  
+  See Also
+  --------
+  meta.report.NamesOfAllSlides
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          slide_name = "Slide 1"
+  
+          all_shapes = report.NamesOfAllShapes(slide_name)
+          for shape_type in all_shapes:
+              print(shape_type[0])
+              for shape in shape_type[1]:
+                  print(shape)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateReport
+MODULE: meta.report
+SIGNATURE: meta.report.CreateReport(name: str, attached: bool=False) -> Report
+DOCSTRING:
+  Creates a report composer window with the provided name, or a unique generated name if one is not provided. Returns None if a name is provided and a report with that name already exists.
+  
+  Parameters
+  ----------
+  name : str, optional
+      Name of the new report composer window.
+  
+  attached : bool, optional
+      Whether the new report window will appear inside the workspace (attached=True) or as a floating window (attached=False).
+  
+  Returns
+  -------
+  Report
+      Upon success returns an object of type meta.report.Report
+      Upon failure returns None.
+  
+  Notes
+  -----
+  Creation fails when a report composer window with the same name exists.
+  
+  See Also
+  --------
+  meta.report.Reports
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          # Create new report
+          r = report.CreateReport()
+          print(r)
+          # Or
+          name = "Report 1"
+          r = report.CreateReport(name)
+          print(r)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: GetReportNames
+MODULE: meta.report
+SIGNATURE: meta.report.GetReportNames() -> Iterable[str]
+DOCSTRING:
+  Returns the names of all report composer windows.
+  
+  Returns
+  -------
+  Iterable[str]
+      Returns a list of strings with the names of all report composer windows.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import report
+  
+  
+      def main():
+          # Create new report
+          r = report.CreateReport()
+          print(r)
+          # Or
+          name = "Report 1"
+          r = report.CreateReport(name)
+          print(r)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Reports
+MODULE: meta.report
+SIGNATURE: meta.report.Reports() -> Iterable[Report]
+DOCSTRING:
+  Returns all report composer windows.
+  
+  Returns
+  -------
+  Iterable[Report]
+      Returns a list of meta.report.Report objects that correspond to all report composer windows.
+  
+  See Also
+  --------
+  meta.report.CreateReport, meta.report.Report
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import os
+      import meta
+      from meta import report
+  
+  
+      def main():
+          # Create new report
+          r = report.CreateReport()
+          print(r)
+          # Or
+          name = "Report 1"
+          r = report.CreateReport(name)
+          print(r)
+  
+          all_r = report.Reports()
+          print(all_r)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeleteReport
+MODULE: meta.report
+SIGNATURE: meta.report.DeleteReport(report: Report | str) -> bool
+DOCSTRING:
+  Deletes the given report from META. This action invalidates the object.
+  
+  Parameters
+  ----------
+  report : Report | str
+      Either a report name as a string or a meta.report.Report object.
+  
+  Returns
+  -------
+  bool
+      Upon success returns True
+      Upon failure returns False.
+  
+  See Also
+  --------
+  meta.report.Report, meta.report.CreateReport, meta.report.Reports
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          # Create new report
+          r = report.CreateReport()
+          # Delete report
+          ret = report.DeleteReport(r)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Spreadsheets
+MODULE: meta.report
+SIGNATURE: meta.report.Spreadsheets() -> Iterable[spreadsheet.Spreadsheet]
+DOCSTRING:
+  Returns all spreadsheet windows.
+  
+  Returns
+  -------
+  Iterable[spreadsheet.Spreadsheet]
+      Returns a list of meta.spreadsheet.Spreadsheet objects that correspond to all spreadsheet windows.
+  
+  See Also
+  --------
+  meta.spreadsheet.CreateSpreadsheet, meta.spreadsheet.Spreadsheet
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import spreadsheet
+  
+  
+      def main():
+          # Create new spreadsheet
+          s = spreadsheet.CreateSpreadsheet()
+          print(s)
+          # OR
+          name = "Spreadsheet 2"
+          s2 = spreadsheet.CreateSpreadsheet(name)
+          print(s2)
+          # Get all spreadsheets
+          all_s = spreadsheet.Spreadsheets()
+          print(all_s)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateReportTag
+MODULE: meta.report
+SIGNATURE: meta.report.CreateReportTag(name: str, value: str) -> ReportTag
+DOCSTRING:
+  Creates a report tag.
+  
+  Parameters
+  ----------
+  name : str
+  
+  value : str
+  
+  Returns
+  -------
+  ReportTag
+      meta.report.ReportTag
+  
+  See Also
+  --------
+  meta.report.ReportTag
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          name = "tag_name"
+          value = "tag_value"
+          tag = report.CreateReportTag(name, value)
+          print(tag)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreateReportFilter
+MODULE: meta.report
+SIGNATURE: meta.report.CreateReportFilter(type: str, name: str, operator: str, value: str, value2: str) -> ReportFilter
+DOCSTRING:
+  Creates a report filter.
+  
+  Parameters
+  ----------
+  type : str
+      Available values are listed below. Note that the 'tag' type also requires the rest of the arguments to be specified, a name, operator, and at least one value (depending on the operator).
+       'presentation'
+       'slide'
+       'element'
+       'tag'
+  
+  name : str, optional
+      The tag name to search for.
+  
+  operator : str, optional
+      Available values are listed below, note that some operators require a value2 argument as well.
+       'equal'
+       'less'
+       'greater'
+       'less_equal'
+       'greater_equal'
+       'not_equal'
+       'between'
+       'not_between'
+       'contains'
+       'not_contains'
+       'starts_with'
+       'not_starts_with'
+       'ends_with'
+       'not_ends_with'
+       'reg_expression'
+       'not_reg_expression'
+  
+  value : str, optional
+      The tag value that is matched against the value of the tags in the report files using the specified operator.
+  
+  value2 : str, optional
+      A second optional value required by operators  'between' and 'not_between'.
+  
+  Returns
+  -------
+  ReportFilter
+      meta.report.ReportFilter
+  
+  See Also
+  --------
+  meta.report.ReportFilter
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import report
+  
+  
+      def main():
+          directory = "../"
+          type = "presentation"
+          presFilter = report.CreateReportFilter("presentation")
+          # OR
+          type = "tag"
+          name = "tag1"
+          operator = "equal"
+          value = "value1"
+          tagFilter = report.CreateReportFilter(type, name, operator, value)
+  
+          presFilter.add_child(tagFilter)
+          print(presFilter)
+          print(presFilter.get_children())
+          print(presFilter.search(directory))
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

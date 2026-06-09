@@ -1,0 +1,646 @@
+MODULE: meta.overlay
+========================================================================
+
+FUNCTION: ClearOverlayRuns
+MODULE: meta.overlay
+SIGNATURE: meta.overlay.ClearOverlayRuns(overlay_run_type: str) -> int
+DOCSTRING:
+  This function deletes all the overlay runs.
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Overlay run type. Possible string values:
+      - 'session'
+      - 'project'.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success or 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+  
+  
+      def main():
+          overlay_run_type = "session"
+          ret = overlay.ClearOverlayRuns(overlay_run_type)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewOverlayRunsEnd
+MODULE: meta.overlay
+SIGNATURE: meta.overlay.CollectNewOverlayRunsEnd(overlay_run_type: str) -> list[Overlay]
+DOCSTRING:
+  This function ends recording the creation of new overlay runs. This function should be preceded by a corresponding call to script function CollectNewOverlayRunsStart().
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Overlay run type. Possible string values:
+      - 'session'
+      - 'project'.
+  
+  Returns
+  -------
+  list[Overlay]
+      It returns a list where each member of the list is an object of class Overlay referring to one specific newly created overlay run.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+      from meta import utils
+  
+  
+      def main():
+          overlay_run_type = "session"
+          ovr = overlay.CollectNewOverlayRunsStart(overlay_run_type)
+  
+          # create new overlay runs
+          utils.MetaCommand(
+              'read ses overlay "/home/examples/Overlay_session.ses" "/home/examples/NastranEx2.nas,/home/examples/NastranEx2Overlay.nas,/home/examples/NastranEx2.op2,/home/examples/NastranEx2Overlay.op2"'
+          )
+  
+          new_overlay_runs = overlay.CollectNewOverlayRunsEnd(overlay_run_type)
+          for ovr in new_overlay_runs:
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewOverlayRunsStart
+MODULE: meta.overlay
+SIGNATURE: meta.overlay.CollectNewOverlayRunsStart(overlay_run_type: str) -> int
+DOCSTRING:
+  This function starts recording the creation of new overlay runs. This function should be followed by a corresponding call to script function CollectNewOverlayRunsEnd().
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Type of the overlay run. Possible values are:
+      - 'session'
+      - 'project'.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success or 0 upon failure.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+      from meta import utils
+  
+  
+      def main():
+          overlay_run_type = "session"
+          ovr = overlay.CollectNewOverlayRunsStart(overlay_run_type)
+  
+          # create new overlay runs
+          utils.MetaCommand(
+              'read ses overlay "/home/examples/Overlay_session.ses" "/home/examples/NastranEx2.nas,/home/examples/NastranEx2Overlay.nas,/home/examples/NastranEx2.op2,/home/examples/NastranEx2Overlay.op2"'
+          )
+  
+          new_overlay_runs = overlay.CollectNewOverlayRunsEnd(overlay_run_type)
+          for ovr in new_overlay_runs:
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsOverlayRun
+MODULE: meta.overlay
+SIGNATURE: meta.overlay.IsOverlayRun(overlay_run: Any) -> int
+DOCSTRING:
+  This function checks whether an object is of class Overlay.
+  
+  Parameters
+  ----------
+  overlay_run : Any
+      Any given object.
+  
+  Returns
+  -------
+  int
+      It returns 1 if the object is of class Overlay, or 0 if not.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+      from meta import models
+  
+  
+      def main():
+          all_overlay_runs = overlay.OverlayRuns()
+  
+          entities = list()
+          entities.append("A string")
+          entities.append(all_overlay_runs[1])
+          for ent in entities:
+              if overlay.IsOverlayRun(ent):
+                  ovr = ent
+                  print("This is an object of class type Overlay")
+                  print(ovr.id, ovr.type, ovr.name, ovr.filename)
+              else:
+                  print("This is NOT an object of class type Overlay")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: OverlayRunById
+MODULE: meta.overlay
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_overlay_runs instead.
+SIGNATURE: meta.overlay.OverlayRunById(overlay_run_type: str, overlay_run_id: int) -> Overlay
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_overlay_runs` instead.
+  
+  This function searches for the overlay_run with the given id (overlay_run_id).
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Type of the overlay run. Possible values are:
+      - 'session'
+      - 'project'.
+  
+  overlay_run_id : int
+      Id of the overlay run.
+  
+  Returns
+  -------
+  Overlay
+      Upon success, it returns an object of class Overlay with the given id.
+      Else, None is returned.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+  
+  
+      def main():
+          overlay_run_type = "session"
+          overlay_run_id = 1
+          ovr = overlay.OverlayRunById(overlay_run_type, overlay_run_id)
+          if ovr:
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: OverlayRuns
+MODULE: meta.overlay
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_overlay_runs instead.
+SIGNATURE: meta.overlay.OverlayRuns() -> list[Overlay]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_overlay_runs` instead.
+  
+  This function collects all overlay runs.
+  
+  Returns
+  -------
+  list[Overlay]
+      It returns a list where each member of the list is an object of class Overlay referring to one specific overlay run.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+  
+  
+      def main():
+          all_overlay_runs = overlay.OverlayRuns()
+  
+          for ovr in all_overlay_runs:
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: OverlayRunsByFilename
+MODULE: meta.overlay
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_overlay_runs instead.
+SIGNATURE: meta.overlay.OverlayRunsByFilename(overlay_run_type: str, overlay_run_filename: str) -> list[Overlay]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_overlay_runs` instead.
+  
+  This function collects all overlay runs with a specific filename.
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Overlay run type. Possible string values:
+      - 'session'
+      - 'project'.
+  
+  overlay_run_filename : str
+      Search string for the filename of the overlay run. Wildcards can also be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  list[Overlay]
+      It returns a list where each member of the list is an object of class Overlay referring to one specific overlay run.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+  
+  
+      def main():
+          overlay_run_type = "session"
+          overlay_run_filename = "*ex*"
+          overlay_runs = overlay.OverlayRunsByFilename(overlay_run_type, overlay_run_filename)
+  
+          for ovr in overlay_runs:
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: OverlayRunsByName
+MODULE: meta.overlay
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_overlay_runs instead.
+SIGNATURE: meta.overlay.OverlayRunsByName(overlay_run_type: str, overlay_run_name: str) -> list[Overlay]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_overlay_runs` instead.
+  
+  This function collects all overlay runs with a specific name.
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Type of the overlay run. Possible values are:
+      - 'session'
+      - 'project'.
+  
+  overlay_run_name : str
+      Search string for the name of the overlay run. Wildcards can also be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  list[Overlay]
+      It returns a list where each member of the list is an object of class Overlay referring to one specific overlay run.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+  
+  
+      def main():
+          overlay_run_type = "session"
+          overlay_run_name = "Run1"
+          overlay_runs = overlay.OverlayRunsByName(overlay_run_type, overlay_run_name)
+  
+          for ovr in overlay_runs:
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: OverlayRunsByType
+MODULE: meta.overlay
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_overlay_runs instead.
+SIGNATURE: meta.overlay.OverlayRunsByType(overlay_run_type: str) -> list[Overlay]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_overlay_runs` instead.
+  
+  This function collects all overlay runs with a specific type.
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Type of the overlay run. Possible values are:
+      - 'session'
+      - 'project'.
+  
+  Returns
+  -------
+  list[Overlay]
+      It returns a list where each member of the list is an object of class OverlayRun referring to one specific overlay run.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+  
+  
+      def main():
+          overlay_run_type = "session"
+          overlay_runs = overlay.OverlayRunsByType(overlay_run_type)
+  
+          for ovr in overlay_runs:
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: OverlayRunsListToDict
+MODULE: meta.overlay
+SIGNATURE: meta.overlay.OverlayRunsListToDict(overlay_runs: list[Overlay]) -> dict
+DOCSTRING:
+  This function constructs a dictionary from a given list with objects of class Overlay.
+  
+  Parameters
+  ----------
+  overlay_runs : list[Overlay]
+      List of objects of class Overlay.
+  
+  Returns
+  -------
+  dict
+      It returns a dictionary whose key is the id of the overlay run and data is the corresponding Overlay object.
+      Upon failure, an empty dictionary is returned.
+  
+  Notes
+  -----
+  If overlay runs with the same element id exist in the given list, then only the first overlay run will be saved in the dictionary.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+  
+  
+      def main():
+          all_overlay_runs = overlay.OverlayRuns()
+          dict_overlay_runs = overlay.OverlayRunsListToDict(all_overlay_runs)
+          for id, ovr in dict_overlay_runs.items():
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PlanesOfOverlayRun
+MODULE: meta.overlay
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_planes instead.
+SIGNATURE: meta.overlay.PlanesOfOverlayRun(overlay_run_type: str, overlay_run_id: int) -> list[planes.Plane]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_planes` instead.
+  
+  This function searches for the planes of an overlay run with a given type and id.
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Type of the overlay run. Possible values are:
+      - 'session'
+      - 'project'.
+  
+  overlay_run_id : int
+      Id of the overlay run.
+  
+  Returns
+  -------
+  list[planes.Plane]
+      It returns a list where each member of the list is an object of class Plane referring to one plane of the given overlay run.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.planes.Plane
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import planes
+  
+  
+      def main():
+          overlay_run_type = "session"
+          overlay_run_id = 1
+  
+          overlay_run_planes = planes.PlanesOfOverlayRun(overlay_run_type, overlay_run_id)
+          for pl in overlay_run_planes:
+              print(pl.name, pl.clip_type)
+              print(pl.origin[0], pl.origin[1], pl.origin[2])
+              print(pl.normal_vector[0], pl.normal_vector[1], pl.normal_vector[2])
+              print(pl.edge_vector[0], pl.edge_vector[1], pl.edge_vector[2])
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReportNewOverlayRuns
+MODULE: meta.overlay
+SIGNATURE: meta.overlay.ReportNewOverlayRuns(overlay_run_type: str) -> list[Overlay]
+DOCSTRING:
+  This function collects the newly created overlay runs from the last call of script function CollectNewOverlayRunsStart(). This function should be preceded by a corresponding call to script function CollectNewOverlayRunsStart() and should be followed by a corresponding call to script function CollectNewOverlayRunsEnd().
+  
+  Parameters
+  ----------
+  overlay_run_type : str
+      Type of the overlay run. Possible values are:
+      - 'session'
+      - 'project'.
+  
+  Returns
+  -------
+  list[Overlay]
+      It returns a list with the Overlay objects of the corresponding newly created overlay runs.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+      from meta import utils
+  
+  
+      def main():
+          overlay_run_type = "session"
+          ovr = overlay.CollectNewOverlayRunsStart(overlay_run_type)
+  
+          # create new overlay runs
+          utils.MetaCommand(
+              'read ses overlay "/home/examples/Overlay/Overlay.ses" "/home/examples/Overlay/Abaqus.inp,/home/examples/Overlay/AbaqusOverlay.inp,/home/examples/Overlay/Abaqus.odb,/home/examples/Overlay/AbaqusOverlay.odb"'
+          )
+  
+          new_overlay_runs = overlay.ReportNewOverlayRuns(overlay_run_type)
+          for ovr in new_overlay_runs:
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+          overlay.CollectNewOverlayRunsEnd(overlay_run_type)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UpdateOverlayRun
+MODULE: meta.overlay
+SIGNATURE: meta.overlay.UpdateOverlayRun(overlay_run: Overlay) -> Overlay
+DOCSTRING:
+  This function updates the data of the given Overlay object. Update is based in the field 'id' of the given Overlay object.
+  
+  Parameters
+  ----------
+  overlay_run : Overlay
+      An object of class Overlay.
+  
+  Returns
+  -------
+  Overlay
+      Upon success, it returns the new updated Overlay object.
+      Else, None is returned.
+  
+  See Also
+  --------
+  meta.overlay.Overlay
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import overlay
+  
+  
+      def main():
+          overlay_run_type = "session"
+          overlay_run_id = 1
+          ovr = overlay.OverlayRunById(overlay_run_type, overlay_run_id)
+  
+          # commands which alter the data of the Overlay object
+          # .......
+  
+          ovr = overlay.UpdateOverlayRun(ovr)
+          if ovr:  # Update OK
+              print(ovr.id, ovr.type, ovr.name, ovr.filename)
+          else:  # Update FAILED
+              print("This is not a valid Overlay object")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

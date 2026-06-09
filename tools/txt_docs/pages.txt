@@ -1,0 +1,715 @@
+MODULE: meta.pages
+========================================================================
+
+FUNCTION: ActivatePage
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.activate instead.
+SIGNATURE: meta.pages.ActivatePage(page_id: int) -> Page
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.activate` instead.
+  
+  This function makes active an existing page specified by its id.
+  
+  Parameters
+  ----------
+  page_id : int
+      Id of the page.
+  
+  Returns
+  -------
+  Page
+      Upon success, it returns an object of class Page referring to the corresponding active page.
+      Else, a non valid page object is returned.
+  
+  See Also
+  --------
+  meta.pages.Page
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          page_id = 0
+          pg = pages.ActivatePage(page_id)
+          if pg:
+              print(pg.id, pg.name, pg.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ActivePage
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_pages instead.
+SIGNATURE: meta.pages.ActivePage() -> Page
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_pages` instead.
+  
+  This function searches for the currently active page.
+  
+  Returns
+  -------
+  Page
+      It returns an object of class Page referring to the currently active page.
+  
+  See Also
+  --------
+  meta.pages.Page
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          pg = pages.ActivePage()
+          print(pg.id, pg.name, pg.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewPagesEnd
+MODULE: meta.pages
+SIGNATURE: meta.pages.CollectNewPagesEnd() -> list[Page]
+DOCSTRING:
+  This function ends recording the creation of new pages. This function should be preceded by a corresponding call to script function CollectNewPagesStart().
+  
+  Returns
+  -------
+  list[Page]
+      It returns a list where each member of the list is an object of class Page referring to one specific newly created page.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.pages.Page
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+      from meta import utils
+  
+  
+      def main():
+          pages.CollectNewPagesStart()
+  
+          # create new pages
+          utils.MetaCommand('page add "Page 1"')
+          utils.MetaCommand('page add "Page 2"')
+          new_pages = pages.CollectNewPagesEnd()
+          for pg in new_pages:
+              print(pg.id, pg.name, pg.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CollectNewPagesStart
+MODULE: meta.pages
+SIGNATURE: meta.pages.CollectNewPagesStart() -> int
+DOCSTRING:
+  This function starts recording the creation of new pages. This function should be followed by a corresponding call to script function CollectNewPagesEnd().
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+      from meta import utils
+  
+  
+      def main():
+          pages.CollectNewPagesStart()
+  
+          # create new pages
+          utils.MetaCommand('page add "Page 1"')
+          utils.MetaCommand('page add "Page 2"')
+          new_pages = pages.CollectNewPagesEnd()
+          for pg in new_pages:
+              print(pg.id, pg.name, pg.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: CreatePage
+MODULE: meta.pages
+SIGNATURE: meta.pages.CreatePage(page_name: str) -> Page
+DOCSTRING:
+  This function creates a new page with a given name. The new page becomes the currently active page.
+  
+  Parameters
+  ----------
+  page_name : str
+      Name of the page
+  
+  Returns
+  -------
+  Page
+      Upon success, it returns an object of class Page referring to the newly created page.
+      Upon failure, a non valid Page object will be returned.
+  
+  See Also
+  --------
+  meta.pages.Page
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          page_name = "Plot_Page"
+          pg = pages.CreatePage(page_name)
+          if pg:
+              print(pg.id, pg.name, pg.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: DeletePage
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.delete instead.
+SIGNATURE: meta.pages.DeletePage(page_id: int) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.delete` instead.
+  
+  This function deletes an existing page specified by its id.
+  
+  Parameters
+  ----------
+  page_id : int
+      Id of the page.
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          page_id = 0
+          ret = pages.DeletePage(page_id)
+          print(ret)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: IsPage
+MODULE: meta.pages
+SIGNATURE: meta.pages.IsPage(page: Any) -> int
+DOCSTRING:
+  This function checks whether an object is of class Page.
+  
+  Parameters
+  ----------
+  page : Any
+      Any given object.
+  
+  Returns
+  -------
+  int
+      It returns 1 if object is of class Pagee, 0 otherwise.
+  
+  See Also
+  --------
+  meta.pages.Page
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+      from meta import utils
+  
+  
+      def main():
+          pages.CollectNewPagesStart()
+          # create new entities
+  
+          utils.MetaCommand('page add "Page 1"')
+          utils.MetaCommand('page add "Page 2"')
+  
+          all_entities = pages.CollectNewPagesEnd()
+          for ent in all_entities:
+              if pages.IsPage(ent):
+                  pg = ent
+                  print("This is a struct of type page")
+                  print(pg.id, pg.name, pg.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PageById
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_pages instead.
+SIGNATURE: meta.pages.PageById(page_id: int) -> Page
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_pages` instead.
+  
+  This function searches for the page with the given id.
+  
+  Parameters
+  ----------
+  page_id : int
+      Id of the page.
+  
+  Returns
+  -------
+  Page
+      Upon success, it returns an object of class Page with the given id.
+      Else, a non valid Page object is returned.
+  
+  See Also
+  --------
+  meta.pages.Page
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          page_id = 2
+          pg = pages.PageById(page_id)
+          if pg:
+              print(pg.id, pg.name, pg.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: Pages
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_pages instead.
+SIGNATURE: meta.pages.Pages() -> list[Page]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_pages` instead.
+  
+  This function collects all the currently existing pages.
+  
+  Returns
+  -------
+  list[Page]
+      It returns a list where each member of the list is an object of class Page referring to the corresponding page.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.pages.Page
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          all_pages = pages.Pages()
+          for pg in all_pages:
+              print(pg.id, pg.name, pg.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: PagesByName
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.utils.get_pages instead.
+SIGNATURE: meta.pages.PagesByName(page_name: str) -> list[Page]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:func:`meta.utils.get_pages` instead.
+  
+  This function searches for the pages with the given name.
+  
+  Parameters
+  ----------
+  page_name : str
+      Argument "page_name" is a string expression where wildcards can be used ("*", "?", "[...]").
+  
+  Returns
+  -------
+  list[Page]
+      It returns a list where each member of the list is an object of class Page referring to one existing page.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.pages.Page
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          page_name = "Pag*"
+          collected_pages = pages.PagesByName(page_name)
+          for pg in collected_pages:
+              print(pg.id, pg.name, pg.active)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: ReportNewPages
+MODULE: meta.pages
+SIGNATURE: meta.pages.ReportNewPages() -> list[Page]
+DOCSTRING:
+  This function collects the newly created pages from the last call of script function CollectNewPagesStart(). This function should be preceded by a corresponding call to script function CollectNewPagesStart() and should be followed by a corresponding call to script function CollectNewPagesEnd().
+  
+  Returns
+  -------
+  list[Page]
+      It returns a list where each member of the list is an object of class Page referring to one specific newly created page.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.pages.Page
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+      from meta import utils
+  
+  
+      def main():
+          pages.CollectNewPagesStart()
+  
+          # create new pages
+          utils.MetaCommand('page add "Page 1"')
+          utils.MetaCommand('page add "Page 2"')
+  
+          new_pages = pages.ReportNewPages()
+          for pg in new_pages:
+              print(pg.id, pg.name, pg.active)
+          pages.CollectNewPagesEnd()
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: UpdatePage
+MODULE: meta.pages
+SIGNATURE: meta.pages.UpdatePage(page: Page) -> Page
+DOCSTRING:
+  This function updates the data of the given page struct. Update is based in the field "id" of the given page struct.
+  
+  Parameters
+  ----------
+  page : Page
+      Object of class Page.
+  
+  Returns
+  -------
+  Page
+      Upon success, it returns the new updated Page object.
+      Else, a non valid Page object is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+      from meta import utils
+  
+  
+      def main():
+          page_id = 0
+          pg = pages.PageById(page_id)
+  
+          # commands which alter the data of the page struct
+          utils.MetaCommand('page rename 0 "new_name"')
+          pg = pages.UpdatePage(pg)
+          if pg:  # Update OK
+              print(pg.id, pg.name, pg.active)
+          else:  # Update FAILED
+              print("This is not a valid page struct")
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: WindowsOfPage
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_windows instead.
+SIGNATURE: meta.pages.WindowsOfPage(page_id: int) -> list[windows.Window]
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_windows` instead.
+  
+  This function collects all the currently existing windows of the specified page.
+  
+  Parameters
+  ----------
+  page_id : int
+      Id of the page.
+  
+  Returns
+  -------
+  list[windows.Window]
+      It returns a list where each memeber of the list is an object of class Window referring to one corresponding window of the given page.
+      Upon failure, an empty list is returned.
+  
+  See Also
+  --------
+  meta.windows.Window
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          page_id = 0
+          page_windows = pages.WindowsOfPage(page_id)
+          for w in page_windows:
+              print(w.name, w.page_id, w.active, w.height, w.width, w.plot2d, w.enabled)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributesOfPage
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_attributes instead.
+SIGNATURE: meta.pages.AttributesOfPage(page_id: int) -> list
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_attributes` instead.
+  
+  It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+  In position 0, internal lists contain a string referring to the name of the attribute.
+  In position 1, internal lists contain a string referring to the value of the attributes.
+  Upon failure, an empty list is returned.
+  
+  Parameters
+  ----------
+  page_id : int
+      The id of the page
+  
+  Returns
+  -------
+  list
+      It returns a list where each member of the list is another list referring to one specific attribute of the given curve.
+      In position 0, internal lists contain a string referring to the name of the attribute.
+      In position 1, internal lists contain a string referring to the value of the attributes.
+      Upon failure, an empty list is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          page_id = 1
+          all_attributes = pages.AttributesOfPage(page_id)
+          for attr in all_attributes:
+              attrib_name = attr[0]
+              attrib_value = attr[1]
+              print("Name: " + attrib_name + "\tValue: " + attrib_value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: SetAttributeOfPage
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.set_attribute instead.
+SIGNATURE: meta.pages.SetAttributeOfPage(page_id: int, attrib_name: str, attrib_value: str | float, attribute_type: str) -> int
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.set_attribute` instead.
+  
+  This function sets the value of a specific User Specified attribute referring to a given page. If the given attribute does not exist it is automatically created and its value is set
+  
+  Parameters
+  ----------
+  page_id : int
+      The id of the page.
+  
+  attrib_name : str
+      Name of the attribute.
+  
+  attrib_value : str | float
+      Value of the attribute. It can be either a number or a string.
+  
+  attribute_type : str, optional
+      Type of the attribute. Accepted values are "numerical" for numerical attributes or "string" for string attributes. Default value is "string".
+  
+  Returns
+  -------
+  int
+      It returns 1 upon success and 0 upon failure.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          page_id = 1
+          attrib_name = "name"
+          attrib_value = "value"
+          val = pages.SetAttributeOfPage(page_id, attrib_name, attrib_value)
+          print(val)
+          # or
+          attrib_name = "n_name"
+          attrib_value = 123
+          attribute_type = "numerical"
+          val = pages.SetAttributeOfPage(page_id, attrib_name, attrib_value, attribute_type)
+          print(val)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------
+
+FUNCTION: AttributeOfPage
+MODULE: meta.pages
+DEPRECATED: Deprecated since version 20.1.0.Use meta.pages.Page.get_attributes instead.
+SIGNATURE: meta.pages.AttributeOfPage(page_id: int, attrib_name: str) -> str
+DOCSTRING:
+  .. deprecated:: 20.1.0
+      Use :py:meth:`meta.pages.Page.get_attributes` instead.
+  
+  This function returns the value of a specific attribute.
+  
+  Parameters
+  ----------
+  page_id : int
+      The id of the page
+  
+  attrib_name : str
+      The name of the attribute
+  
+  Returns
+  -------
+  str
+      Upon success, it returns a string with the value of the given argument.
+      Else, an empty string is returned.
+  
+  Examples
+  --------
+  ::
+  
+      # PYTHON script
+      import meta
+      from meta import pages
+  
+  
+      def main():
+          page_id = 1
+          name = "Name"
+          value = pages.AttributeOfPage(page_id, name)
+          print("Value " + value)
+  
+  
+      if __name__ == "__main__":
+          main()
+
+----------------------------------------

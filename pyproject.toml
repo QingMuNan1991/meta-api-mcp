@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "meta-api-mcp"
+version = "0.1.0"
+description = "MCP Server for searching META Python API documentation (BETA CAE Systems)"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+]
+
+[project.scripts]
+meta-api-mcp = "tools.mcp_server:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "anthropic>=0.40.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tools*"]
+
+[tool.setuptools.package-data]
+tools = ["*.json", "txt_docs/*.txt"]
