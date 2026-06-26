@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../ansa-api-mcp"
+		},
+		{
+			"path": "../../../../PycharmProjects/PythonProject"
+		},
+		{
+			"path": "../../../../PycharmProjects/Skill"
+		}
+	],
+	"settings": {}
+}

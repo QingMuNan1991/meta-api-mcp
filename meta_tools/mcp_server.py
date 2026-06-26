@@ -5,14 +5,12 @@ This server provides three-layer search (keyword → fuzzy → text fallback)
 over a pre-built index of META API functions parsed from the pydev_meta stubs.
 """
 
-from __future__ import annotations
 
 import json
 import os
 import re
 import unicodedata
 from pathlib import Path
-from typing import Optional
 
 from mcp.server.fastmcp import FastMCP
 
@@ -102,7 +100,7 @@ class MetaApiSearcher:
     def _txt_search(
         self,
         query_tokens: list[str],
-        module_filter: Optional[str],
+        module_filter: str | None,
         include_deprecated: bool,
         max_results: int,
     ) -> list[dict]:
@@ -179,8 +177,8 @@ class MetaApiSearcher:
     def search(
         self,
         query: str,
-        module: Optional[str] = None,
-        category: Optional[str] = None,
+        module: str | None = None,
+        category: str | None = None,
         include_deprecated: bool = False,
         top_n: int = 5,
     ) -> list[dict]:
@@ -283,7 +281,7 @@ class MetaApiSearcher:
 
 # --- helpers ---
 
-def _normalize_module(module: Optional[str]) -> Optional[str]:
+def _normalize_module(module: str | None) -> str | None:
     """Ensure module name has 'meta.' prefix.
 
     >>> _normalize_module("elements")    # → "meta.elements"
@@ -301,8 +299,20 @@ _PKG_DIR = Path(__file__).parent
 _INDEX_PATH = str(_PKG_DIR / "meta_api_index.json")
 _INDEX_PATH = os.environ.get("META_API_INDEX_PATH", _INDEX_PATH)
 
-mcp = FastMCP("meta-api")
-_searcher: Optional[MetaApiSearcher] = None
+mcp = FastMCP(
+    "meta-api",
+    instructions="""This server provides search access to META Python API documentation.
+META is the post-processing / visualization tool from BETA CAE Systems.
+
+Available tools:
+- search_meta_api(query, module?, category?, include_deprecated?, top_n?): Search the META API docs
+- list_meta_modules(): List all available META API modules
+- list_meta_categories(): List all META API function categories
+- get_meta_function(function_name, module?): Get full docs for a specific function
+
+Always use these tools when the user asks about META API, post-processing, CAE visualization, or result extraction."""
+)
+_searcher: MetaApiSearcher | None = None
 
 
 def _get_searcher() -> MetaApiSearcher:
@@ -311,7 +321,7 @@ def _get_searcher() -> MetaApiSearcher:
         if not os.path.exists(_INDEX_PATH):
             raise FileNotFoundError(
                 f"META API index not found: {_INDEX_PATH}\n"
-                "Run `python -m tools.generate_index` to build it first."
+                "Run `python -m meta_tools.generate_index` to build it first."
             )
         _searcher = MetaApiSearcher(_INDEX_PATH)
     return _searcher
@@ -379,8 +389,8 @@ def _format_result(func: dict) -> str:
 @mcp.tool()
 def search_meta_api(
     query: str,
-    module: Optional[str] = None,
-    category: Optional[str] = None,
+    module: str | None = None,
+    category: str | None = None,
     include_deprecated: bool = False,
     top_n: int = 5,
 ) -> str:
@@ -492,7 +502,7 @@ def list_meta_categories() -> str:
 
 
 @mcp.tool()
-def get_meta_function(function_name: str, module: Optional[str] = None) -> str:
+def get_meta_function(function_name: str, module: str | None = None) -> str:
     """Get full documentation for a specific META API function by exact name.
 
     Args:
@@ -604,7 +614,7 @@ def main():
             sys.exit(0 if success else 1)
 
         if cmd == "build-index":
-            from tools.generate_index import build_index, save_index
+            from meta_tools.generate_index import build_index, save_index
             meta_dir = (
                 sys.argv[2] if len(sys.argv) > 2 else
                 r"D:\Programs\BETA_CAE_Systems\ansa_v25.1.4\docs\extending"
@@ -615,7 +625,11 @@ def main():
             save_index(functions, output)
             sys.exit(0)
 
-    mcp.run()
+    try:
+        mcp.run()
+    except (BrokenPipeError, EOFError, KeyboardInterrupt):
+        pass
+    sys.exit(0)
 
 
 if __name__ == "__main__":

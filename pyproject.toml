@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-meta-api-mcp = "tools.mcp_server:main"
+meta-api-mcp = "meta_tools.mcp_server:main"
 
 [project.optional-dependencies]
 dev = [
@@ -22,7 +22,7 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["tools*"]
+include = ["meta_tools*"]
 
 [tool.setuptools.package-data]
-tools = ["*.json", "txt_docs/*.txt"]
+meta_tools = ["*.json", "txt_docs/*.txt"]

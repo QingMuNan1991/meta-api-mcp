@@ -7,7 +7,7 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
-from tools.parse_meta_stubs import parse_all_stubs
+from meta_tools.parse_meta_stubs import parse_all_stubs
 
 
 # ---------------------------------------------------------------------------
