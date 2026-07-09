@@ -190,13 +190,15 @@ def _generate_keywords_for_function(func: dict) -> list[str]:
 
     keywords: set[str] = set()
 
-    # 1. Split function name by camelCase / underscore into tokens
+    # 1. Split function name by camelCase / underscore / dot into tokens
     # Insert underscore at case transitions, then split:
-    #   GetElements   → Get_Elements  → ["get", "elements"]
-    #   HTMLReport    → HTML_Report   → ["html", "report"]
-    #   ISO_FUNCTION  → (unchanged)   → ["iso", "function"]
-    s = re.sub(r"(?<=[a-z])(?=[A-Z])", "_", name)   # lower → UPPER
-    s = re.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", "_", s)  # XML → Parser
+    #   GetElements      → Get_Elements  → ["get", "elements"]
+    #   HTMLReport       → HTML_Report   → ["html", "report"]
+    #   Node.get_coordinates → Node_get_coordinates → ["node","get","coordinates"]
+    #   ISO_FUNCTION     → (unchanged)   → ["iso", "function"]
+    dotted = name.replace(".", "_")
+    s = re.sub(r"(?<=[a-z])(?=[A-Z])", "_", dotted)   # lower → UPPER
+    s = re.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", "_", s)    # XML → Parser
     raw_tokens = s.lower().split("_")
     tokens = [t for t in raw_tokens if t and len(t) >= 2]
     keywords.update(tokens)
@@ -205,6 +207,11 @@ def _generate_keywords_for_function(func: dict) -> list[str]:
     keywords.add(name.lower())
     bare_module = module[5:] if module.startswith("meta.") else module
     keywords.add(bare_module)
+    # Also add the class part of a ClassName.method name (e.g. "node")
+    if "." in name and not name.isupper():
+        class_part = name.split(".", 1)[0].lower()
+        if len(class_part) >= 2:
+            keywords.add(class_part)
 
     # 3. Map to Chinese equivalents
     for tok in list(keywords):

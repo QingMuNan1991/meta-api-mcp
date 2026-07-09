@@ -9,6 +9,11 @@
 - 📦 4 个 MCP 工具：搜索函数、列出模块、列出分类、精确查找
 - ⚡ 无需 LLM 即可完成索引构建（规则式关键词生成）
 
+> **当前索引（enriched @ 2026-07-09）**：基于 **ANSA/META v25.1.4** 的 `pydev_meta` 桩文件重建，
+> 共 **3366** 个 API 符号 / **36** 个模块。除顶层函数外，还纳入了
+> **类公共方法**（如 `meta.nodes.Node.get_coordinates`）与 **模块级常量**
+> （如 `meta.constants.ABAQUS_FASTENER`），覆盖率 100%，与 v25.1.4 桩完全一致、无旧版本残留。
+
 ---
 
 ## 快速上手
@@ -24,10 +29,13 @@ pip install -e .
 
 ```bash
 # 方式一：使用默认路径（D:\Programs\BETA_CAE_Systems\ansa_v25.1.4\...）
-python -m tools build-index
+python -m meta_tools generate_index
 
 # 方式二：指定 META stubs 目录
-python -m tools build-index "D:\path\to\pydev_meta\meta"
+python -m meta_tools generate_index "D:\path\to\pydev_meta\meta"
+
+# 方式三：通过已安装的可执行文件（需先 pip install -e .）
+meta-api-mcp build-index
 
 # 方式三：指定输入和输出路径
 python -m tools build-index "D:\path\to\meta" ".\tools\meta_api_index.json"
@@ -107,24 +115,51 @@ meta-api-mcp/
 
 ## META API 模块覆盖范围
 
-| 模块 | 说明 |
-|------|------|
-| `meta.elements` | 单元操作（增删改查、变换）|
-| `meta.nodes` | 节点操作 |
-| `meta.models` | 模型管理 |
-| `meta.parts` | 零件/部件 |
-| `meta.groups` | 分组管理 |
-| `meta.materials` | 材料定义 |
-| `meta.connections` | 连接关系 |
-| `meta.boundaries` | 边界条件 |
-| `meta.results` | 结果后处理 |
-| `meta.report` | 报告生成 |
-| `meta.utils` | 通用工具函数 |
-| `meta.visuals` | 可视化控制 |
-| `meta.session` | 会话/工作区 |
-| `meta.dm` | 数据管理 |
-| ... | 共约 36 个模块 |
+当前索引共 **3366** 个 API 符号，分布在 **36** 个模块（已纳入类方法与常量）：
 
+| 模块 | 数量 | 说明 |
+|------|-----:|------|
+| `meta.elements` | 213 | 单元操作（增删改查、变换）|
+| `meta.nodes` | 133 | 节点操作（含 `Node.*` 方法）|
+| `meta.models` | 185 | 模型管理（含 `Model.*` 方法）|
+| `meta.parts` | 198 | 零件/部件 |
+| `meta.groups` | 168 | 分组管理（含 `Group.*` 方法）|
+| `meta.materials` | 122 | 材料定义 |
+| `meta.connections` | 87 | 连接关系 |
+| `meta.boundaries` | 102 | 边界条件（含 `Boundary.*` 方法）|
+| `meta.results` | 229 | 结果后处理 |
+| `meta.report` | 399 | 报告生成（含 `Report.*` 方法）|
+| `meta.utils` | 123 | 通用工具函数 |
+| `meta.visuals` | 115 | 可视化控制 |
+| `meta.windows` | 210 | 窗口管理（含 `Window.*` 方法）|
+| `meta.session` | 12 | 会话/工作区 |
+| `meta.dm` | 95 | 数据管理（Data Manager）|
+| `meta.constants` | 190 | 求解器/实体类型等常量枚举 |
+| `meta.tdk` | 85 | 工具栏控件（`Toolbar`/`CheckBox` 等类方法）|
+| `meta.vr` | 15 | 虚拟现实（`VR.*` 方法）|
+| `meta.spdrm` | 14 | SPDM 工作流（`process.*` 方法）|
+| `meta.em` | 8 | 电磁（Farfield 等）|
+| `meta.coordsystems` | 62 | 坐标系 |
+| `meta.planes` | 84 | 平面 |
+| `meta.sections` | 22 | 截面 |
+| `meta.calc` | 18 | 计算 |
+| `meta.nvh` | 27 | NVH |
+| `meta.isofunctions` | 53 | 等值面/等值线 |
+| `meta.overlay` | 28 | 叠加层 |
+| `meta.pages` | 50 | 页面 |
+| `meta.spreadsheet` | 61 | 表格 |
+| `meta.annotations` | 154 | 标注 |
+| `meta.toolbars` | 30 | 工具栏 |
+| `meta.collaboration` | 2 | 协同 |
+| `meta.betascript` | 9 | BetaScript 脚本 |
+| `meta.betavisibility` | 1 | Beta 可见性 |
+| `meta.base` | 55 | 基础/通用 |
+| `meta.__init__` | 7 | 包初始化/重导出 |
+
+> **命名约定**：类方法以 `ClassName.method` 入库（例如 `meta.nodes.Node.get_coordinates`），
+> 常量以 `meta.constants.NAME` 入库（例如 `meta.constants.ABAQUS_FASTENER`）；
+> 搜索时可用类名/方法名/常量名直接命中。
+>
 > `guitk.py`（GUI 工具包，94k 行）和 `plot2d.py` 默认跳过，可在 `parse_meta_stubs.py` 中修改 `skip_modules` 启用。
 
 ---
