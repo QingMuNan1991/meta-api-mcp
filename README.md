@@ -1,3 +1,8 @@
+<img width="430" height="430" alt="微信图片_20260912110609_11_156" src="https://github.com/user-attachments/assets/00f18553-dd01-40e8-8e47-cf72ca992269" />
+
+欢迎关注“解忧CAE”公众号，共同交流ANSA/META仿真技巧
+
+
 # meta-api-mcp
 
 **MCP Server for META Python API** — BETA CAE Systems 后处理工具的 AI 辅助开发工具。
